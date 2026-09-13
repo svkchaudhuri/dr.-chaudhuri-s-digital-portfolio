@@ -134,11 +134,36 @@ function Section({ id, eyebrow, title, children, muted = false }: { id: string; 
   return <section id={id} className={cn("scroll-mt-20 px-5 py-20 sm:px-10 lg:px-14 xl:px-20", muted && "bg-muted/60")}><div className="mx-auto max-w-6xl"><p className="section-kicker">{eyebrow}</p><h2 className="section-title">{title}</h2><div className="mt-10">{children}</div></div></section>;
 }
 
+const typedTerms = ["Fluid Power Systems", "Robotic Manipulators", "Maritime Control"];
+function TypedTerm() {
+  const [index, setIndex] = useState(0);
+  const [len, setLen] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+  useEffect(() => {
+    const word = typedTerms[index];
+    if (!deleting && len === word.length) {
+      const t = setTimeout(() => setDeleting(true), 1800);
+      return () => clearTimeout(t);
+    }
+    if (deleting && len === 0) {
+      const t = setTimeout(() => { setDeleting(false); setIndex((i) => (i + 1) % typedTerms.length); }, 250);
+      return () => clearTimeout(t);
+    }
+    const t = setTimeout(() => setLen((l) => l + (deleting ? -1 : 1)), deleting ? 38 : 72);
+    return () => clearTimeout(t);
+  }, [len, deleting, index]);
+  return <span className="text-primary">
+    {typedTerms[index].slice(0, len)}
+    <span aria-hidden="true" className="ml-1 inline-block h-[0.82em] w-[3px] animate-pulse bg-primary align-baseline" />
+    <span className="sr-only">{typedTerms.join(", ")}</span>
+  </span>;
+}
+
 function Hero() {
   return <section id="home" className="relative flex min-h-[700px] scroll-mt-20 items-center overflow-hidden border-b border-border px-5 py-24 sm:px-10 lg:px-14 xl:px-20">
     <div className="hero-grid absolute inset-0 opacity-50" /><div className="relative mx-auto w-full max-w-6xl">
       <p className="section-kicker">Dynamics · Control · Real-time validation</p>
-      <h1 className="mt-5 max-w-5xl font-display text-5xl leading-[1.02] text-foreground sm:text-6xl xl:text-7xl">Control systems that are <span className="text-primary">certified</span>, not merely tuned.</h1>
+      <h1 className="mt-5 max-w-5xl font-display text-4xl leading-[1.08] text-foreground sm:text-5xl xl:text-6xl">Researcher in Nonlinear Control of <br className="hidden sm:block" /><TypedTerm /></h1>
       <p className="mt-8 max-w-3xl text-lg leading-8 text-muted-foreground">Control engineer with more than twelve years of experience in nonlinear and adaptive control of uncertain dynamical systems—taking ideas from mathematical formulation through MIL, SIL and HIL to purpose-built experimental rigs.</p>
       <div className="mt-10 grid max-w-3xl grid-cols-2 gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-4">
         {[['7','h-index'],['170','Scholar citations'],['122','WoS citations'],['28','publications']].map(([n,l]) => <div key={l} className="bg-background p-5"><p className="font-display text-3xl text-primary">{n}</p><p className="mt-1 text-xs font-bold uppercase text-muted-foreground">{l}</p></div>)}
