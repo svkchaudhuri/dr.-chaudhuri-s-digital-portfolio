@@ -258,11 +258,11 @@ function Skills() { return <Section id="skills" eyebrow="Technical skills" title
 const reviews: [string, string][] = [['IEEE/ASME Transactions on Mechatronics','14'],['IEEE Transactions on Instrumentation and Measurement','10'],['IEEE Transactions on Vehicular Technology','9'],['IEEE I2MTC','6'],['IEEE Sensors Journal','3'],['Control Engineering Practice','3'],['Proc. IMechE, Part C','2'],['Computers and Electronics in Agriculture','2'],['IEEE JESTIE','2'],['Sādhanā','1'],['Journal of the Brazilian Society of Mechanical Sciences and Engineering','1'],['IEEE Open Journal of Instrumentation and Measurement','1'],['IEEE IAS Publications','1']];
 
 const languages = [
-  ["C1", "\u{1F1EC}\u{1F1E7}", "English", "Professional (British Council certified)"],
-  ["C2", "\u{1F1EE}\u{1F1F3}", "Hindi", "Native"],
-  ["C2", "\u{1F1EE}\u{1F1F3}", "Bengali", "Native"],
-  ["A1", "\u{1F1E9}\u{1F1F0}", "Danish", "Basic"],
-  ["A0", "\u{1F1E9}\u{1F1EA}", "German", "Beginner (Just started / In progress)"],
+  { level: "C1", flag: "\u{1F1EC}\u{1F1E7}", name: "English", note: "Professional (British Council certified)", certUrl: englishCertAsset.url, certFile: "British_Council_Certificate_2020.pdf" },
+  { level: "C2", flag: "\u{1F1EE}\u{1F1F3}", name: "Hindi", note: "Native" },
+  { level: "C2", flag: "\u{1F1EE}\u{1F1F3}", name: "Bengali", note: "Native" },
+  { level: "A1", flag: "\u{1F1E9}\u{1F1F0}", name: "Danish", note: "Basic", certUrl: danishCertAsset.url, certFile: "Shouvik_Chaudvik_modultestbevis_3.1.pdf" },
+  { level: "A0", flag: "\u{1F1E9}\u{1F1EA}", name: "German", note: "Beginner (Just started / In progress)" },
 ] as const;
 
 
