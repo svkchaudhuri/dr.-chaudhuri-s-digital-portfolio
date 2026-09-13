@@ -9,7 +9,7 @@ const base = {
   preserveAspectRatio: "xMidYMid meet",
 };
 
-/** Control loop with phase trajectory — nonlinear & adaptive control. */
+/** Control loop with phase trajectory - nonlinear & adaptive control. */
 export const ControlLoopGraphic: G = (props) => (
   <svg {...base} aria-label="Feedback control loop with a phase-plane trajectory" {...props}>
     <g stroke="currentColor" strokeWidth="1.1" className="text-primary/35">
@@ -33,7 +33,7 @@ export const ControlLoopGraphic: G = (props) => (
   </svg>
 );
 
-/** Hull with canting keel and wave field — maritime roll stabilisation. */
+/** Hull with canting keel and wave field - maritime roll stabilisation. */
 export const MaritimeGraphic: G = (props) => (
   <svg {...base} aria-label="Vessel hull with canting keel in a wave field" {...props}>
     <g className="stroke-primary/30" strokeWidth="1">
