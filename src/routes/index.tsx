@@ -62,19 +62,19 @@ function SidebarContent({ active, close, showNav = false }: { active: string; cl
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
     close?.();
   };
-  return <div className="flex h-full min-h-0 flex-col justify-center gap-6 overflow-y-auto px-6 py-8">
+  return <div className="flex h-full min-h-0 flex-col justify-between gap-3 overflow-hidden px-5 py-6">
     <div className="shrink-0 text-center">
       <div className="relative mx-auto w-fit">
-        <div aria-hidden="true" className="absolute -inset-2 rounded-full bg-sidebar-primary/10" />
-        <img src={headshot.url} alt="Portrait of Dr. Shouvik Chaudhuri" className="relative mx-auto aspect-square w-[min(210px,60vw)] rounded-full border-[5px] border-card object-cover shadow-portrait" />
+        <div aria-hidden="true" className="absolute -inset-1.5 rounded-full bg-sidebar-primary/10" />
+        <img src={headshot.url} alt="Portrait of Dr. Shouvik Chaudhuri" className="relative mx-auto aspect-square w-[min(144px,42vw)] rounded-full border-4 border-card object-cover shadow-portrait" />
       </div>
-      <h2 className="mt-6 font-display text-[1.7rem] leading-tight text-sidebar-foreground">Shouvik Chaudhuri, Ph.D.</h2>
-      <p className="mt-2 text-[11px] font-bold leading-snug text-sidebar-primary">SMIEEE (US) · MIET (UK) · MIE (India)<br />Pursuing CEng status (IET)</p>
-      <p className="mt-2 text-sm font-semibold text-sidebar-foreground">Researcher in Dynamics and Control</p>
+      <h2 className="mt-3 font-display text-[1.35rem] leading-tight text-sidebar-foreground">Shouvik Chaudhuri, Ph.D.</h2>
+      <p className="mt-1.5 text-[10.5px] font-bold leading-snug text-sidebar-primary">SMIEEE (US) · MIET (UK) · MIE (India)<br />Pursuing CEng status (IET)</p>
+      <p className="mt-1.5 text-[13px] font-semibold text-sidebar-foreground">Researcher in Dynamics and Control</p>
     </div>
     <div className="shrink-0">
-      <p className="text-center text-[10px] font-bold uppercase tracking-[0.18em] text-sidebar-foreground/50">Academic profiles</p>
-      <div className="mt-3 grid grid-cols-3 gap-2.5">
+      <p className="text-center text-[9.5px] font-bold uppercase tracking-[0.18em] text-sidebar-foreground/50">Academic profiles</p>
+      <div className="mt-2 grid grid-cols-3 gap-2">
         {brandLinks.map((link) => {
           const inner = <>
             <BrandMark link={link} className="size-6" />
