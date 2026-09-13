@@ -93,7 +93,7 @@ function SidebarContent({ active, close, showNav = false }: { active: string; cl
     </nav>}
     <div className="shrink-0">
       <Button asChild className="w-full"><a href={cvAsset.url} download="Shouvik-Chaudhuri-CV.pdf"><Download className="size-4" />Download CV</a></Button>
-      <div className="mt-4 space-y-1.5 border-t border-sidebar-border pt-4 text-xs text-sidebar-foreground/70">
+      <div className="mt-3 space-y-1 border-t border-sidebar-border pt-3 text-[11.5px] text-sidebar-foreground/70">
         <a className="flex items-center gap-2 hover:text-sidebar-primary" href="mailto:svk.chaudhuri@gmail.com"><Mail className="size-3.5" />svk.chaudhuri@gmail.com</a>
         <p className="flex items-center gap-2"><MapPin className="size-3.5" />Kolkata, India</p>
       </div>
