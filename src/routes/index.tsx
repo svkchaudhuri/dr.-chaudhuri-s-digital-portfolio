@@ -74,16 +74,16 @@ function SidebarContent({ active, close, showNav = false }: { active: string; cl
       <p className="mt-1.5 text-[13px] font-semibold text-sidebar-foreground">Researcher in Dynamics and Control</p>
     </div>
     <div className="shrink-0">
-      <p className="text-center text-[9.5px] font-bold uppercase tracking-[0.18em] text-sidebar-foreground/50">Academic profiles</p>
+      <p className="text-center text-[9.5px] font-bold uppercase tracking-[0.18em] text-sidebar-foreground/70">Academic profiles</p>
       <div className="mt-2 grid grid-cols-3 gap-2">
         {brandLinks.map((link) => {
           const inner = <>
             <BrandMark link={link} className="size-5" />
-            <span className="mt-1 text-[9px] font-bold leading-none text-sidebar-foreground/70">{link.label === "Web of Science" ? "WoS" : link.label === "Google Scholar" ? "Scholar" : link.label}</span>
+            <span className="mt-1 text-[9px] font-bold leading-none text-sidebar-card-foreground/80">{link.label === "Web of Science" ? "WoS" : link.label === "Google Scholar" ? "Scholar" : link.label}</span>
           </>;
           return link.url
-            ? <a key={link.label} href={link.url} target="_blank" rel="noreferrer" title={link.label} className="flex flex-col items-center justify-center rounded-lg border border-sidebar-border bg-sidebar-accent py-2 transition-all hover:-translate-y-0.5 hover:border-sidebar-primary hover:shadow-portrait">{inner}</a>
-            : <span key={link.label} title={link.value} className="flex flex-col items-center justify-center rounded-lg border border-sidebar-border bg-sidebar-accent py-2">{inner}</span>;
+            ? <a key={link.label} href={link.url} target="_blank" rel="noreferrer" title={link.label} className="flex flex-col items-center justify-center rounded-xl border border-sidebar-border/60 bg-sidebar-card py-2 shadow-sm transition-all hover:-translate-y-0.5 hover:border-sidebar-primary hover:shadow-md">{inner}</a>
+            : <span key={link.label} title={link.value} className="flex flex-col items-center justify-center rounded-xl border border-sidebar-border/60 bg-sidebar-card py-2 shadow-sm">{inner}</span>;
         })}
       </div>
     </div>
