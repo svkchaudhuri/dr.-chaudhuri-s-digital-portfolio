@@ -100,8 +100,13 @@ function Portfolio() {
   }, []);
   useEffect(() => { document.body.style.overflow = drawer ? "hidden" : ""; return () => { document.body.style.overflow = ""; }; }, [drawer]);
 
-  return <div className="min-h-screen bg-background">
-    <aside className="fixed inset-y-0 left-0 z-30 hidden w-[300px] border-r border-sidebar-border bg-sidebar lg:block"><SidebarContent active={active} /></aside>
+  return <div className="relative min-h-screen bg-background">
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+      <img src={sduBg.url} alt="" className="absolute inset-x-0 top-0 h-[62vh] w-full object-cover opacity-[0.09]" />
+      <img src={heroBg.url} alt="" className="absolute inset-x-0 bottom-0 h-[55vh] w-full object-cover opacity-[0.06]" />
+      <div className="absolute inset-0 bg-background/70 backdrop-blur-[3px]" />
+    </div>
+    <aside className="fixed inset-y-0 left-0 z-30 hidden h-screen w-[300px] overflow-hidden border-r border-sidebar-border bg-sidebar lg:block"><SidebarContent active={active} /></aside>
     <header className="sticky top-0 z-40 grid h-16 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-b border-border bg-background/95 px-4 backdrop-blur lg:hidden">
       <Button variant="ghost" size="icon" onClick={() => setDrawer(true)} aria-label="Open navigation"><Menu className="size-5" /></Button>
       <span className="truncate text-sm font-bold">Shouvik Chaudhuri, Ph.D.</span>
