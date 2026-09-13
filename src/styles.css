@@ -62,6 +62,8 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-card: var(--sidebar-card);
+  --color-sidebar-card-foreground: var(--sidebar-card-foreground);
   --color-highlight: var(--highlight);
   --color-overlay: var(--overlay);
   --shadow-portrait: 0 14px 38px color-mix(in oklab, var(--primary) 18%, transparent);
@@ -94,14 +96,16 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.216 0.032 256);
+  --sidebar: oklch(0.257 0.159 202);
   --sidebar-foreground: oklch(0.97 0.006 250);
   --sidebar-primary: oklch(0.78 0.09 190);
-  --sidebar-primary-foreground: oklch(0.19 0.03 256);
-  --sidebar-accent: oklch(0.285 0.033 256);
+  --sidebar-primary-foreground: oklch(0.15 0.03 202);
+  --sidebar-accent: oklch(0.32 0.07 202);
   --sidebar-accent-foreground: oklch(0.97 0.006 250);
-  --sidebar-border: oklch(0.36 0.03 256);
+  --sidebar-border: oklch(0.42 0.06 202);
   --sidebar-ring: oklch(0.78 0.09 190);
+  --sidebar-card: oklch(1 0 0 / 0.98);
+  --sidebar-card-foreground: oklch(0.22 0.04 202);
   --highlight: oklch(0.7 0.12 80);
   --overlay: oklch(0.15 0.02 190 / 55%);
 }
