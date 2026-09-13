@@ -257,13 +257,14 @@ function Skills() { return <Section id="skills" eyebrow="Technical skills" title
 
 const reviews: [string, string][] = [['IEEE/ASME Transactions on Mechatronics','14'],['IEEE Transactions on Instrumentation and Measurement','10'],['IEEE Transactions on Vehicular Technology','9'],['IEEE I2MTC','6'],['IEEE Sensors Journal','3'],['Control Engineering Practice','3'],['Proc. IMechE, Part C','2'],['Computers and Electronics in Agriculture','2'],['IEEE JESTIE','2'],['Sādhanā','1'],['Journal of the Brazilian Society of Mechanical Sciences and Engineering','1'],['IEEE Open Journal of Instrumentation and Measurement','1'],['IEEE IAS Publications','1']];
 
-const languages = [
+type Language = { level: string; flag: string; name: string; note: string; certUrl?: string; certFile?: string };
+const languages: readonly Language[] = [
   { level: "C1", flag: "\u{1F1EC}\u{1F1E7}", name: "English", note: "Professional (British Council certified)", certUrl: englishCertAsset.url, certFile: "British_Council_Certificate_2020.pdf" },
   { level: "C2", flag: "\u{1F1EE}\u{1F1F3}", name: "Hindi", note: "Native" },
   { level: "C2", flag: "\u{1F1EE}\u{1F1F3}", name: "Bengali", note: "Native" },
   { level: "A1", flag: "\u{1F1E9}\u{1F1F0}", name: "Danish", note: "Basic", certUrl: danishCertAsset.url, certFile: "Shouvik_Chaudvik_modultestbevis_3.1.pdf" },
   { level: "A0", flag: "\u{1F1E9}\u{1F1EA}", name: "German", note: "Beginner (Just started / In progress)" },
-] as const;
+];
 
 
 function Service() { return <Section id="service" eyebrow="Service" title="Professional standing and peer review"><div className="grid gap-10 lg:grid-cols-2"><div><h3 className="font-display text-2xl">Memberships & honours</h3><div className="mt-5 space-y-4">{[['Senior Member, IEEE','Elevated 2026 · member since 2016 · ID 90902393'],['Member, IET','ID 1101020475 · pursuing CEng status'],['Member & Chartered Engineer (India), IE(I)','ID M-1848040'],['Associate Member, INAE','Application under review, 2026'],['IEEE COVID-19 App Development Contest','Winner, 2020 · CovCov mobile application']].map(([a,b])=><div key={a} className="border-l-2 border-highlight pl-4"><p className="font-semibold">{a}</p><p className="text-sm text-muted-foreground">{b}</p></div>)}</div></div><div><div className="flex items-end justify-between"><h3 className="font-display text-2xl">Verified peer review</h3><p className="font-display text-4xl text-primary">55</p></div><p className="mt-2 text-sm text-muted-foreground">Reviews of 42 manuscripts · September 2015–September 2026</p><div className="mt-5 divide-y divide-border border-y border-border">{reviews.map(([a,n])=><div key={a} className="grid grid-cols-[1fr_auto] gap-3 py-2.5 text-xs"><span>{a}</span><strong className="text-primary">{n}</strong></div>)}</div></div></div></Section>; }
