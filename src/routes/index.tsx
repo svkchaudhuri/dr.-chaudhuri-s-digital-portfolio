@@ -38,7 +38,7 @@ export const Route = createFileRoute("/")({
 
 const nav = [
   ["home", "Home", Home], ["profile", "Profile", Users], ["research", "Research", Microscope],
-  ["experience", "Experience", BriefcaseBusiness], ["funding", "Funding", Award],
+  ["experience", "From Theory to Implementation", BriefcaseBusiness], ["funding", "Funding", Award],
   ["education", "Education", GraduationCap], ["publications", "Publications", BookOpen],
   ["teaching", "Teaching", Users], ["skills", "Skills", Wrench], ["service", "Service", ShieldCheck],
   ["downloads", "Downloads", Download], ["contact", "Contact", Mail],
