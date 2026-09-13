@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Award, BookOpen, BriefcaseBusiness, CheckCircle2, ChevronRight, Download,
-  Database, ExternalLink, FileText, GraduationCap, Home, Linkedin,
+  ExternalLink, FileText, GraduationCap, Home, Linkedin,
   Mail, MapPin, Menu, Microscope, Search, ShieldCheck, SlidersHorizontal, Users, Wrench, X,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ComponentType } from "react";
@@ -14,6 +14,7 @@ import mastersThesisAsset from "@/assets/masters-dissertation.pdf.asset.json";
 import orcidLogo from "@/assets/orcid-logo.png.asset.json";
 import wosLogo from "@/assets/wos-logo.png.asset.json";
 import ieeeLogo from "@/assets/ieee-logo.png.asset.json";
+import scopusLogo from "@/assets/scopus-logo.png.asset.json";
 import sduBg from "@/assets/sdu-sonderborg.jpeg.asset.json";
 import heroBg from "@/assets/hero-bg.jpg.asset.json";
 import { Button } from "@/components/ui/button";
@@ -46,7 +47,7 @@ const brandLinks: Brand[] = [
   { label: "ORCID", value: "0000-0001-8957-5086", url: "https://orcid.org/0000-0001-8957-5086", img: orcidLogo.url },
   { label: "Web of Science", value: "ResearcherID S-9653-2019", url: "https://www.webofscience.com/wos/author/record/S-9653-2019", img: wosLogo.url },
   { label: "Google Scholar", value: "sXYaj-AAAAAJ", url: "https://scholar.google.com/citations?user=sXYaj-AAAAAJ", Icon: GraduationCap },
-  { label: "Scopus", value: "Author ID 14062861300", url: "https://www.scopus.com/authid/detail.uri?authorId=14062861300", Icon: Database },
+  { label: "Scopus", value: "Author ID 14062861300", url: "https://www.scopus.com/authid/detail.uri?authorId=14062861300", img: scopusLogo.url },
   { label: "LinkedIn", value: "drshouvikchaudhuri", url: "https://www.linkedin.com/in/drshouvikchaudhuri", Icon: Linkedin },
   { label: "IEEE", value: "Senior Member · ID 90902393", img: ieeeLogo.url },
 ];
@@ -244,7 +245,15 @@ function Teaching() { return <Section id="teaching" eyebrow="Teaching" title="Te
 function Skills() { return <Section id="skills" eyebrow="Technical skills" title="Methods, platforms and tools" muted><div className="grid gap-px overflow-hidden rounded-md border border-border bg-border md:grid-cols-2">{skills.map(([t,d])=><article className="bg-background p-6" key={t}><h3 className="text-sm font-extrabold text-primary">{t}</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">{d}</p></article>)}</div></Section>; }
 
 const reviews=[['IEEE/ASME Transactions on Mechatronics','14'],['IEEE Transactions on Instrumentation and Measurement','10'],['IEEE Transactions on Vehicular Technology','9'],['IEEE I2MTC','6'],['IEEE Sensors Journal','3'],['Control Engineering Practice','3'],['Proc. IMechE, Part C','2'],['Computers and Electronics in Agriculture','2'],['IEEE JESTIE','2'],['Sādhanā','1'],['Journal of the Brazilian Society of Mechanical Sciences and Engineering','1'],['IEEE Open Journal of Instrumentation and Measurement','1'],['IEEE IAS Publications','1']];
-function Service() { return <Section id="service" eyebrow="Service" title="Professional standing and peer review"><div className="grid gap-10 lg:grid-cols-2"><div><h3 className="font-display text-2xl">Memberships & honours</h3><div className="mt-5 space-y-4">{[['Senior Member, IEEE','Elevated 2026 · member since 2016 · ID 90902393'],['Member, IET','ID 1101020475 · pursuing CEng status'],['Member & Chartered Engineer (India), IE(I)','ID M-1848040'],['Associate Member, INAE','Application under review, 2026'],['IEEE COVID-19 App Development Contest','Winner, 2020 · CovCov mobile application']].map(([a,b])=><div key={a} className="border-l-2 border-highlight pl-4"><p className="font-semibold">{a}</p><p className="text-sm text-muted-foreground">{b}</p></div>)}</div></div><div><div className="flex items-end justify-between"><h3 className="font-display text-2xl">Verified peer review</h3><p className="font-display text-4xl text-primary">55</p></div><p className="mt-2 text-sm text-muted-foreground">Reviews of 42 manuscripts · September 2015–September 2026</p><div className="mt-5 divide-y divide-border border-y border-border">{reviews.map(([a,n])=><div key={a} className="grid grid-cols-[1fr_auto] gap-3 py-2.5 text-xs"><span>{a}</span><strong className="text-primary">{n}</strong></div>)}</div></div></div><div className="mt-12 border-t border-border pt-8"><h3 className="font-display text-2xl">Languages</h3><p className="mt-3 text-sm leading-7 text-muted-foreground">English (Professional, C1; British Council) · Hindi (Native, C2) · Bengali (Native, C2) · Danish (Basic, A1) · German (Beginner)</p></div></Section>; }
+const languages = [
+  ["C1", "\u{1F1EC}\u{1F1E7}", "English", "Professional (British Council certified)"],
+  ["C2", "\u{1F1EE}\u{1F1F3}", "Hindi", "Native"],
+  ["C2", "\u{1F1EE}\u{1F1F3}", "Bengali", "Native"],
+  ["A1", "\u{1F1E9}\u{1F1F0}", "Danish", "Basic"],
+  ["A1", "\u{1F1E9}\u{1F1EA}", "German", "Beginner"],
+] as const;
+
+function Service() { return <Section id="service" eyebrow="Service" title="Professional standing and peer review"><div className="grid gap-10 lg:grid-cols-2"><div><h3 className="font-display text-2xl">Memberships & honours</h3><div className="mt-5 space-y-4">{[['Senior Member, IEEE','Elevated 2026 · member since 2016 · ID 90902393'],['Member, IET','ID 1101020475 · pursuing CEng status'],['Member & Chartered Engineer (India), IE(I)','ID M-1848040'],['Associate Member, INAE','Application under review, 2026'],['IEEE COVID-19 App Development Contest','Winner, 2020 · CovCov mobile application']].map(([a,b])=><div key={a} className="border-l-2 border-highlight pl-4"><p className="font-semibold">{a}</p><p className="text-sm text-muted-foreground">{b}</p></div>)}</div></div><div><div className="flex items-end justify-between"><h3 className="font-display text-2xl">Verified peer review</h3><p className="font-display text-4xl text-primary">55</p></div><p className="mt-2 text-sm text-muted-foreground">Reviews of 42 manuscripts · September 2015–September 2026</p><div className="mt-5 divide-y divide-border border-y border-border">{reviews.map(([a,n])=><div key={a} className="grid grid-cols-[1fr_auto] gap-3 py-2.5 text-xs"><span>{a}</span><strong className="text-primary">{n}</strong></div>)}</div></div></div><div className="mt-12 border-t border-border pt-8"><h3 className="font-display text-2xl">Languages</h3><div className="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">{languages.map(([level,flag,name,note])=>(<div key={name} className="group flex flex-col items-center rounded-xl border border-border bg-card/60 p-4 text-center transition-all hover:-translate-y-1 hover:border-primary hover:shadow-portrait"><div className="flex size-16 items-center justify-center rounded-full border-2 border-primary/40 bg-primary/5 font-display text-xl text-primary transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">{level}</div><p className="mt-3 text-sm font-semibold"><span className="mr-1.5" aria-hidden="true">{flag}</span>{name}</p><p className="mt-1 text-xs leading-5 text-muted-foreground">{note}</p></div>))}</div></div></Section>; }
 
 const downloadCards = [
   { title: "Academic CV", note: "Complete academic record · Version 2 · 13 September 2026 · PDF", url: cvAsset.url, file: "Shouvik_Chaudhuri_CV_Master_v2.pdf" },
