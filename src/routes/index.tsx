@@ -253,6 +253,14 @@ function Skills() { return <Section id="skills" eyebrow="Technical skills" title
   </div>
 </Section>; }
 
+const languages = [
+  ["C1", "\u{1F1EC}\u{1F1E7}", "English", "Professional (British Council certified)"],
+  ["C2", "\u{1F1EE}\u{1F1F3}", "Hindi", "Native"],
+  ["C2", "\u{1F1EE}\u{1F1F3}", "Bengali", "Native"],
+  ["A1", "\u{1F1E9}\u{1F1F0}", "Danish", "Basic"],
+  ["A0", "\u{1F1E9}\u{1F1EA}", "German", "Beginner (Just started / In progress)"],
+] as const;
+
 
 function Service() { return <Section id="service" eyebrow="Service" title="Professional standing and peer review"><div className="grid gap-10 lg:grid-cols-2"><div><h3 className="font-display text-2xl">Memberships & honours</h3><div className="mt-5 space-y-4">{[['Senior Member, IEEE','Elevated 2026 · member since 2016 · ID 90902393'],['Member, IET','ID 1101020475 · pursuing CEng status'],['Member & Chartered Engineer (India), IE(I)','ID M-1848040'],['Associate Member, INAE','Application under review, 2026'],['IEEE COVID-19 App Development Contest','Winner, 2020 · CovCov mobile application']].map(([a,b])=><div key={a} className="border-l-2 border-highlight pl-4"><p className="font-semibold">{a}</p><p className="text-sm text-muted-foreground">{b}</p></div>)}</div></div><div><div className="flex items-end justify-between"><h3 className="font-display text-2xl">Verified peer review</h3><p className="font-display text-4xl text-primary">55</p></div><p className="mt-2 text-sm text-muted-foreground">Reviews of 42 manuscripts · September 2015–September 2026</p><div className="mt-5 divide-y divide-border border-y border-border">{reviews.map(([a,n])=><div key={a} className="grid grid-cols-[1fr_auto] gap-3 py-2.5 text-xs"><span>{a}</span><strong className="text-primary">{n}</strong></div>)}</div></div></div></Section>; }
 
