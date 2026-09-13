@@ -67,7 +67,7 @@ function SidebarContent({ active, close, showNav = false }: { active: string; cl
     <div className="shrink-0 text-center">
       <div className="relative mx-auto w-fit">
         <div aria-hidden="true" className="absolute -inset-1.5 rounded-full bg-sidebar-primary/10" />
-        <img src={headshot.url} alt="Portrait of Dr. Shouvik Chaudhuri" className="relative mx-auto aspect-square w-[min(144px,42vw)] rounded-full border-4 border-card object-cover shadow-portrait" />
+        <img src={headshot.url} alt="Portrait of Dr. Shouvik Chaudhuri" className="relative mx-auto aspect-square w-[min(144px,42vw)] rounded-full border-4 border-sidebar-accent object-cover shadow-portrait" />
       </div>
       <h2 className="mt-3 font-display text-[1.35rem] leading-tight text-sidebar-foreground">Shouvik Chaudhuri, Ph.D.</h2>
       <p className="mt-1.5 text-[10.5px] font-bold leading-snug text-sidebar-primary">SMIEEE (US) · MIET (UK) · MIE (India)<br />Pursuing CEng status (IET)</p>
@@ -82,8 +82,8 @@ function SidebarContent({ active, close, showNav = false }: { active: string; cl
             <span className="mt-1 text-[9px] font-bold leading-none text-sidebar-foreground/70">{link.label === "Web of Science" ? "WoS" : link.label === "Google Scholar" ? "Scholar" : link.label}</span>
           </>;
           return link.url
-            ? <a key={link.label} href={link.url} target="_blank" rel="noreferrer" title={link.label} className="flex flex-col items-center justify-center rounded-lg border border-sidebar-border bg-card py-2 transition-all hover:-translate-y-0.5 hover:border-sidebar-primary hover:shadow-portrait">{inner}</a>
-            : <span key={link.label} title={link.value} className="flex flex-col items-center justify-center rounded-lg border border-sidebar-border bg-card py-2">{inner}</span>;
+            ? <a key={link.label} href={link.url} target="_blank" rel="noreferrer" title={link.label} className="flex flex-col items-center justify-center rounded-lg border border-sidebar-border bg-sidebar-accent py-2 transition-all hover:-translate-y-0.5 hover:border-sidebar-primary hover:shadow-portrait">{inner}</a>
+            : <span key={link.label} title={link.value} className="flex flex-col items-center justify-center rounded-lg border border-sidebar-border bg-sidebar-accent py-2">{inner}</span>;
         })}
       </div>
     </div>
@@ -129,9 +129,9 @@ function Portfolio() {
 
   return <div className="relative min-h-screen bg-background">
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      <img src={sduBg.url} alt="" className="absolute inset-x-0 top-0 h-[62vh] w-full object-cover opacity-[0.09]" />
-      <img src={heroBg.url} alt="" className="absolute inset-x-0 bottom-0 h-[55vh] w-full object-cover opacity-[0.06]" />
-      <div className="absolute inset-0 bg-background/70 backdrop-blur-[3px]" />
+      <img src={sduBg.url} alt="" className="absolute inset-x-0 top-0 h-[62vh] w-full object-cover opacity-[0.3]" />
+      <img src={heroBg.url} alt="" className="absolute inset-x-0 bottom-0 h-[55vh] w-full object-cover opacity-[0.22]" />
+      <div className="absolute inset-0 bg-background/72 backdrop-blur-[2px]" />
     </div>
     <aside className="fixed inset-y-0 left-0 z-30 hidden h-screen w-[340px] overflow-hidden border-r border-sidebar-border bg-sidebar lg:block"><SidebarContent active={active} /></aside>
     <header className="sticky top-0 z-40 grid h-16 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-b border-border bg-background/95 px-4 backdrop-blur lg:hidden">
@@ -242,18 +242,29 @@ const courses: { code: string; text: string; url?: string }[] = [
 ];
 function Teaching() { return <Section id="teaching" eyebrow="Teaching" title="Teaching and supervision"><div className="grid gap-4 md:grid-cols-2">{courses.map(c=>{const inner=<><p className="flex items-center gap-1.5 font-mono text-xs font-bold text-primary">{c.code}{c.url&&<ExternalLink className="size-3.5" aria-hidden="true" />}</p><p className="mt-2 text-sm leading-6">{c.text}</p></>;return c.url?<a key={c.code} href={c.url} target="_blank" rel="noreferrer" className="block rounded-md border border-border p-5 transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait">{inner}</a>:<div className="rounded-md border border-border p-5" key={c.code}>{inner}</div>;})}</div><p className="mt-6 text-sm text-muted-foreground">Teaching assistant: Control of Autonomous Systems (Autumn 2022) and Construct Mechatronics (Spring 2022). Internal co-examiner for Adaptive and Nonlinear Control, Fault-Tolerant Control, and Statistical Signal Processing.</p><div className="mt-14 grid gap-12 lg:grid-cols-2"><ThesisList title="Master's dissertations" items={masters}/><ThesisList title="Bachelor's projects" items={bachelors}/></div></Section>; }
 
-function Skills() { return <Section id="skills" eyebrow="Technical skills" title="Methods, platforms and tools" muted><div className="grid gap-px overflow-hidden rounded-md border border-border bg-border md:grid-cols-2">{skills.map(([t,d])=><article className="bg-background p-6" key={t}><h3 className="text-sm font-extrabold text-primary">{t}</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">{d}</p></article>)}</div></Section>; }
+function Skills() { return <Section id="skills" eyebrow="Technical skills" title="Methods, platforms and tools" muted>
+  <div>
+    <h3 className="font-display text-2xl">Engineering &amp; Technical Competencies</h3>
+    <div className="mt-5 grid gap-px overflow-hidden rounded-md border border-border bg-border md:grid-cols-2">{skills.map(([t,d])=><article className="bg-background p-6" key={t}><h3 className="text-sm font-extrabold text-primary">{t}</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">{d}</p></article>)}</div>
+  </div>
+  <div className="mt-12 border-t border-border pt-8">
+    <h3 className="font-display text-2xl">Languages &amp; Communication</h3>
+    <div className="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">{languages.map(([level,flag,name,note])=>(<div key={name} className="group flex flex-col items-center rounded-xl border border-border bg-card/60 p-4 text-center transition-all hover:-translate-y-1 hover:border-primary hover:shadow-portrait"><div className="flex size-16 items-center justify-center rounded-full border-2 border-primary/40 bg-primary/5 font-display text-xl text-primary transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">{level}</div><p className="mt-3 text-sm font-semibold"><span className="mr-1.5" aria-hidden="true">{flag}</span>{name}</p><p className="mt-1 text-xs leading-5 text-muted-foreground">{note}</p></div>))}</div>
+  </div>
+</Section>; }
 
-const reviews=[['IEEE/ASME Transactions on Mechatronics','14'],['IEEE Transactions on Instrumentation and Measurement','10'],['IEEE Transactions on Vehicular Technology','9'],['IEEE I2MTC','6'],['IEEE Sensors Journal','3'],['Control Engineering Practice','3'],['Proc. IMechE, Part C','2'],['Computers and Electronics in Agriculture','2'],['IEEE JESTIE','2'],['Sādhanā','1'],['Journal of the Brazilian Society of Mechanical Sciences and Engineering','1'],['IEEE Open Journal of Instrumentation and Measurement','1'],['IEEE IAS Publications','1']];
+const reviews: [string, string][] = [['IEEE/ASME Transactions on Mechatronics','14'],['IEEE Transactions on Instrumentation and Measurement','10'],['IEEE Transactions on Vehicular Technology','9'],['IEEE I2MTC','6'],['IEEE Sensors Journal','3'],['Control Engineering Practice','3'],['Proc. IMechE, Part C','2'],['Computers and Electronics in Agriculture','2'],['IEEE JESTIE','2'],['Sādhanā','1'],['Journal of the Brazilian Society of Mechanical Sciences and Engineering','1'],['IEEE Open Journal of Instrumentation and Measurement','1'],['IEEE IAS Publications','1']];
+
 const languages = [
   ["C1", "\u{1F1EC}\u{1F1E7}", "English", "Professional (British Council certified)"],
   ["C2", "\u{1F1EE}\u{1F1F3}", "Hindi", "Native"],
   ["C2", "\u{1F1EE}\u{1F1F3}", "Bengali", "Native"],
   ["A1", "\u{1F1E9}\u{1F1F0}", "Danish", "Basic"],
-  ["A1", "\u{1F1E9}\u{1F1EA}", "German", "Beginner"],
+  ["A0", "\u{1F1E9}\u{1F1EA}", "German", "Beginner (Just started / In progress)"],
 ] as const;
 
-function Service() { return <Section id="service" eyebrow="Service" title="Professional standing and peer review"><div className="grid gap-10 lg:grid-cols-2"><div><h3 className="font-display text-2xl">Memberships & honours</h3><div className="mt-5 space-y-4">{[['Senior Member, IEEE','Elevated 2026 · member since 2016 · ID 90902393'],['Member, IET','ID 1101020475 · pursuing CEng status'],['Member & Chartered Engineer (India), IE(I)','ID M-1848040'],['Associate Member, INAE','Application under review, 2026'],['IEEE COVID-19 App Development Contest','Winner, 2020 · CovCov mobile application']].map(([a,b])=><div key={a} className="border-l-2 border-highlight pl-4"><p className="font-semibold">{a}</p><p className="text-sm text-muted-foreground">{b}</p></div>)}</div></div><div><div className="flex items-end justify-between"><h3 className="font-display text-2xl">Verified peer review</h3><p className="font-display text-4xl text-primary">55</p></div><p className="mt-2 text-sm text-muted-foreground">Reviews of 42 manuscripts · September 2015–September 2026</p><div className="mt-5 divide-y divide-border border-y border-border">{reviews.map(([a,n])=><div key={a} className="grid grid-cols-[1fr_auto] gap-3 py-2.5 text-xs"><span>{a}</span><strong className="text-primary">{n}</strong></div>)}</div></div></div><div className="mt-12 border-t border-border pt-8"><h3 className="font-display text-2xl">Languages</h3><div className="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">{languages.map(([level,flag,name,note])=>(<div key={name} className="group flex flex-col items-center rounded-xl border border-border bg-card/60 p-4 text-center transition-all hover:-translate-y-1 hover:border-primary hover:shadow-portrait"><div className="flex size-16 items-center justify-center rounded-full border-2 border-primary/40 bg-primary/5 font-display text-xl text-primary transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">{level}</div><p className="mt-3 text-sm font-semibold"><span className="mr-1.5" aria-hidden="true">{flag}</span>{name}</p><p className="mt-1 text-xs leading-5 text-muted-foreground">{note}</p></div>))}</div></div></Section>; }
+
+function Service() { return <Section id="service" eyebrow="Service" title="Professional standing and peer review"><div className="grid gap-10 lg:grid-cols-2"><div><h3 className="font-display text-2xl">Memberships & honours</h3><div className="mt-5 space-y-4">{[['Senior Member, IEEE','Elevated 2026 · member since 2016 · ID 90902393'],['Member, IET','ID 1101020475 · pursuing CEng status'],['Member & Chartered Engineer (India), IE(I)','ID M-1848040'],['Associate Member, INAE','Application under review, 2026'],['IEEE COVID-19 App Development Contest','Winner, 2020 · CovCov mobile application']].map(([a,b])=><div key={a} className="border-l-2 border-highlight pl-4"><p className="font-semibold">{a}</p><p className="text-sm text-muted-foreground">{b}</p></div>)}</div></div><div><div className="flex items-end justify-between"><h3 className="font-display text-2xl">Verified peer review</h3><p className="font-display text-4xl text-primary">55</p></div><p className="mt-2 text-sm text-muted-foreground">Reviews of 42 manuscripts · September 2015–September 2026</p><div className="mt-5 divide-y divide-border border-y border-border">{reviews.map(([a,n])=><div key={a} className="grid grid-cols-[1fr_auto] gap-3 py-2.5 text-xs"><span>{a}</span><strong className="text-primary">{n}</strong></div>)}</div></div></div></Section>; }
 
 const downloadCards = [
   { title: "Academic CV", note: "Complete academic record · Version 2 · 13 September 2026 · PDF", url: cvAsset.url, file: "Shouvik_Chaudhuri_CV_Master_v2.pdf" },
