@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Award, BookOpen, BriefcaseBusiness, CheckCircle2, ChevronRight, Download,
-  ExternalLink, GraduationCap, Home, Mail, MapPin, Menu, Microscope, Search,
-  ShieldCheck, SlidersHorizontal, Users, Wrench, X,
+  Database, ExternalLink, Fingerprint, Globe2, GraduationCap, Home, Linkedin,
+  Mail, MapPin, Menu, Microscope, Search, ShieldCheck, SlidersHorizontal, Users, Wrench, X,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ComponentType } from "react";
 
@@ -40,6 +40,14 @@ const profileLinks = [
   ["LinkedIn", "drshouvikchaudhuri", "https://www.linkedin.com/in/drshouvikchaudhuri"],
 ] as const;
 
+const sidebarLinks: [string, string, ComponentType<{ className?: string }>][] = [
+  ["ORCID", "https://orcid.org/0000-0001-8957-5086", Fingerprint],
+  ["Web of Science", "https://www.webofscience.com/wos/author/record/S-9653-2019", Globe2],
+  ["Google Scholar", "https://scholar.google.com/citations?user=sXYaj-AAAAAJ", GraduationCap],
+  ["Scopus", "https://www.scopus.com/authid/detail.uri?authorId=14062861300", Database],
+  ["LinkedIn", "https://www.linkedin.com/in/drshouvikchaudhuri", Linkedin],
+];
+
 function SidebarContent({ active, close }: { active: string; close?: () => void }) {
   const jump = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -51,6 +59,10 @@ function SidebarContent({ active, close }: { active: string; close?: () => void 
       <h2 className="mt-4 font-display text-[1.65rem] leading-tight text-sidebar-foreground">Shouvik Chaudhuri, Ph.D.</h2>
       <p className="mt-2 text-[11px] font-bold leading-relaxed text-sidebar-primary">SMIEEE (US) · MIET (UK) · MIE (India)<br />Pursuing CEng status (IET)</p>
       <p className="mt-2 text-sm font-semibold text-sidebar-foreground">Researcher in Dynamics and Control</p>
+      <div className="mt-4 flex justify-center gap-1.5">
+        {sidebarLinks.map(([label, url, Icon]) => <a key={label} href={url} target="_blank" rel="noreferrer" title={label} aria-label={label} className="grid size-8 place-items-center rounded-full border border-sidebar-border text-sidebar-foreground/70 transition-colors hover:border-sidebar-primary hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"><Icon className="size-3.5" /></a>)}
+      </div>
+      <p className="mt-2 text-[10px] font-semibold text-sidebar-foreground/60">IEEE Senior Member · ID 90902393</p>
     </div>
     <nav aria-label="Portfolio sections" className="mt-6 space-y-1">
       {nav.map(([id, label, Icon]) => <button key={id} onClick={() => jump(id)} className={cn("grid w-full grid-cols-[24px_1fr] items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors", active === id ? "bg-sidebar-primary text-sidebar-primary-foreground" : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground")}>
