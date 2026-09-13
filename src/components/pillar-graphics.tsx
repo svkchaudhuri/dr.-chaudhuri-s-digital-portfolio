@@ -57,14 +57,14 @@ export const StewartGraphic: G = (props) => (
   <svg {...base} aria-label="Six degree-of-freedom Stewart platform with hydraulic actuators" {...props}>
     <ellipse cx="160" cy="34" rx="72" ry="16" className="fill-primary/12 stroke-primary/55" strokeWidth="1.3" />
     <ellipse cx="160" cy="116" rx="104" ry="20" className="fill-primary/5 stroke-primary/40" strokeWidth="1.2" />
-    {[
+    {([
       [104, 40, 66, 114],
       [116, 32, 128, 122],
       [196, 32, 192, 122],
       [216, 40, 254, 114],
       [150, 48, 100, 120],
       [170, 48, 222, 120],
-    ].map(([x1, y1, x2, y2]) => (
+    ] as [number, number, number, number][]).map(([x1, y1, x2, y2]) => (
       <g key={`${x1}-${x2}`}>
         <path d={`M${x1} ${y1}L${x2} ${y2}`} className="stroke-primary/55" strokeWidth="3.2" strokeLinecap="round" />
         <path d={`M${(x1 + x2) / 2} ${(y1 + y2) / 2}L${x2} ${y2}`} className="stroke-highlight" strokeWidth="1.6" strokeLinecap="round" />
