@@ -77,12 +77,12 @@ function SidebarContent({ active, close, showNav = false }: { active: string; cl
       <div className="mt-2 grid grid-cols-3 gap-2">
         {brandLinks.map((link) => {
           const inner = <>
-            <BrandMark link={link} className="size-6" />
-            <span className="mt-1.5 text-[9px] font-bold leading-none text-sidebar-foreground/70">{link.label === "Web of Science" ? "WoS" : link.label === "Google Scholar" ? "Scholar" : link.label}</span>
+            <BrandMark link={link} className="size-5" />
+            <span className="mt-1 text-[9px] font-bold leading-none text-sidebar-foreground/70">{link.label === "Web of Science" ? "WoS" : link.label === "Google Scholar" ? "Scholar" : link.label}</span>
           </>;
           return link.url
-            ? <a key={link.label} href={link.url} target="_blank" rel="noreferrer" title={link.label} className="flex flex-col items-center justify-center rounded-lg border border-sidebar-border bg-card py-3 transition-all hover:-translate-y-0.5 hover:border-sidebar-primary hover:shadow-portrait">{inner}</a>
-            : <span key={link.label} title={link.value} className="flex flex-col items-center justify-center rounded-lg border border-sidebar-border bg-card py-3">{inner}</span>;
+            ? <a key={link.label} href={link.url} target="_blank" rel="noreferrer" title={link.label} className="flex flex-col items-center justify-center rounded-lg border border-sidebar-border bg-card py-2 transition-all hover:-translate-y-0.5 hover:border-sidebar-primary hover:shadow-portrait">{inner}</a>
+            : <span key={link.label} title={link.value} className="flex flex-col items-center justify-center rounded-lg border border-sidebar-border bg-card py-2">{inner}</span>;
         })}
       </div>
     </div>
