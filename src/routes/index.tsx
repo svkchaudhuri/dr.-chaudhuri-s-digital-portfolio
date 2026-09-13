@@ -13,9 +13,11 @@ import phdThesisAsset from "@/assets/phd-thesis.pdf.asset.json";
 import mastersThesisAsset from "@/assets/masters-dissertation.pdf.asset.json";
 import orcidLogo from "@/assets/orcid-logo.png.asset.json";
 import wosLogo from "@/assets/wos-logo.png.asset.json";
+import ieeeLogo from "@/assets/ieee-logo.png.asset.json";
 import sduBg from "@/assets/sdu-sonderborg.jpeg.asset.json";
 import heroBg from "@/assets/hero-bg.jpg.asset.json";
 import { Button } from "@/components/ui/button";
+import { pillarGraphics } from "@/components/pillar-graphics";
 import { publications, researchPillars, skills } from "@/lib/portfolio-data";
 import { cn } from "@/lib/utils";
 
