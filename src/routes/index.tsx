@@ -104,7 +104,7 @@ function SidebarContent({ active, close, showNav = false }: { active: string; cl
 function TopNav({ active }: { active: string }) {
   const jump = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   return <div className="sticky top-0 z-20 hidden border-b border-border bg-background/90 backdrop-blur lg:block">
-    <nav aria-label="Portfolio sections" className="flex flex-wrap gap-1 px-5 py-2.5 xl:px-8">>
+    <nav aria-label="Portfolio sections" className="flex flex-wrap gap-1 px-5 py-2.5 xl:px-8">
       {nav.map(([id, label, Icon]) => <button key={id} onClick={() => jump(id)} aria-current={active === id ? "true" : undefined} className={cn("flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[12.5px] font-semibold transition-colors", active === id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground")}>
         <Icon className="size-4 shrink-0" aria-hidden="true" /><span>{label}</span>
       </button>)}
