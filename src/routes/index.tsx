@@ -47,39 +47,42 @@ const profileLinks = [
   ["LinkedIn", "drshouvikchaudhuri", "https://www.linkedin.com/in/drshouvikchaudhuri"],
 ] as const;
 
-const sidebarLinks: [string, string, ComponentType<{ className?: string }>][] = [
-  ["ORCID", "https://orcid.org/0000-0001-8957-5086", Fingerprint],
-  ["Web of Science", "https://www.webofscience.com/wos/author/record/S-9653-2019", Globe2],
-  ["Google Scholar", "https://scholar.google.com/citations?user=sXYaj-AAAAAJ", GraduationCap],
-  ["Scopus", "https://www.scopus.com/authid/detail.uri?authorId=14062861300", Database],
-  ["LinkedIn", "https://www.linkedin.com/in/drshouvikchaudhuri", Linkedin],
+type SideLink = { label: string; url: string; Icon?: ComponentType<{ className?: string }>; img?: string };
+const sidebarLinks: SideLink[] = [
+  { label: "ORCID", url: "https://orcid.org/0000-0001-8957-5086", img: orcidLogo.url },
+  { label: "Web of Science", url: "https://www.webofscience.com/wos/author/record/S-9653-2019", img: wosLogo.url },
+  { label: "Google Scholar", url: "https://scholar.google.com/citations?user=sXYaj-AAAAAJ", Icon: GraduationCap },
+  { label: "Scopus", url: "https://www.scopus.com/authid/detail.uri?authorId=14062861300", Icon: Database },
+  { label: "LinkedIn", url: "https://www.linkedin.com/in/drshouvikchaudhuri", Icon: Linkedin },
 ];
 
 function SidebarContent({ active, close }: { active: string; close?: () => void }) {
   const jump = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
     close?.();
   };
-  return <div className="flex h-full flex-col overflow-y-auto px-5 py-6">
-    <div className="text-center">
-      <img src={headshot.url} alt="Portrait of Dr. Shouvik Chaudhuri" className="mx-auto size-32 rounded-full border-4 border-sidebar-border object-cover shadow-portrait" />
-      <h2 className="mt-4 font-display text-[1.65rem] leading-tight text-sidebar-foreground">Shouvik Chaudhuri, Ph.D.</h2>
-      <p className="mt-2 text-[11px] font-bold leading-relaxed text-sidebar-primary">SMIEEE (US) · MIET (UK) · MIE (India)<br />Pursuing CEng status (IET)</p>
-      <p className="mt-2 text-sm font-semibold text-sidebar-foreground">Researcher in Dynamics and Control</p>
-      <div className="mt-4 flex justify-center gap-1.5">
-        {sidebarLinks.map(([label, url, Icon]) => <a key={label} href={url} target="_blank" rel="noreferrer" title={label} aria-label={label} className="grid size-8 place-items-center rounded-full border border-sidebar-border text-sidebar-foreground/70 transition-colors hover:border-sidebar-primary hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"><Icon className="size-3.5" /></a>)}
+  return <div className="flex h-full min-h-0 flex-col px-5 py-5">
+    <div className="shrink-0 text-center">
+      <img src={headshot.url} alt="Portrait of Dr. Shouvik Chaudhuri" className="mx-auto size-[104px] rounded-full border-4 border-sidebar-border object-cover shadow-portrait" />
+      <h2 className="mt-3 font-display text-[1.4rem] leading-tight text-sidebar-foreground">Shouvik Chaudhuri, Ph.D.</h2>
+      <p className="mt-1.5 text-[10px] font-bold leading-snug text-sidebar-primary">SMIEEE (US) · MIET (UK) · MIE (India)<br />Pursuing CEng status (IET)</p>
+      <p className="mt-1.5 text-[13px] font-semibold text-sidebar-foreground">Researcher in Dynamics and Control</p>
+      <div className="mt-3 flex justify-center gap-1.5">
+        {sidebarLinks.map(({ label, url, Icon, img }) => <a key={label} href={url} target="_blank" rel="noreferrer" title={label} aria-label={label} className="grid size-8 place-items-center rounded-full border border-sidebar-border bg-card text-sidebar-foreground/70 transition-colors hover:border-sidebar-primary hover:bg-sidebar-primary hover:text-sidebar-primary-foreground">{img ? <img src={img} alt="" className="size-4 object-contain" /> : Icon ? <Icon className="size-3.5" /> : null}</a>)}
       </div>
       <p className="mt-2 text-[10px] font-semibold text-sidebar-foreground/60">IEEE Senior Member · ID 90902393</p>
     </div>
-    <nav aria-label="Portfolio sections" className="mt-6 space-y-1">
-      {nav.map(([id, label, Icon]) => <button key={id} onClick={() => jump(id)} className={cn("grid w-full grid-cols-[24px_1fr] items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors", active === id ? "bg-sidebar-primary text-sidebar-primary-foreground" : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground")}>
+    <nav aria-label="Portfolio sections" className="mt-4 min-h-0 flex-1 space-y-0.5 overflow-y-auto">
+      {nav.map(([id, label, Icon]) => <button key={id} onClick={() => jump(id)} aria-current={active === id ? "true" : undefined} className={cn("grid w-full grid-cols-[20px_1fr] items-center gap-3 rounded-md px-3 py-[7px] text-left text-[13px] font-medium transition-colors", active === id ? "bg-sidebar-primary text-sidebar-primary-foreground" : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground")}>
         <Icon className="size-4 shrink-0" aria-hidden="true" /><span>{label}</span>
       </button>)}
     </nav>
-    <Button asChild className="mt-6 w-full"><a href={cvAsset.url} download="Shouvik-Chaudhuri-CV.pdf"><Download className="size-4" />Download CV</a></Button>
-    <div className="mt-5 space-y-2 border-t border-sidebar-border pt-5 text-xs text-sidebar-foreground/70">
-      <a className="flex items-center gap-2 hover:text-sidebar-primary" href="mailto:svk.chaudhuri@gmail.com"><Mail className="size-3.5" />svk.chaudhuri@gmail.com</a>
-      <p className="flex items-center gap-2"><MapPin className="size-3.5" />Kolkata, India / SDU Denmark</p>
+    <div className="shrink-0">
+      <Button asChild className="mt-3 w-full"><a href={cvAsset.url} download="Shouvik-Chaudhuri-CV.pdf"><Download className="size-4" />Download CV</a></Button>
+      <div className="mt-3 space-y-1.5 border-t border-sidebar-border pt-3 text-xs text-sidebar-foreground/70">
+        <a className="flex items-center gap-2 hover:text-sidebar-primary" href="mailto:svk.chaudhuri@gmail.com"><Mail className="size-3.5" />svk.chaudhuri@gmail.com</a>
+        <p className="flex items-center gap-2"><MapPin className="size-3.5" />Kolkata, India</p>
+      </div>
     </div>
   </div>;
 }
