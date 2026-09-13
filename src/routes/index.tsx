@@ -104,7 +104,7 @@ function SidebarContent({ active, close, showNav = false }: { active: string; cl
 function TopNav({ active }: { active: string }) {
   const jump = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   return <div className="sticky top-0 z-20 hidden border-b border-border bg-background/90 backdrop-blur lg:block">
-    <nav aria-label="Portfolio sections" className="flex flex-wrap gap-1 px-5 py-2.5 xl:px-8">
+    <nav aria-label="Portfolio sections" className="flex flex-wrap justify-center gap-1 px-5 py-2.5 xl:px-8">
       {nav.map(([id, label, Icon]) => <button key={id} onClick={() => jump(id)} aria-current={active === id ? "true" : undefined} className={cn("flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[12.5px] font-semibold transition-colors", active === id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground")}>
         <Icon className="size-4 shrink-0" aria-hidden="true" /><span>{label}</span>
       </button>)}
@@ -187,11 +187,11 @@ function TypedTerm() {
 }
 
 function Hero() {
-  return <section id="home" className="relative flex min-h-[700px] scroll-mt-20 items-center overflow-hidden border-b border-border px-5 py-24 sm:px-10 lg:px-14 xl:px-20">
+  return <section id="home" className="relative scroll-mt-20 overflow-hidden border-b border-border px-5 pb-16 pt-8 sm:px-10 lg:px-14 xl:px-20">
     <div className="hero-grid absolute inset-0 opacity-50" /><div className="relative mx-auto w-full max-w-6xl">
       <p className="section-kicker">Dynamics · Control · Real-time validation</p>
-      <h1 className="mt-5 max-w-5xl font-display text-4xl leading-[1.08] text-foreground sm:text-5xl xl:text-6xl">Researcher in Dynamics and Control of <br className="hidden sm:block" /><TypedTerm /></h1>
-      <p className="mt-8 max-w-3xl text-lg leading-8 text-muted-foreground">Control engineer with more than twelve years of experience in nonlinear and adaptive control of uncertain dynamical systems—taking ideas from mathematical formulation through MIL, SIL and HIL to purpose-built experimental rigs.</p>
+      <h1 className="mt-3 max-w-5xl font-display text-4xl leading-[1.08] text-foreground sm:text-5xl xl:text-6xl">Researcher in Dynamics and Control of <br className="hidden sm:block" /><TypedTerm /></h1>
+      <p className="mt-7 max-w-3xl text-lg leading-8 text-muted-foreground">Control engineer with more than twelve years of experience in nonlinear and adaptive control of uncertain dynamical systems, taking ideas from mathematical formulation through MIL, SIL and HIL to purpose-built experimental rigs.</p>
       <div className="mt-10 grid max-w-3xl grid-cols-2 gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-4">
         {[['7','h-index'],['170','Scholar citations'],['122','WoS citations'],['28','publications']].map(([n,l]) => <div key={l} className="bg-background p-5"><p className="font-display text-3xl text-primary">{n}</p><p className="mt-1 text-xs font-bold uppercase text-muted-foreground">{l}</p></div>)}
       </div>
