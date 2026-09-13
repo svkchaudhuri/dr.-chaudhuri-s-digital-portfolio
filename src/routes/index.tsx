@@ -41,53 +41,77 @@ const nav = [
   ["downloads", "Downloads", Download], ["contact", "Contact", Mail],
 ] as const;
 
-const profileLinks = [
-  ["ORCID", "0000-0001-8957-5086", "https://orcid.org/0000-0001-8957-5086"],
-  ["Web of Science", "ResearcherID S-9653-2019", "https://www.webofscience.com/wos/author/record/S-9653-2019"],
-  ["Google Scholar", "sXYaj-AAAAAJ", "https://scholar.google.com/citations?user=sXYaj-AAAAAJ"],
-  ["Scopus", "Author ID 14062861300", "https://www.scopus.com/authid/detail.uri?authorId=14062861300"],
-  ["LinkedIn", "drshouvikchaudhuri", "https://www.linkedin.com/in/drshouvikchaudhuri"],
-] as const;
-
-type SideLink = { label: string; url: string; Icon?: ComponentType<{ className?: string }>; img?: string };
-const sidebarLinks: SideLink[] = [
-  { label: "ORCID", url: "https://orcid.org/0000-0001-8957-5086", img: orcidLogo.url },
-  { label: "Web of Science", url: "https://www.webofscience.com/wos/author/record/S-9653-2019", img: wosLogo.url },
-  { label: "Google Scholar", url: "https://scholar.google.com/citations?user=sXYaj-AAAAAJ", Icon: GraduationCap },
-  { label: "Scopus", url: "https://www.scopus.com/authid/detail.uri?authorId=14062861300", Icon: Database },
-  { label: "LinkedIn", url: "https://www.linkedin.com/in/drshouvikchaudhuri", Icon: Linkedin },
+type Brand = { label: string; value: string; url?: string; img?: string; Icon?: ComponentType<{ className?: string }> };
+const brandLinks: Brand[] = [
+  { label: "ORCID", value: "0000-0001-8957-5086", url: "https://orcid.org/0000-0001-8957-5086", img: orcidLogo.url },
+  { label: "Web of Science", value: "ResearcherID S-9653-2019", url: "https://www.webofscience.com/wos/author/record/S-9653-2019", img: wosLogo.url },
+  { label: "Google Scholar", value: "sXYaj-AAAAAJ", url: "https://scholar.google.com/citations?user=sXYaj-AAAAAJ", Icon: GraduationCap },
+  { label: "Scopus", value: "Author ID 14062861300", url: "https://www.scopus.com/authid/detail.uri?authorId=14062861300", Icon: Database },
+  { label: "LinkedIn", value: "drshouvikchaudhuri", url: "https://www.linkedin.com/in/drshouvikchaudhuri", Icon: Linkedin },
+  { label: "IEEE", value: "Senior Member · ID 90902393", img: ieeeLogo.url },
 ];
 
-function SidebarContent({ active, close }: { active: string; close?: () => void }) {
+function BrandMark({ link, className }: { link: Brand; className?: string }) {
+  if (link.img) return <img src={link.img} alt="" className={cn("object-contain", className)} />;
+  const Icon = link.Icon;
+  return Icon ? <Icon className={className} /> : null;
+}
+
+function SidebarContent({ active, close, showNav = false }: { active: string; close?: () => void; showNav?: boolean }) {
   const jump = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
     close?.();
   };
-  return <div className="flex h-full min-h-0 flex-col px-5 py-5">
+  return <div className="flex h-full min-h-0 flex-col justify-center gap-6 overflow-y-auto px-6 py-8">
     <div className="shrink-0 text-center">
-      <img src={headshot.url} alt="Portrait of Dr. Shouvik Chaudhuri" className="mx-auto size-[104px] rounded-full border-4 border-sidebar-border object-cover shadow-portrait" />
-      <h2 className="mt-3 font-display text-[1.4rem] leading-tight text-sidebar-foreground">Shouvik Chaudhuri, Ph.D.</h2>
-      <p className="mt-1.5 text-[10px] font-bold leading-snug text-sidebar-primary">SMIEEE (US) · MIET (UK) · MIE (India)<br />Pursuing CEng status (IET)</p>
-      <p className="mt-1.5 text-[13px] font-semibold text-sidebar-foreground">Researcher in Dynamics and Control</p>
-      <div className="mt-3 flex justify-center gap-1.5">
-        {sidebarLinks.map(({ label, url, Icon, img }) => <a key={label} href={url} target="_blank" rel="noreferrer" title={label} aria-label={label} className="grid size-8 place-items-center rounded-full border border-sidebar-border bg-card text-sidebar-foreground/70 transition-colors hover:border-sidebar-primary hover:bg-sidebar-primary hover:text-sidebar-primary-foreground">{img ? <img src={img} alt="" className="size-4 object-contain" /> : Icon ? <Icon className="size-3.5" /> : null}</a>)}
+      <div className="relative mx-auto w-fit">
+        <div aria-hidden="true" className="absolute -inset-2 rounded-full bg-sidebar-primary/10" />
+        <img src={headshot.url} alt="Portrait of Dr. Shouvik Chaudhuri" className="relative mx-auto aspect-square w-[min(210px,60vw)] rounded-full border-[5px] border-card object-cover shadow-portrait" />
       </div>
-      <p className="mt-2 text-[10px] font-semibold text-sidebar-foreground/60">IEEE Senior Member · ID 90902393</p>
+      <h2 className="mt-6 font-display text-[1.7rem] leading-tight text-sidebar-foreground">Shouvik Chaudhuri, Ph.D.</h2>
+      <p className="mt-2 text-[11px] font-bold leading-snug text-sidebar-primary">SMIEEE (US) · MIET (UK) · MIE (India)<br />Pursuing CEng status (IET)</p>
+      <p className="mt-2 text-sm font-semibold text-sidebar-foreground">Researcher in Dynamics and Control</p>
     </div>
-    <nav aria-label="Portfolio sections" className="mt-4 min-h-0 flex-1 space-y-0.5 overflow-y-auto">
+    <div className="shrink-0">
+      <p className="text-center text-[10px] font-bold uppercase tracking-[0.18em] text-sidebar-foreground/50">Academic profiles</p>
+      <div className="mt-3 grid grid-cols-3 gap-2.5">
+        {brandLinks.map((link) => {
+          const inner = <>
+            <BrandMark link={link} className="size-6" />
+            <span className="mt-1.5 text-[9px] font-bold leading-none text-sidebar-foreground/70">{link.label.split(" ")[0]}</span>
+          </>;
+          return link.url
+            ? <a key={link.label} href={link.url} target="_blank" rel="noreferrer" title={link.label} className="flex flex-col items-center justify-center rounded-lg border border-sidebar-border bg-card py-3 transition-all hover:-translate-y-0.5 hover:border-sidebar-primary hover:shadow-portrait">{inner}</a>
+            : <span key={link.label} title={link.value} className="flex flex-col items-center justify-center rounded-lg border border-sidebar-border bg-card py-3">{inner}</span>;
+        })}
+      </div>
+    </div>
+    {showNav && <nav aria-label="Portfolio sections" className="min-h-0 shrink-0 space-y-0.5">
       {nav.map(([id, label, Icon]) => <button key={id} onClick={() => jump(id)} aria-current={active === id ? "true" : undefined} className={cn("grid w-full grid-cols-[20px_1fr] items-center gap-3 rounded-md px-3 py-[7px] text-left text-[13px] font-medium transition-colors", active === id ? "bg-sidebar-primary text-sidebar-primary-foreground" : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground")}>
         <Icon className="size-4 shrink-0" aria-hidden="true" /><span>{label}</span>
       </button>)}
-    </nav>
+    </nav>}
     <div className="shrink-0">
-      <Button asChild className="mt-3 w-full"><a href={cvAsset.url} download="Shouvik-Chaudhuri-CV.pdf"><Download className="size-4" />Download CV</a></Button>
-      <div className="mt-3 space-y-1.5 border-t border-sidebar-border pt-3 text-xs text-sidebar-foreground/70">
+      <Button asChild className="w-full"><a href={cvAsset.url} download="Shouvik-Chaudhuri-CV.pdf"><Download className="size-4" />Download CV</a></Button>
+      <div className="mt-4 space-y-1.5 border-t border-sidebar-border pt-4 text-xs text-sidebar-foreground/70">
         <a className="flex items-center gap-2 hover:text-sidebar-primary" href="mailto:svk.chaudhuri@gmail.com"><Mail className="size-3.5" />svk.chaudhuri@gmail.com</a>
         <p className="flex items-center gap-2"><MapPin className="size-3.5" />Kolkata, India</p>
       </div>
     </div>
   </div>;
 }
+
+function TopNav({ active }: { active: string }) {
+  const jump = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  return <div className="sticky top-0 z-20 hidden border-b border-border bg-background/90 backdrop-blur lg:block">
+    <nav aria-label="Portfolio sections" className="flex gap-1 overflow-x-auto px-5 py-2.5 xl:px-8">
+      {nav.map(([id, label, Icon]) => <button key={id} onClick={() => jump(id)} aria-current={active === id ? "true" : undefined} className={cn("flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[12.5px] font-semibold transition-colors", active === id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground")}>
+        <Icon className="size-4 shrink-0" aria-hidden="true" /><span>{label}</span>
+      </button>)}
+    </nav>
+  </div>;
+}
+
 
 function Portfolio() {
   const [active, setActive] = useState("home");
