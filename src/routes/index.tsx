@@ -8,6 +8,13 @@ import { useEffect, useMemo, useState, type ComponentType } from "react";
 
 import headshot from "@/assets/shouvik-headshot.png.asset.json";
 import cvAsset from "@/assets/shouvik-cv.pdf.asset.json";
+import pubListAsset from "@/assets/publication-list.pdf.asset.json";
+import phdThesisAsset from "@/assets/phd-thesis.pdf.asset.json";
+import mastersThesisAsset from "@/assets/masters-dissertation.pdf.asset.json";
+import orcidLogo from "@/assets/orcid-logo.png.asset.json";
+import wosLogo from "@/assets/wos-logo.png.asset.json";
+import sduBg from "@/assets/sdu-sonderborg.jpeg.asset.json";
+import heroBg from "@/assets/hero-bg.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 import { publications, researchPillars, skills } from "@/lib/portfolio-data";
 import { cn } from "@/lib/utils";
