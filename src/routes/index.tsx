@@ -140,7 +140,7 @@ function TypedTerm() {
   const [len, setLen] = useState(0);
   const [deleting, setDeleting] = useState(false);
   useEffect(() => {
-    const word = typedTerms[index];
+    const word = typedTerms[index] ?? "";
     if (!deleting && len === word.length) {
       const t = setTimeout(() => setDeleting(true), 1800);
       return () => clearTimeout(t);
@@ -153,7 +153,7 @@ function TypedTerm() {
     return () => clearTimeout(t);
   }, [len, deleting, index]);
   return <span className="text-primary">
-    {typedTerms[index].slice(0, len)}
+    {(typedTerms[index] ?? "").slice(0, len)}
     <span aria-hidden="true" className="ml-1 inline-block h-[0.82em] w-[3px] animate-pulse bg-primary align-baseline" />
     <span className="sr-only">{typedTerms.join(", ")}</span>
   </span>;
