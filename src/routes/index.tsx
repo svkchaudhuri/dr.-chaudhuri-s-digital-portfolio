@@ -535,6 +535,8 @@ const builtInCareerMoment: CareerMoment = {
   featured: true,
 };
 const careerStorageKey = "shouvik-career-moments";
+const adminStorageKey = "shouvik-gallery-admin";
+const adminPasscode = "sc2026";
 
 function CareerGallery() {
   const [moments, setMoments] = useState<CareerMoment[]>([]);
