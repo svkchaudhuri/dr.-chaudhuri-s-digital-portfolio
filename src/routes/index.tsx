@@ -546,6 +546,27 @@ function CareerGallery() {
   const [tag, setTag] = useState("");
   const [error, setError] = useState("");
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [passcodeOpen, setPasscodeOpen] = useState(false);
+  const [passcode, setPasscode] = useState("");
+  const [passcodeError, setPasscodeError] = useState("");
+
+  useEffect(() => {
+    if (window.localStorage.getItem(adminStorageKey) === "true") { setIsAdmin(true); return; }
+    if (new URLSearchParams(window.location.search).get("admin") === "true") setPasscodeOpen(true);
+  }, []);
+
+  const unlockAdmin = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (passcode.trim() !== adminPasscode) { setPasscodeError("That passcode is not correct."); return; }
+    window.localStorage.setItem(adminStorageKey, "true");
+    setIsAdmin(true); setPasscode(""); setPasscodeError(""); setPasscodeOpen(false);
+  };
+
+  const lockAdmin = () => {
+    window.localStorage.removeItem(adminStorageKey);
+    setIsAdmin(false); setDialogOpen(false);
+  };
 
   useEffect(() => {
     try {
