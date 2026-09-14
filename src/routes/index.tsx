@@ -107,11 +107,14 @@ function SidebarContent({ active, close, showNav = false }: { active: string; cl
 
 function TopNav({ active }: { active: string }) {
   const jump = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const rows = [nav.slice(0, 7), nav.slice(7)];
   return <div className="sticky top-0 z-20 hidden border-b border-border bg-background/90 backdrop-blur lg:block">
-    <nav aria-label="Portfolio sections" className="flex flex-nowrap justify-start gap-1 overflow-x-auto px-5 py-2.5 xl:px-8">
-      {nav.map(([id, label, Icon]) => <button key={id} onClick={() => jump(id)} aria-current={active === id ? "true" : undefined} className={cn("flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[12.5px] font-semibold transition-colors", active === id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground")}>
-        <Icon className="size-4 shrink-0" aria-hidden="true" /><span>{label}</span>
-      </button>)}
+    <nav aria-label="Portfolio sections" className="overflow-hidden px-5 py-2 xl:px-8">
+      {rows.map((row, rowIndex) => <div key={rowIndex} className={cn("flex flex-nowrap gap-1", rowIndex === 1 && "mt-1 justify-center")}>
+        {row.map(([id, label, Icon]) => <Button key={id} variant="ghost" size="sm" onClick={() => jump(id)} aria-current={active === id ? "true" : undefined} className={cn("h-7 shrink min-w-0 gap-1 px-2 text-[11.5px] xl:px-2.5 xl:text-xs", active === id && "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground")}>
+          <Icon className="size-3.5 shrink-0" aria-hidden="true" /><span className="whitespace-nowrap">{label}</span>
+        </Button>)}
+      </div>)}
     </nav>
   </div>;
 }
@@ -271,13 +274,89 @@ const languages: readonly Language[] = [
 
 function Service() { return <Section id="service" eyebrow="Service" title="Professional standing and peer review"><div className="grid gap-10 lg:grid-cols-2"><div><h3 className="font-display text-2xl">Memberships & honours</h3><div className="mt-5 space-y-4">{[['Senior Member, IEEE','Elevated 2026 · member since 2016 · ID 90902393'],['Member, IET','ID 1101020475 · pursuing CEng status'],['Member & Chartered Engineer (India), IE(I)','ID M-1848040'],['Associate Member, INAE','Application under review, 2026'],['IEEE COVID-19 App Development Contest','Winner, 2020 · CovCov mobile application']].map(([a,b])=><div key={a} className="border-l-2 border-highlight pl-4"><p className="font-semibold">{a}</p><p className="text-sm text-muted-foreground">{b}</p></div>)}</div></div><div><div className="flex items-end justify-between"><h3 className="font-display text-2xl">Verified peer review</h3><p className="font-display text-4xl text-primary">55</p></div><p className="mt-2 text-sm text-muted-foreground">Reviews of 42 manuscripts · September 2015–September 2026</p><div className="mt-5 divide-y divide-border border-y border-border">{reviews.map(([a,n])=><div key={a} className="grid grid-cols-[1fr_auto] gap-3 py-2.5 text-xs"><span>{a}</span><strong className="text-primary">{n}</strong></div>)}</div></div></div></Section>; }
 
-const careerMoments = [
-  { title: "SDU Sønderborg", note: "Campus and Als Fjord · Maritime control research", src: sduBg.url, alt: "University of Southern Denmark campus beside Als Fjord", className: "md:col-span-2 md:row-span-2" },
-  { title: "Kolkata", note: "Vidyasagar Setu · An early chapter in the engineering journey", src: heroBg.url, alt: "Shouvik Chaudhuri beside Vidyasagar Setu in Kolkata", className: "md:row-span-2" },
-  { title: "Academic journey", note: "Research, teaching and collaboration across institutions", src: headshot.url, alt: "Portrait of Dr. Shouvik Chaudhuri", className: "md:col-span-1" },
-] as const;
+type CareerMoment = { id: string; title: string; tag: string; src: string; alt: string; featured?: boolean };
+const builtInCareerMoment: CareerMoment = {
+  id: "sdu-sonderborg",
+  title: "SDU Sønderborg",
+  tag: "Campus and Als Fjord · Maritime control research",
+  src: sduBg.url,
+  alt: "University of Southern Denmark campus beside Als Fjord",
+  featured: true,
+};
+const careerStorageKey = "shouvik-career-moments";
 
-function CareerGallery() { return <Section id="gallery" eyebrow="Career Gallery" title="Career Moments" muted><div className="grid auto-rows-[220px] gap-4 md:grid-cols-3">{careerMoments.map((moment)=><figure key={moment.title} className={cn("group relative overflow-hidden rounded-md border border-border bg-card", moment.className)}><img src={moment.src} alt={moment.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" /><figcaption className="absolute inset-x-0 bottom-0 bg-overlay px-5 py-4 text-primary-foreground backdrop-blur-sm"><p className="font-display text-xl">{moment.title}</p><p className="mt-1 text-xs opacity-80">{moment.note}</p></figcaption></figure>)}<div className="grid place-items-center rounded-md border border-dashed border-primary/40 bg-primary/5 p-6 text-center"><div><span className="mx-auto grid size-11 place-items-center rounded-full border border-primary/30 bg-background text-primary"><ImagePlus className="size-5" aria-hidden="true" /></span><p className="mt-3 text-sm font-bold">Research testbeds &amp; laboratory moments</p><p className="mt-1 text-xs leading-5 text-muted-foreground">Reserved for future career snapshots</p></div></div></div></Section>; }
+function CareerGallery() {
+  const [moments, setMoments] = useState<CareerMoment[]>([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+  const [title, setTitle] = useState("");
+  const [tag, setTag] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(careerStorageKey);
+      if (!stored) return;
+      const parsed: unknown = JSON.parse(stored);
+      if (Array.isArray(parsed)) {
+        setMoments(parsed.filter((item): item is CareerMoment => Boolean(item && typeof item === "object" && "id" in item && "src" in item && "title" in item && typeof item.id === "string" && typeof item.src === "string" && typeof item.title === "string")));
+      }
+    } catch {
+      window.localStorage.removeItem(careerStorageKey);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!dialogOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setDialogOpen(false); };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [dialogOpen]);
+
+  const addPhoto = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const cleanTitle = title.trim();
+    const cleanTag = tag.trim();
+    let cleanUrl = "";
+    try {
+      const parsedUrl = new URL(imageUrl.trim());
+      if (parsedUrl.protocol !== "https:" && parsedUrl.protocol !== "http:") throw new Error();
+      cleanUrl = parsedUrl.toString();
+    } catch {
+      setError("Enter a valid image URL beginning with http:// or https://.");
+      return;
+    }
+    if (!cleanTitle) {
+      setError("Add a title or caption for this photo.");
+      return;
+    }
+    const next = [...moments, { id: `${Date.now()}-${cleanTitle.slice(0, 20)}`, title: cleanTitle, tag: cleanTag, src: cleanUrl, alt: cleanTitle }];
+    setMoments(next);
+    window.localStorage.setItem(careerStorageKey, JSON.stringify(next));
+    setImageUrl(""); setTitle(""); setTag(""); setError(""); setDialogOpen(false);
+  };
+
+  const allMoments = [builtInCareerMoment, ...moments];
+  return <Section id="gallery" eyebrow="Career Gallery" title="Career Moments" muted>
+    <div className="mb-6 flex justify-end"><Button onClick={() => { setError(""); setDialogOpen(true); }}><ImagePlus className="size-4" aria-hidden="true" />Add Photo</Button></div>
+    <div className="grid auto-rows-[220px] gap-4 md:grid-cols-3">
+      {allMoments.map((moment, index) => <figure key={moment.id} className={cn("group relative overflow-hidden rounded-2xl border border-border bg-card", moment.featured ? "md:col-span-2 md:row-span-2" : index % 3 === 1 ? "md:row-span-2" : "")}><img src={moment.src} alt={moment.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" /><figcaption className="absolute inset-x-0 bottom-0 bg-overlay px-5 py-4 text-primary-foreground backdrop-blur-sm"><p className="font-display text-xl">{moment.title}</p>{moment.tag && <p className="mt-1 text-xs opacity-80">{moment.tag}</p>}</figcaption></figure>)}
+    </div>
+    {dialogOpen && <div className="fixed inset-0 z-[70] grid place-items-center p-4">
+      <Button variant="ghost" aria-label="Close add photo dialog" className="absolute inset-0 h-auto w-full rounded-none bg-overlay hover:bg-overlay" onClick={() => setDialogOpen(false)} />
+      <div role="dialog" aria-modal="true" aria-labelledby="add-photo-title" className="relative z-10 w-full max-w-lg rounded-xl border border-border bg-background p-6 shadow-drawer">
+        <div className="flex items-start justify-between gap-4"><div><h3 id="add-photo-title" className="font-display text-2xl">Add a career photo</h3><p className="mt-1 text-sm text-muted-foreground">Add a hosted image to this gallery.</p></div><Button variant="ghost" size="icon" onClick={() => setDialogOpen(false)} aria-label="Close dialog"><X className="size-5" /></Button></div>
+        <form className="mt-6 space-y-4" onSubmit={addPhoto}>
+          <label className="block text-sm font-semibold">Image URL<input type="url" required maxLength={2048} value={imageUrl} onChange={(event) => setImageUrl(event.target.value)} placeholder="https://example.com/photo.jpg" className="mt-2 h-10 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" /></label>
+          <label className="block text-sm font-semibold">Title or caption<input required maxLength={100} value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Research testbed demonstration" className="mt-2 h-10 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" /></label>
+          <label className="block text-sm font-semibold">Year or tag <span className="font-normal text-muted-foreground">(optional)</span><input maxLength={60} value={tag} onChange={(event) => setTag(event.target.value)} placeholder="2025 · SDU Laboratory" className="mt-2 h-10 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" /></label>
+          {error && <p role="alert" className="text-sm font-semibold text-destructive">{error}</p>}
+          <div className="flex justify-end gap-2 pt-2"><Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button><Button type="submit"><ImagePlus className="size-4" />Add Photo</Button></div>
+        </form>
+      </div>
+    </div>}
+  </Section>;
+}
 
 const downloadCards = [
   { title: "Academic CV", note: "Complete academic record · Version 2 · 13 September 2026 · PDF", url: cvAsset.url, file: "Shouvik_Chaudhuri_CV_Master_v2.pdf" },
