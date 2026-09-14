@@ -4,7 +4,7 @@ import {
   ExternalLink, FileImage, FileText, GraduationCap, Home, ImagePlus, Linkedin,
   Globe2, Mail, MapPin, Menu, Microscope, Search, ShieldCheck, SlidersHorizontal, Users, Wrench, X,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState, type ComponentType } from "react";
+import { useEffect, useMemo, useState, type ComponentType } from "react";
 
 import headshot from "@/assets/shouvik-headshot.png.asset.json";
 import cvAsset from "@/assets/shouvik-cv.pdf.asset.json";
