@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  Award, BookOpen, BriefcaseBusiness, CheckCircle2, ChevronRight, Download,
+  Award, BadgeCheck, BookOpen, BriefcaseBusiness, CheckCircle2, ChevronRight, Clock3, Download,
   ExternalLink, FileImage, FileText, GraduationCap, Home, ImagePlus, Linkedin,
-  Mail, MapPin, Menu, Microscope, Search, ShieldCheck, SlidersHorizontal, Users, Wrench, X,
+  Globe2, Mail, MapPin, Menu, Microscope, Search, ShieldCheck, SlidersHorizontal, Users, Wrench, X,
 } from "lucide-react";
-import { useEffect, useMemo, useState, type ComponentType } from "react";
+import { useEffect, useMemo, useRef, useState, type ComponentType } from "react";
 
 import headshot from "@/assets/shouvik-headshot.png.asset.json";
 import cvAsset from "@/assets/shouvik-cv.pdf.asset.json";
@@ -208,7 +208,73 @@ function Hero() {
   </section>;
 }
 
-function Profile() { return <Section id="profile" eyebrow="Profile" title="Rigorous research through-lines"><div className="grid gap-10 lg:grid-cols-[1.25fr_.75fr]"><div className="space-y-5 text-[1.03rem] leading-8 text-muted-foreground"><p>I am a control engineer with more than twelve years of experience in the nonlinear and adaptive control of uncertain dynamical systems, and in the mathematical modelling that supports it. My work spans learning-based control, in which the learned component sits inside the loop under an adaptation law designed to preserve stability; safety-critical formulations built on control barrier functions and quadratic programming; and maritime motion control.</p><p>The common thread is closed-loop behaviour that can be certified rather than only tuned, on plants that are uncertain and only partly modelled. I take that work from mathematical formulation through simulation and MIL/SIL/HIL pipelines to real-time experimental validation on purpose-built rigs.</p></div><div className="border-l border-border pl-7"><p className="font-display text-2xl">Research leadership</p><ul className="mt-5 space-y-4 text-sm text-muted-foreground">{["Led a three-partner consortium as Project Manager", "Principal Investigator on two competitive grants", "Supervised twelve Master's and Bachelor's projects", "Research spanning control, energy and engineering–biology"].map(x => <li key={x} className="flex gap-3"><ChevronRight className="mt-0.5 size-4 shrink-0 text-primary" />{x}</li>)}</ul></div></div></Section>; }
+const profileHighlights = [
+  { value: "12+", label: "Years in research", Icon: Clock3 },
+  { value: "28", label: "Publications", Icon: BookOpen },
+  { value: "1.689M", label: "DKK research grants", Icon: Award },
+  { value: "3", label: "Countries represented", Icon: Globe2 },
+] as const;
+
+const journeyMilestones = [
+  ["2012 to 2013", "Masters GATE Fellow", "BARC, Mumbai", "First-principles modelling and simulation of a compact pressurised water reactor."],
+  ["2013 to 2022", "Research Fellow", "Jadavpur University, Kolkata", "Robotics, electrohydraulic control, real-time actuation and experimental validation."],
+  ["2015 to 2021", "Ph.D. in Engineering", "Jadavpur University", "Adaptive-neuro-sliding mode control and vision sensing for electrohydraulic systems."],
+  ["2022 to 2026", "Postdoctoral Researcher", "University of Southern Denmark, Sønderborg", "Maritime control systems, safety-critical roll stabilisation and research leadership."],
+  ["June 2023", "Visiting Researcher", "TU Ilmenau, Germany", "PUREWATER secondment with the Control Systems Group and KOMPASS GmbH."],
+] as const;
+
+const researchInterests = [
+  "Nonlinear control", "Adaptive control", "Safety-critical control", "CBF-QP filters",
+  "Electrohydraulic systems", "Stewart platforms", "Marine roll stabilisation",
+  "Energy systems", "Digital twins", "Real-time HIL", "Engineering and biology",
+] as const;
+
+function JourneyTimeline() {
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const element = timelineRef.current;
+    if (!element) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry?.isIntersecting) {
+        setVisible(true);
+        observer.disconnect();
+      }
+    }, { threshold: 0.12 });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+  const delays = ["delay-0", "delay-75", "delay-150", "delay-200", "delay-300"];
+  return <div ref={timelineRef} className="relative mt-7 space-y-8 before:absolute before:bottom-3 before:left-[7px] before:top-3 before:w-px before:bg-border">
+    {journeyMilestones.map(([date, role, organisation, detail], index) => <article key={`${date}-${role}`} className={cn("relative pl-10 transition-all duration-700 motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none", delays[index], visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0")}>
+      <span className="absolute left-0 top-1.5 size-[15px] rounded-full border-4 border-background bg-primary" />
+      <p className="font-mono text-xs font-bold text-primary">{date}</p>
+      <h4 className="mt-1 font-display text-xl">{role}</h4>
+      <p className="mt-1 text-sm font-semibold">{organisation}</p>
+      <p className="mt-2 text-sm leading-6 text-muted-foreground">{detail}</p>
+    </article>)}
+  </div>;
+}
+
+function Profile() { return <Section id="profile" eyebrow="Profile" title="Rigorous research through-lines">
+  <div className="max-w-4xl text-[1.03rem] leading-8 text-muted-foreground">
+    <p>I am a control engineer with more than twelve years of experience in nonlinear and adaptive control of uncertain dynamical systems. My research connects rigorous mathematical formulation with simulation, MIL, SIL and HIL workflows, and real-time validation on purpose-built experimental rigs.</p>
+  </div>
+  <div className="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+    {profileHighlights.map(({ value, label, Icon }) => <article key={label} className="group rounded-md border border-border bg-card/80 p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait">
+      <div className="flex items-center justify-between gap-3"><p className="font-display text-3xl text-primary">{value}</p><span className="grid size-9 place-items-center rounded-full bg-primary/10 text-primary"><Icon className="size-4" aria-hidden="true" /></span></div>
+      <p className="mt-2 text-xs font-bold uppercase text-muted-foreground">{label}</p>
+    </article>)}
+  </div>
+  <div className="mt-14 grid gap-14 lg:grid-cols-[1.05fr_.95fr]">
+    <div><p className="section-kicker">Career path</p><h3 className="mt-2 font-display text-3xl">Journey</h3><JourneyTimeline /></div>
+    <div>
+      <p className="section-kicker">Current focus</p><h3 className="mt-2 font-display text-3xl">Research Interests</h3>
+      <div className="mt-7 flex flex-wrap gap-2">{researchInterests.map((interest) => <span key={interest} className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-2 text-sm font-semibold text-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"><Microscope className="size-3.5" aria-hidden="true" />{interest}</span>)}</div>
+      <div className="mt-9 rounded-md border-l-2 border-highlight bg-card/70 p-6"><p className="font-display text-xl">Research leadership</p><ul className="mt-5 space-y-4 text-sm text-muted-foreground">{["Led a three-partner consortium as Project Manager", "Principal Investigator on two competitive grants", "Supervised twelve Master's and Bachelor's projects", "Research spanning control, energy, and the engineering and biology interface"].map(x => <li key={x} className="flex gap-3"><ChevronRight className="mt-0.5 size-4 shrink-0 text-primary" />{x}</li>)}</ul></div>
+    </div>
+  </div>
+</Section>; }
 
 function Research() { return <Section id="research" eyebrow="Research" title="Connected research pillars" muted><div className="grid gap-px overflow-hidden rounded-md border border-border bg-border md:grid-cols-2 xl:grid-cols-3">{researchPillars.map(([title, text], i) => { const Graphic = pillarGraphics[i]; return <article key={title} className={cn("flex flex-col bg-background p-7", i === 0 && "md:col-span-2 xl:col-span-1")}><span className="font-mono text-xs text-primary">0{i+1}</span><h3 className="mt-4 font-display text-2xl">{title}</h3>{Graphic && <div className="mt-5 overflow-hidden rounded-md border border-border bg-muted/40 p-3"><Graphic className="h-[124px] w-full text-primary" /></div>}<p className="mt-4 text-sm leading-6 text-muted-foreground">{text}</p></article>; })}</div><div className="mt-12 grid gap-4 md:grid-cols-2">{["Delivered safety-critical closed-loop control for active marine vessel motion stabilisation.","Specified and commissioned a marine vessel test rig with integrated wave generation.","Engineered a real-time, multi-actuator control architecture for an electrohydraulic quadruped.","Developed vision-based motion sensing on a 700 kg hydraulic Stewart platform.","Established two permanent teaching and research testbeds at SDU as Principal Investigator."].map(x=><p key={x} className="flex gap-3 text-sm leading-6"><CheckCircle2 className="mt-1 size-4 shrink-0 text-highlight" />{x}</p>)}</div></Section>; }
 
@@ -220,7 +286,30 @@ const experiences = [
 ];
 function Experience() { return <Section id="experience" eyebrow="Experience" title="Theory to Implementation"><div className="relative space-y-12 before:absolute before:bottom-2 before:left-[7px] before:top-2 before:w-px before:bg-border">{experiences.map(e=><article key={e.role} className="relative pl-10"><span className="absolute left-0 top-1.5 size-[15px] rounded-full border-4 border-background bg-primary" /><p className="font-mono text-xs font-bold text-primary">{e.date}</p><h3 className="mt-2 font-display text-2xl">{e.role}</h3><p className="mt-1 text-sm font-semibold text-muted-foreground">{e.org}</p><div className="mt-5 grid gap-3 md:grid-cols-2">{e.projects.map(p=>{const inner=<><p className="flex items-center gap-2 text-sm font-extrabold text-primary">{p.name}{"url" in p&&p.url?<ExternalLink className="size-3.5" aria-hidden="true" />:null}</p><p className="mt-2 text-sm leading-6 text-muted-foreground">{p.desc}</p></>;return "url" in p&&p.url?<a key={p.name} href={p.url} target="_blank" rel="noreferrer" className="block rounded-md border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait">{inner}</a>:<div key={p.name} className="rounded-md border border-border bg-card p-5">{inner}</div>;})}</div></article>)}</div></Section>; }
 
-function Funding() { const funded=[['SAFEMARVEL','Den Danske Maritime Fond · 2023-116 / 3410157 · 03/2024–02/2026','1,489,000 DKK','Research Lead and Project Manager · Completed'],['Advanced servo motor control system','Fabrikant Mads Clausen Fond · 3410254 · 01/2025–02/2026','100,000 DKK','Principal Investigator · Completed'],['RACHP training system','Fabrikant Mads Clausen Fond · 3410089 · 01/2024–12/2025','100,000 DKK','Principal Investigator · Completed'],['International mobility and travel','Otto Mønsteds Fond · INCOM 2026, India','7,500 DKK','Main applicant']]; return <Section id="funding" eyebrow="Funding" title="Research Funding" muted><div className="grid gap-4 md:grid-cols-2">{funded.map(([n,s,a,r])=><article className="rounded-md border border-border bg-background p-6" key={n}><p className="text-xs font-bold uppercase text-primary">{a}</p><h3 className="mt-2 font-display text-xl">{n}</h3><p className="mt-2 text-sm text-muted-foreground">{s}</p><p className="mt-4 text-xs font-semibold">{r}</p></article>)}</div><h3 className="mt-12 font-display text-2xl">Proposals</h3><div className="mt-5 divide-y divide-border border-y border-border">{[['MERLIN: Marine Environmental Remediation Learning Integrated Navigator','Lead applicant · Progressed to Phase 2'],['Smart energy management and power flow optimisation for maritime energy hubs','Project participant · Under preparation'],['Smart power flow optimisation for megawatt supercharging','Co-developer · Waitlisted'],['Motion-stabilised safe room for reducing motion sickness','Co-developer · Not funded']].map(([a,b])=><div key={a} className="grid gap-1 py-4 sm:grid-cols-[1fr_auto]"><p className="font-semibold">{a}</p><p className="text-sm text-muted-foreground">{b}</p></div>)}</div></Section>; }
+function Funding() {
+  const funded = [
+    ['SAFEMARVEL', 'Den Danske Maritime Fond · 2023-116 / 3410157 · 03/2024–02/2026', '1,489,000 DKK', 'Research Lead and Project Manager · Completed'],
+    ['Advanced servo motor control system', 'Fabrikant Mads Clausen Fond · 3410254 · 01/2025–02/2026', '100,000 DKK', 'Principal Investigator · Completed'],
+    ['RACHP training system', 'Fabrikant Mads Clausen Fond · 3410089 · 01/2024–12/2025', '100,000 DKK', 'Principal Investigator · Completed'],
+    ['International mobility and travel', 'Otto Mønsteds Fond · INCOM 2026, India', '7,500 DKK', 'Main applicant'],
+  ];
+  const proposals = [
+    ['MERLIN: Marine Environmental Remediation Learning Integrated Navigator', 'Lead applicant', 'Progressed to Phase 2'],
+    ['Smart energy management and power flow optimisation for maritime energy hubs', 'Project participant', 'Under preparation'],
+    ['Smart power flow optimisation for megawatt supercharging', 'Co-developer', 'Waitlisted'],
+    ['Motion-stabilised safe room for reducing motion sickness', 'Co-developer', 'Not funded'],
+  ];
+  return <Section id="funding" eyebrow="Funding" title="Research Funding" muted>
+    <div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-full bg-primary text-primary-foreground"><BadgeCheck className="size-5" aria-hidden="true" /></span><div><h3 className="font-display text-2xl">Funded Research Grants</h3><p className="mt-1 text-sm text-muted-foreground">Awarded grants and mobility support.</p></div></div>
+    <div className="mt-6 grid gap-4 md:grid-cols-2">{funded.map(([name, source, amount, role]) => <article className="rounded-md border border-primary/20 bg-background p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait" key={name}>
+      <div className="flex flex-wrap items-center justify-between gap-2"><p className="text-xs font-bold uppercase text-primary">{amount}</p><span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary"><CheckCircle2 className="size-3" aria-hidden="true" />Awarded</span></div>
+      <h4 className="mt-3 font-display text-xl">{name}</h4><p className="mt-2 text-sm leading-6 text-muted-foreground">{source}</p><p className="mt-4 text-xs font-semibold">{role}</p>
+    </article>)}</div>
+    <div className="mt-14 border-t border-border pt-9"><div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-full border border-primary/30 bg-background text-primary"><Clock3 className="size-5" aria-hidden="true" /></span><div><h3 className="font-display text-2xl">Proposals in Pipeline / Not Funded</h3><p className="mt-1 text-sm text-muted-foreground">Submitted, developing, waitlisted, and concluded proposals.</p></div></div>
+      <div className="mt-6 grid gap-4 md:grid-cols-2">{proposals.map(([name, role, status]) => <article key={name} className="rounded-md border border-border bg-card/60 p-6 transition-colors hover:border-primary/50"><div className="flex items-start justify-between gap-4"><Clock3 className="mt-1 size-4 shrink-0 text-highlight" aria-hidden="true" /><span className="rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-bold text-muted-foreground">{status}</span></div><h4 className="mt-4 font-display text-xl leading-snug">{name}</h4><p className="mt-3 text-xs font-semibold text-primary">{role}</p></article>)}</div>
+    </div>
+  </Section>;
+}
 
 function Education() { const ed=[['Ph.D. (Engineering)','07/2015 - 11/2021','Jadavpur University · CGPA 10.00/10.00 · EQF 8','Developing Electrohydraulic System Solutions using Adaptive-Neuro-Sliding Mode Control and Vision Sensing.'],['M.E. in Nuclear Engineering','08/2011 - 07/2013','Jadavpur University · CGPA 9.02/10.00 (86.28%) · EQF 7','Compact Pressurized Water Reactor Modelling, carried out at BARC Mumbai.'],['B.Tech in Electrical Engineering','08/2007 - 06/2011','Seacom Engineering College, WBUT · DGPA 8.73/10.00 · EQF 6','Control Systems, electrical machines, electromagnetic field theory, microprocessors and digital signal processing.'],['Higher Secondary (Class XII), CBSE','April 2006','Kendriya Vidyalaya Ballygunge · 87.20%','Physics, Chemistry, Mathematics, Biology and English.'],['Secondary (Class X), CBSE','April 2004','Kendriya Vidyalaya Ballygunge · 90.60%','Science, Mathematics, Social Science, English and Hindi.']]; return <Section id="education" eyebrow="Education" title="Academic foundations"><div className="space-y-4">{ed.map(([degree,date,school,detail])=><article key={degree} className="grid gap-4 border-b border-border py-6 md:grid-cols-[180px_1fr]"><p className="font-mono text-xs font-bold text-primary">{date}</p><div><h3 className="font-display text-2xl">{degree}</h3><p className="mt-1 text-sm font-semibold">{school}</p><p className="mt-3 text-sm leading-6 text-muted-foreground">{detail}</p></div></article>)}</div></Section>; }
 
