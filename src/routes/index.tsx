@@ -223,32 +223,6 @@ const researchInterests = [
   "Energy systems", "Digital twins", "Real-time HIL", "Engineering and biology",
 ] as const;
 
-function JourneyTimeline() {
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const element = timelineRef.current;
-    if (!element) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry?.isIntersecting) {
-        setVisible(true);
-        observer.disconnect();
-      }
-    }, { threshold: 0.12 });
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
-  const delays = ["delay-0", "delay-75", "delay-150", "delay-200", "delay-300"];
-  return <div ref={timelineRef} className="relative mt-7 space-y-8 before:absolute before:bottom-3 before:left-[7px] before:top-3 before:w-px before:bg-border">
-    {journeyMilestones.map(([date, role, organisation, detail], index) => <article key={`${date}-${role}`} className={cn("relative pl-10 transition-all duration-700 motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none", delays[index], visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0")}>
-      <span className="absolute left-0 top-1.5 size-[15px] rounded-full border-4 border-background bg-primary" />
-      <p className="font-mono text-xs font-bold text-primary">{date}</p>
-      <h4 className="mt-1 font-display text-xl">{role}</h4>
-      <p className="mt-1 text-sm font-semibold">{organisation}</p>
-      <p className="mt-2 text-sm leading-6 text-muted-foreground">{detail}</p>
-    </article>)}
-  </div>;
-}
 
 function Profile() { return <Section id="profile" eyebrow="Profile" title="Rigorous research through-lines">
   <div className="max-w-4xl text-[1.03rem] leading-8 text-muted-foreground">
