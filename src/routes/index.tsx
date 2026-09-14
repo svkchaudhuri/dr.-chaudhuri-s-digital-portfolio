@@ -622,7 +622,24 @@ function CareerGallery() {
   const activeMoment = lightbox !== null ? allMoments[lightbox] : null;
 
   return <Section id="gallery" eyebrow="Career Gallery" title="Career Moments" muted>
-    <div className="mb-6 flex justify-end"><Button onClick={() => { setLightbox(null); setError(""); setDialogOpen(true); }}><ImagePlus className="size-4" aria-hidden="true" />Add Photo</Button></div>
+    <div className="mb-6 flex items-center justify-end gap-2">
+      {isAdmin ? <>
+        <Button onClick={() => { setLightbox(null); setError(""); setDialogOpen(true); }}><ImagePlus className="size-4" aria-hidden="true" />Add Photo</Button>
+        <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={lockAdmin}><Lock className="size-4" aria-hidden="true" />Exit admin</Button>
+      </> : <Button variant="ghost" size="icon" aria-label="Unlock gallery editing" className="text-muted-foreground/40 hover:text-muted-foreground" onClick={() => { setPasscodeError(""); setPasscodeOpen(true); }}><LockOpen className="size-4" aria-hidden="true" /></Button>}
+    </div>
+    {passcodeOpen && <div className="fixed inset-0 z-[70] grid place-items-center p-4">
+      <Button variant="ghost" aria-label="Close passcode dialog" className="absolute inset-0 h-auto w-full rounded-none bg-overlay hover:bg-overlay" onClick={() => setPasscodeOpen(false)} />
+      <div role="dialog" aria-modal="true" aria-labelledby="admin-passcode-title" className="relative z-10 w-full max-w-sm rounded-xl border border-border bg-background p-6 shadow-drawer">
+        <h3 id="admin-passcode-title" className="font-display text-2xl">Enter passcode</h3>
+        <p className="mt-1 text-sm text-muted-foreground">Gallery editing is restricted.</p>
+        <form className="mt-5 space-y-4" onSubmit={unlockAdmin}>
+          <input type="password" autoFocus value={passcode} onChange={(event) => setPasscode(event.target.value)} placeholder="Passcode" aria-label="Passcode" className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+          {passcodeError && <p role="alert" className="text-sm font-semibold text-destructive">{passcodeError}</p>}
+          <div className="flex justify-end gap-2"><Button type="button" variant="outline" onClick={() => setPasscodeOpen(false)}>Cancel</Button><Button type="submit">Unlock</Button></div>
+        </form>
+      </div>
+    </div>}
     <div className="grid auto-rows-[220px] gap-4 md:grid-cols-3">
       {allMoments.map((moment, index) => (
         <figure
