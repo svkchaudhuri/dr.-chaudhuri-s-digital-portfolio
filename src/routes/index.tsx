@@ -321,8 +321,8 @@ function Research() {
     const visual = researchPillarVisuals[index];
     if (!visual) return null;
 
-    return <article key={title} className="research-hex-shell group w-full max-w-[26rem] transition-all duration-300 motion-safe:hover:-translate-y-1.5 motion-safe:hover:scale-[1.012]">
-      <Button variant="ghost" onClick={() => setSelectedPillar(index)} aria-label={`Explore ${title}`} className="research-hex-card relative flex aspect-[0.866/1] h-auto w-full cursor-pointer flex-col items-center justify-center overflow-hidden bg-research-card px-12 py-16 text-center shadow-none hover:bg-research-card focus-visible:ring-2 focus-visible:ring-research-navy focus-visible:ring-offset-4">
+    return <article key={title} className="research-hex-shell group aspect-[0.866/1] w-full max-w-[26rem] transition-all duration-300 motion-safe:hover:-translate-y-1.5 motion-safe:hover:scale-[1.012]">
+      <Button variant="ghost" onClick={() => setSelectedPillar(index)} aria-label={`Explore ${title}`} className="research-hex-card relative flex h-full w-full cursor-pointer flex-col items-center justify-center overflow-hidden bg-research-card px-12 py-16 text-center shadow-none hover:bg-research-card focus-visible:ring-2 focus-visible:ring-research-navy focus-visible:ring-offset-4">
         <span className="absolute top-[13%] rounded-full border border-primary/20 bg-research-mist px-3 py-1 font-mono text-[10px] font-bold text-primary">PILLAR {String(index + 1).padStart(2, "0")}</span>
         <span className="flex h-32 w-full items-center justify-center overflow-hidden">
           <img src={visual.image} alt={visual.alt} loading="lazy" className="max-h-32 w-full object-contain transition-transform duration-500 motion-safe:group-hover:scale-[1.06]" />
