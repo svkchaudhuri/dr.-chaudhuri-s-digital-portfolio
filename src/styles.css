@@ -118,6 +118,31 @@
   --research-navy: oklch(0.34 0.075 251);
   --research-mist: oklch(0.945 0.012 248);
   --research-amber: oklch(0.7 0.135 75);
+
+  /* Home focus cards: indigo, emerald/teal, ocean/cyan tints */
+  --home-card-1-bg: oklch(0.93 0.025 270);
+  --home-card-1-border: oklch(0.75 0.07 270);
+  --home-card-1-icon-bg: oklch(0.82 0.08 270);
+  --home-card-1-icon-text: oklch(0.35 0.12 270);
+  --home-card-1-chip-bg: oklch(0.90 0.03 270);
+  --home-card-1-chip-border: oklch(0.78 0.05 270);
+  --home-card-1-chip-text: oklch(0.38 0.10 270);
+
+  --home-card-2-bg: oklch(0.95 0.025 165);
+  --home-card-2-border: oklch(0.75 0.07 165);
+  --home-card-2-icon-bg: oklch(0.85 0.08 165);
+  --home-card-2-icon-text: oklch(0.30 0.11 165);
+  --home-card-2-chip-bg: oklch(0.92 0.03 165);
+  --home-card-2-chip-border: oklch(0.78 0.05 165);
+  --home-card-2-chip-text: oklch(0.35 0.10 165);
+
+  --home-card-3-bg: oklch(0.95 0.025 205);
+  --home-card-3-border: oklch(0.75 0.07 205);
+  --home-card-3-icon-bg: oklch(0.85 0.08 205);
+  --home-card-3-icon-text: oklch(0.30 0.10 205);
+  --home-card-3-chip-bg: oklch(0.92 0.03 205);
+  --home-card-3-chip-border: oklch(0.78 0.05 205);
+  --home-card-3-chip-text: oklch(0.35 0.10 205);
 }
 
 .dark {
@@ -157,6 +182,31 @@
   --research-navy: oklch(0.28 0.055 251);
   --research-mist: oklch(0.91 0.018 248);
   --research-amber: oklch(0.76 0.12 75);
+
+  /* Home focus cards: indigo, emerald/teal, ocean/cyan tints (dark) */
+  --home-card-1-bg: oklch(0.25 0.05 270);
+  --home-card-1-border: oklch(0.45 0.08 270);
+  --home-card-1-icon-bg: oklch(0.35 0.10 270);
+  --home-card-1-icon-text: oklch(0.90 0.05 270);
+  --home-card-1-chip-bg: oklch(0.30 0.04 270);
+  --home-card-1-chip-border: oklch(0.45 0.06 270);
+  --home-card-1-chip-text: oklch(0.85 0.05 270);
+
+  --home-card-2-bg: oklch(0.22 0.04 165);
+  --home-card-2-border: oklch(0.42 0.07 165);
+  --home-card-2-icon-bg: oklch(0.32 0.09 165);
+  --home-card-2-icon-text: oklch(0.92 0.04 165);
+  --home-card-2-chip-bg: oklch(0.27 0.04 165);
+  --home-card-2-chip-border: oklch(0.42 0.06 165);
+  --home-card-2-chip-text: oklch(0.88 0.04 165);
+
+  --home-card-3-bg: oklch(0.22 0.04 205);
+  --home-card-3-border: oklch(0.42 0.07 205);
+  --home-card-3-icon-bg: oklch(0.32 0.09 205);
+  --home-card-3-icon-text: oklch(0.92 0.04 205);
+  --home-card-3-chip-bg: oklch(0.27 0.04 205);
+  --home-card-3-chip-border: oklch(0.42 0.06 205);
+  --home-card-3-chip-text: oklch(0.88 0.04 205);
 }
 
 @layer base {
