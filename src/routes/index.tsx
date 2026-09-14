@@ -349,7 +349,7 @@ function Research() {
             <img src={selected.image} alt={selected.alt} className="max-h-[25rem] w-full object-contain" />
           </div>
           <div className="p-6 sm:p-8">
-            <span className="font-mono text-[11px] font-bold text-primary">PILLAR {String(selectedPillar + 1).padStart(2, "0")}</span>
+            <span className="font-mono text-[11px] font-bold text-primary">PILLAR {String(researchPillarVisuals.indexOf(selected) + 1).padStart(2, "0")}</span>
             <DialogTitle className="mt-2 pr-8 font-research-display text-3xl font-semibold leading-tight text-research-navy">{selectedContent[0]}</DialogTitle>
             <DialogDescription className="mt-4 font-research-body text-sm leading-6 text-muted-foreground">{selectedContent[1]}</DialogDescription>
             <div className="mt-7 space-y-6">
