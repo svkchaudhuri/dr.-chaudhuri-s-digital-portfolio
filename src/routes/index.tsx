@@ -26,6 +26,7 @@ import maritimeControlImage from "@/assets/maritime-keel-control.png.asset.json"
 import thermalEnergyImage from "@/assets/fluid-power-thermal-energy.png.asset.json";
 import bioprocessImage from "@/assets/microfluidics-bioprocess.png.asset.json";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { publications, researchPillars, skills } from "@/lib/portfolio-data";
 import { cn } from "@/lib/utils";
@@ -200,19 +201,48 @@ function TypedTerm() {
   </span>;
 }
 
+type ScholarMetrics = { h_index: number; citations: number; publications: number; last_synced_at: string | null };
+
+function useScholarMetrics() {
+  const [metrics, setMetrics] = useState<ScholarMetrics | null>(null);
+  useEffect(() => {
+    let active = true;
+    supabase
+      .from("scholar_metrics")
+      .select("h_index, citations, publications, last_synced_at")
+      .eq("scholar_author_id", "sXYaj-AAAAAJ")
+      .maybeSingle()
+      .then(({ data }) => { if (active && data) setMetrics(data as ScholarMetrics); });
+    return () => { active = false; };
+  }, []);
+  return metrics;
+}
+
 function Hero() {
+  const metrics = useScholarMetrics();
+  const stats: [string, string][] = [
+    [String(metrics?.h_index ?? 7), "h-index"],
+    [String(metrics?.citations ?? 170), "Scholar citations"],
+    ["122", "WoS citations"],
+    [String(metrics?.publications ?? 28), "publications"],
+  ];
+  const synced = metrics?.last_synced_at
+    ? new Date(metrics.last_synced_at).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })
+    : null;
   return <section id="home" className="relative scroll-mt-20 overflow-hidden border-b border-border px-5 pb-16 pt-8 sm:px-10 lg:px-14 xl:px-20">
     <div className="hero-grid absolute inset-0 opacity-50" /><div className="relative mx-auto w-full max-w-6xl">
       <p className="section-kicker">Dynamics · Control · Real-time validation</p>
       <h1 className="mt-3 max-w-5xl font-display text-4xl leading-[1.08] text-foreground sm:text-5xl xl:text-6xl">Researcher in Dynamics and Control of <br className="hidden sm:block" /><TypedTerm /></h1>
       <p className="mt-7 max-w-3xl text-lg leading-8 text-muted-foreground">Control engineer with more than twelve years of experience in nonlinear and adaptive control of uncertain dynamical systems, taking ideas from mathematical formulation through MIL, SIL and HIL to purpose-built experimental rigs.</p>
       <div className="mt-10 grid max-w-3xl grid-cols-2 gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-4">
-        {[['7','h-index'],['170','Scholar citations'],['122','WoS citations'],['28','publications']].map(([n,l]) => <div key={l} className="bg-background p-5"><p className="font-display text-3xl text-primary">{n}</p><p className="mt-1 text-xs font-bold uppercase text-muted-foreground">{l}</p></div>)}
+        {stats.map(([n,l]) => <div key={l} className="bg-background p-5"><p className="font-display text-3xl text-primary">{n}</p><p className="mt-1 text-xs font-bold uppercase text-muted-foreground">{l}</p></div>)}
       </div>
+      {synced ? <p className="mt-3 max-w-3xl text-xs text-muted-foreground">Google Scholar metrics last synced {synced}.</p> : null}
       <div className="mt-10 grid gap-3 md:grid-cols-3">{["Nonlinear & Adaptive Control", "Safety-critical Control (CLF-CBF-QP)", "Maritime & Electrohydraulic Systems"].map((x) => <div className="flex items-center gap-3 border-l-2 border-highlight py-2 pl-4 text-sm font-bold" key={x}><CheckCircle2 className="size-4 shrink-0 text-primary" />{x}</div>)}</div>
     </div>
   </section>;
 }
+
 
 const profileHighlights = [
   { value: "12+", label: "Years in research", Icon: Clock3 },
