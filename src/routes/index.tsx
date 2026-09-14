@@ -313,11 +313,11 @@ function Research() {
       <div className="mx-auto grid max-w-[60rem] justify-items-center gap-6 md:grid-cols-2 lg:gap-8">
         {researchPillars.slice(0, 2).map(renderPillar)}
       </div>
-      <div className="mt-6 grid justify-items-center gap-6 md:grid-cols-2 lg:-mt-16 lg:ml-auto lg:max-w-[64rem] lg:pl-16 lg:gap-8">
-        {researchPillars.slice(2, 4).map((pillar, index) => renderPillar(pillar, index + 2))}
-      </div>
       <div className="mt-6 flex justify-center lg:-mt-16">
-        {researchPillars.slice(4).map((pillar, index) => renderPillar(pillar, index + 4))}
+        {researchPillars.slice(2, 3).map((pillar, index) => renderPillar(pillar, index + 2))}
+      </div>
+      <div className="mx-auto mt-6 grid max-w-[60rem] justify-items-center gap-6 md:grid-cols-2 lg:-mt-16 lg:gap-8">
+        {researchPillars.slice(3).map((pillar, index) => renderPillar(pillar, index + 3))}
       </div>
     </div>
     <div className="mt-12 grid gap-4 md:grid-cols-2">{["Delivered safety-critical closed-loop control for active marine vessel motion stabilisation.","Specified and commissioned a marine vessel test rig with integrated wave generation.","Engineered a real-time, multi-actuator control architecture for an electrohydraulic quadruped.","Developed vision-based motion sensing on a 700 kg hydraulic Stewart platform.","Established two permanent teaching and research testbeds at SDU as Principal Investigator."].map(x=><p key={x} className="flex gap-3 text-sm leading-6"><CheckCircle2 className="mt-1 size-4 shrink-0 text-highlight" />{x}</p>)}</div>
