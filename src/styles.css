@@ -228,10 +228,18 @@
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 }
 
+@utility research-honeycomb-frame {
+  width: 100%;
+  max-width: 52.875rem;
+
+  @media (min-width: 48rem) {
+    container-type: inline-size;
+  }
+}
+
 @utility research-honeycomb {
   display: flex;
   width: 100%;
-  max-width: 52.875rem;
   flex-direction: column;
   align-items: center;
   gap: 1.25rem;
@@ -244,7 +252,6 @@
 
     position: relative;
     display: block;
-    container-type: inline-size;
     height: calc(var(--hex-height) + var(--hex-row-step) * 2);
 
     & > .research-hex-shell {

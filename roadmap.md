@@ -12,3 +12,4 @@
 - [x] Correct Research Pillars to true pointy-top honeycomb geometry
 - [x] Replace fixed honeycomb overlaps with uniform geometry-driven spacing
 - [x] Move verified Research achievements into their relevant pillar dialogs
+- [x] Tighten the Research to Experience transition and remove honeycomb trailing space
