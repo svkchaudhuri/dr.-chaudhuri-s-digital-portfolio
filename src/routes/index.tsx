@@ -449,15 +449,15 @@ function CareerGallery() {
     </div>}
     {activeMoment && (
       <div
-        className="fixed inset-0 z-[80] grid place-items-center bg-black/92 p-4 backdrop-blur-sm"
+        className="fixed inset-0 z-[80] grid place-items-center bg-black/92 p-4 pt-20 backdrop-blur-sm lg:pt-4"
         onClick={(event) => { if (event.target === event.currentTarget) setLightbox(null); }}
         role="dialog"
         aria-modal="true"
         aria-label={`${activeMoment.title} lightbox`}
       >
-        <Button variant="ghost" size="icon" className="absolute right-4 top-4 z-10 text-white hover:bg-white/10" onClick={() => setLightbox(null)} aria-label="Close lightbox"><X className="size-7" /></Button>
+        <Button variant="ghost" size="icon" className="absolute right-4 top-20 z-10 text-white hover:bg-white/10 lg:top-4" onClick={() => setLightbox(null)} aria-label="Close lightbox"><X className="size-7" /></Button>
         <div className="flex max-h-full w-full max-w-6xl flex-col items-center gap-5">
-          <img src={activeMoment.src} alt={activeMoment.alt} className="max-h-[78vh] w-auto max-w-full rounded-xl object-contain shadow-2xl" />
+          <img src={activeMoment.src} alt={activeMoment.alt} className="max-h-[70vh] w-auto max-w-full rounded-xl object-contain shadow-2xl lg:max-h-[78vh]" />
           <div className="max-w-2xl text-center text-white">
             <p className="font-display text-2xl">{activeMoment.title}</p>
             {activeMoment.tag && <p className="mt-1.5 text-sm font-medium opacity-80">{activeMoment.tag}</p>}
