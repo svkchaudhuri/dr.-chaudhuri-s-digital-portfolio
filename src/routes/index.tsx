@@ -147,7 +147,7 @@ function Portfolio() {
       <Button asChild variant="outline" size="sm"><a href={cvAsset.url} download><Download className="size-4" /><span className="hidden sm:inline">CV</span></a></Button>
     </header>
     {drawer && <div className="fixed inset-0 z-50 lg:hidden"><button aria-label="Close navigation" className="absolute inset-0 bg-overlay" onClick={() => setDrawer(false)} /><aside className="absolute inset-y-0 left-0 w-[min(88vw,340px)] bg-sidebar shadow-drawer"><Button variant="ghost" size="icon" className="absolute right-3 top-3 z-10" onClick={() => setDrawer(false)} aria-label="Close navigation"><X className="size-5" /></Button><SidebarContent active={active} close={() => setDrawer(false)} showNav /></aside></div>}
-    <main className="relative z-10 lg:ml-[340px]">
+    <main className="relative lg:ml-[340px]">
       <TopNav active={active} />
       <Hero />
       <Profile />
