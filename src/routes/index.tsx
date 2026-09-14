@@ -238,7 +238,7 @@ function Hero() {
         {stats.map(([n,l]) => <div key={l} className="bg-background p-5"><p className="font-display text-3xl text-primary">{n}</p><p className="mt-1 text-xs font-bold uppercase text-muted-foreground">{l}</p></div>)}
       </div>
       {synced ? <p className="mt-3 max-w-3xl text-xs text-muted-foreground">Google Scholar metrics last synced {synced}.</p> : null}
-      <div className="mt-10 grid gap-3 md:grid-cols-3">{["Nonlinear & Adaptive Control", "Safety-critical Control (CLF-CBF-QP)", "Maritime & Electrohydraulic Systems"].map((x) => <div className="flex items-center gap-3 border-l-2 border-highlight py-2 pl-4 text-sm font-bold" key={x}><CheckCircle2 className="size-4 shrink-0 text-primary" />{x}</div>)}</div>
+      <div className="mt-10 grid gap-3 md:grid-cols-3">{[{label:"Nonlinear & Adaptive Control"},{label:"Safety-critical Control",sub:"(CLF-CBF-QP)"},{label:"Maritime & Electrohydraulic Systems"}].map(({label,sub}) => <div className="flex items-start gap-3 border-l-2 border-highlight py-2 pl-4 text-sm font-bold" key={label}><CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" /><span className="flex flex-col leading-snug"><span>{label}</span>{sub ? <span className="text-[0.8rem] font-semibold text-muted-foreground">{sub}</span> : null}</span></div>)}</div>
     </div>
   </section>;
 }
