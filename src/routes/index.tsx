@@ -171,8 +171,8 @@ function Portfolio() {
   </div>;
 }
 
-function Section({ id, eyebrow, title, children, muted = false }: { id: string; eyebrow: string; title: string; children: React.ReactNode; muted?: boolean }) {
-  return <section id={id} className={cn("scroll-mt-20 px-5 py-20 sm:px-10 lg:px-14 xl:px-20", muted && "bg-muted/60")}><div className="mx-auto max-w-6xl"><p className="section-kicker">{eyebrow}</p><h2 className="section-title">{title}</h2><div className="mt-10">{children}</div></div></section>;
+function Section({ id, eyebrow, title, children, muted = false, className }: { id: string; eyebrow: string; title: string; children: React.ReactNode; muted?: boolean; className?: string }) {
+  return <section id={id} className={cn("scroll-mt-20 px-5 py-20 sm:px-10 lg:px-14 xl:px-20", muted && "bg-muted/60", className)}><div className="mx-auto max-w-6xl"><p className="section-kicker">{eyebrow}</p><h2 className="section-title">{title}</h2><div className="mt-10">{children}</div></div></section>;
 }
 
 const typedTerms = ["Fluid Power Systems", "Robotic Manipulators", "Maritime Systems"];
@@ -339,9 +339,11 @@ function Research() {
     </article>;
   };
 
-  return <Section id="research" eyebrow="Research" title="Connected research pillars" muted>
-    <div className="research-honeycomb mx-auto">
-      {researchPillars.map(renderPillar)}
+  return <Section id="research" eyebrow="Research" title="Connected research pillars" muted className="pb-10 sm:pb-12">
+    <div className="research-honeycomb-frame mx-auto">
+      <div className="research-honeycomb">
+        {researchPillars.map(renderPillar)}
+      </div>
     </div>
     <Dialog open={selectedPillar !== null} onOpenChange={(open) => { if (!open) setSelectedPillar(null); }}>
       {selected && selectedContent && <DialogContent className="max-h-[90vh] w-[calc(100%-2rem)] max-w-4xl overflow-y-auto border-primary/25 bg-background p-0 shadow-2xl sm:rounded-md">
@@ -384,7 +386,7 @@ const experiences = [
   { date:"08/2013 - 02/2022", role:"Research Fellow - Robotics & Electrohydraulic Control", org:"Hydraulics Laboratory, Jadavpur University · Kolkata", projects:[{name:"CARS",desc:"Real-time multi-actuator control for an autonomous quadruped torso. Sponsored by CAIR, DRDO; 12/2015–02/2022."},{name:"DARO",desc:"High-frequency real-time tracking for linear servo actuation, including a 700 kg Stewart platform. Sponsored by AR&DB, DRDO; 08/2013–12/2015."}]},
   { date:"07/2012 - 06/2013", role:"Masters GATE Fellow", org:"Instrumentation & Control Division, BARC · Mumbai", projects:[{name:"Nuclear reactor modelling",desc:"First-principles pressurised water reactor and regulating-system models in MATLAB/Simulink, with Lyapunov stability analysis."}]},
 ];
-function Experience() { return <Section id="experience" eyebrow="Experience" title="Theory to Implementation"><div className="relative space-y-12 before:absolute before:bottom-2 before:left-[7px] before:top-2 before:w-px before:bg-border">{experiences.map(e=><article key={e.role} className="relative pl-10"><span className="absolute left-0 top-1.5 size-[15px] rounded-full border-4 border-background bg-primary" /><p className="font-mono text-xs font-bold text-primary">{e.date}</p><h3 className="mt-2 font-display text-2xl">{e.role}</h3><p className="mt-1 text-sm font-semibold text-muted-foreground">{e.org}</p><div className="mt-5 grid gap-3 md:grid-cols-2">{e.projects.map(p=>{const inner=<><p className="flex items-center gap-2 text-sm font-extrabold text-primary">{p.name}{"url" in p&&p.url?<ExternalLink className="size-3.5" aria-hidden="true" />:null}</p><p className="mt-2 text-sm leading-6 text-muted-foreground">{p.desc}</p></>;return "url" in p&&p.url?<a key={p.name} href={p.url} target="_blank" rel="noreferrer" className="block rounded-md border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait">{inner}</a>:<div key={p.name} className="rounded-md border border-border bg-card p-5">{inner}</div>;})}</div></article>)}</div></Section>; }
+function Experience() { return <Section id="experience" eyebrow="Experience" title="Theory to Implementation" className="pt-10 sm:pt-12"><div className="relative space-y-12 before:absolute before:bottom-2 before:left-[7px] before:top-2 before:w-px before:bg-border">{experiences.map(e=><article key={e.role} className="relative pl-10"><span className="absolute left-0 top-1.5 size-[15px] rounded-full border-4 border-background bg-primary" /><p className="font-mono text-xs font-bold text-primary">{e.date}</p><h3 className="mt-2 font-display text-2xl">{e.role}</h3><p className="mt-1 text-sm font-semibold text-muted-foreground">{e.org}</p><div className="mt-5 grid gap-3 md:grid-cols-2">{e.projects.map(p=>{const inner=<><p className="flex items-center gap-2 text-sm font-extrabold text-primary">{p.name}{"url" in p&&p.url?<ExternalLink className="size-3.5" aria-hidden="true" />:null}</p><p className="mt-2 text-sm leading-6 text-muted-foreground">{p.desc}</p></>;return "url" in p&&p.url?<a key={p.name} href={p.url} target="_blank" rel="noreferrer" className="block rounded-md border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait">{inner}</a>:<div key={p.name} className="rounded-md border border-border bg-card p-5">{inner}</div>;})}</div></article>)}</div></Section>; }
 
 function Funding() {
   const funded = [
