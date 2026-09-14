@@ -4,7 +4,7 @@ import {
   ExternalLink, FileImage, FileText, GraduationCap, Home, ImagePlus, Linkedin,
   Globe2, Mail, MapPin, Menu, Microscope, Search, ShieldCheck, SlidersHorizontal, Users, Wrench, X,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState, type ComponentType } from "react";
+import { useEffect, useMemo, useState, type ComponentType } from "react";
 
 import headshot from "@/assets/shouvik-headshot.png.asset.json";
 import cvAsset from "@/assets/shouvik-cv.pdf.asset.json";
@@ -215,46 +215,14 @@ const profileHighlights = [
   { value: "3", label: "Countries represented", Icon: Globe2 },
 ] as const;
 
-const journeyMilestones = [
-  ["2012 to 2013", "Masters GATE Fellow", "BARC, Mumbai", "First-principles modelling and simulation of a compact pressurised water reactor."],
-  ["2013 to 2022", "Research Fellow", "Jadavpur University, Kolkata", "Robotics, electrohydraulic control, real-time actuation and experimental validation."],
-  ["2015 to 2021", "Ph.D. in Engineering", "Jadavpur University", "Adaptive-neuro-sliding mode control and vision sensing for electrohydraulic systems."],
-  ["2022 to 2026", "Postdoctoral Researcher", "University of Southern Denmark, Sønderborg", "Maritime control systems, safety-critical roll stabilisation and research leadership."],
-  ["June 2023", "Visiting Researcher", "TU Ilmenau, Germany", "PUREWATER secondment with the Control Systems Group and KOMPASS GmbH."],
-] as const;
 
 const researchInterests = [
-  "Nonlinear control", "Adaptive control", "Safety-critical control", "CBF-QP filters",
-  "Electrohydraulic systems", "Stewart platforms", "Marine roll stabilisation",
+  "Nonlinear control", "Adaptive control", "Optimal and robust control", "Safety-critical control",
+  "CLF-CBF-QP filters", "Fluid power systems", "Electrohydraulic actuation",
+  "Stewart platforms", "Marine roll stabilisation", "Robotics",
   "Energy systems", "Digital twins", "Real-time HIL", "Engineering and biology",
 ] as const;
 
-function JourneyTimeline() {
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const element = timelineRef.current;
-    if (!element) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry?.isIntersecting) {
-        setVisible(true);
-        observer.disconnect();
-      }
-    }, { threshold: 0.12 });
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
-  const delays = ["delay-0", "delay-75", "delay-150", "delay-200", "delay-300"];
-  return <div ref={timelineRef} className="relative mt-7 space-y-8 before:absolute before:bottom-3 before:left-[7px] before:top-3 before:w-px before:bg-border">
-    {journeyMilestones.map(([date, role, organisation, detail], index) => <article key={`${date}-${role}`} className={cn("relative pl-10 transition-all duration-700 motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none", delays[index], visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0")}>
-      <span className="absolute left-0 top-1.5 size-[15px] rounded-full border-4 border-background bg-primary" />
-      <p className="font-mono text-xs font-bold text-primary">{date}</p>
-      <h4 className="mt-1 font-display text-xl">{role}</h4>
-      <p className="mt-1 text-sm font-semibold">{organisation}</p>
-      <p className="mt-2 text-sm leading-6 text-muted-foreground">{detail}</p>
-    </article>)}
-  </div>;
-}
 
 function Profile() { return <Section id="profile" eyebrow="Profile" title="Rigorous research through-lines">
   <div className="max-w-4xl text-[1.03rem] leading-8 text-muted-foreground">
@@ -266,12 +234,23 @@ function Profile() { return <Section id="profile" eyebrow="Profile" title="Rigor
       <p className="mt-2 text-xs font-bold uppercase text-muted-foreground">{label}</p>
     </article>)}
   </div>
-  <div className="mt-14 grid gap-14 lg:grid-cols-[1.05fr_.95fr]">
-    <div><p className="section-kicker">Career path</p><h3 className="mt-2 font-display text-3xl">Journey</h3><JourneyTimeline /></div>
+  <div className="mt-14 grid gap-10 lg:grid-cols-2">
     <div>
-      <p className="section-kicker">Current focus</p><h3 className="mt-2 font-display text-3xl">Research Interests</h3>
+      <p className="section-kicker">Core methods</p>
+      <h3 className="mt-2 font-display text-3xl">Research Interests</h3>
       <div className="mt-7 flex flex-wrap gap-2">{researchInterests.map((interest) => <span key={interest} className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-2 text-sm font-semibold text-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"><Microscope className="size-3.5" aria-hidden="true" />{interest}</span>)}</div>
-      <div className="mt-9 rounded-md border-l-2 border-highlight bg-card/70 p-6"><p className="font-display text-xl">Research leadership</p><ul className="mt-5 space-y-4 text-sm text-muted-foreground">{["Led a three-partner consortium as Project Manager", "Principal Investigator on two competitive grants", "Supervised twelve Master's and Bachelor's projects", "Research spanning control, energy, and the engineering and biology interface"].map(x => <li key={x} className="flex gap-3"><ChevronRight className="mt-0.5 size-4 shrink-0 text-primary" />{x}</li>)}</ul></div>
+    </div>
+    <div>
+      <p className="section-kicker">Roles and responsibilities</p>
+      <h3 className="mt-2 font-display text-3xl">Research Leadership</h3>
+      <ul className="mt-7 space-y-4 text-sm leading-6 text-muted-foreground">{[
+        "Project Manager of SAFEMARVEL, a three-partner consortium spanning SDU, Dacoma ApS and SDU Physics Odense.",
+        "Research participant in AMCOSTAR, an international Eurostars / Eureka network project on active marine stabilisation.",
+        "Principal Investigator on two competitive grants from the Fabrikant Mads Clausen Fond.",
+        "Co-supervised six Master's dissertations and six Bachelor's projects in mechatronics and control.",
+        "Internal co-examiner for Master's courses in adaptive and nonlinear control, fault-tolerant control and statistical signal processing.",
+        "Grant writer and coordinator on proposals progressing through national and European funding schemes."
+      ].map(x => <li key={x} className="flex gap-3"><ChevronRight className="mt-1 size-4 shrink-0 text-primary" />{x}</li>)}</ul>
     </div>
   </div>
 </Section>; }
