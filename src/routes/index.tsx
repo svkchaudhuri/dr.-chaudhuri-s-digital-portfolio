@@ -253,6 +253,7 @@ function Profile() { return <Section id="profile" eyebrow="Profile" title="Rigor
         "Project Manager of SAFEMARVEL, a three-partner consortium spanning SDU, Dacoma ApS and SDU Physics Odense.",
         "Research participant in AMCOSTAR, an international Eurostars / Eureka network project on active marine stabilisation.",
         "Principal Investigator on two competitive grants from the Fabrikant Mads Clausen Fond.",
+        "Established two permanent teaching and research testbeds at SDU as Principal Investigator.",
         "Co-supervised six Master's dissertations and six Bachelor's projects in mechatronics and control.",
         "Internal co-examiner for Master's courses in adaptive and nonlinear control, fault-tolerant control and statistical signal processing.",
         "Grant writer and coordinator on proposals progressing through national and European funding schemes."
@@ -268,6 +269,7 @@ const researchPillarVisuals = [
     methods: ["Adaptive control", "Nonlinear control", "Robust control", "Optimal control"],
     applications: ["Uncertain dynamical systems", "Safety-critical control", "Model-based design"],
     tools: ["MATLAB/Simulink", "Simscape", "MIL, SIL and HIL"],
+    milestones: ["Developed safety-critical control designs using CLF-CBF-QP.", "Developed adaptive algorithms for uncertain dynamical systems."],
     publications: [0, 10, 16],
   },
   {
@@ -276,6 +278,7 @@ const researchPillarVisuals = [
     methods: ["Real-time motion control", "Force control", "Vision sensing", "Parallel manipulators"],
     applications: ["Electrohydraulic actuation", "Stewart platforms", "Robotic manipulators"],
     tools: ["Speedgoat", "NI cRIO and myRIO", "LabVIEW and DAQ"],
+    milestones: ["Developed vision-based motion sensing on a 700 kg hydraulic Stewart platform.", "Engineered a real-time, multi-actuator control architecture for an electrohydraulic quadruped."],
     publications: [5, 7, 11],
   },
   {
@@ -284,6 +287,7 @@ const researchPillarVisuals = [
     methods: ["Canting keels", "Airkeel systems", "CBF-QP safety filters", "Varying sea states"],
     applications: ["Marine motion control", "Roll stabilisation", "Crane operations"],
     tools: ["Digital twins", "Real-time HIL", "IMUs and encoders"],
+    milestones: ["Delivered safety-critical closed-loop control for active marine vessel motion stabilisation.", "Specified and commissioned a marine vessel test rig with integrated wave generation."],
     publications: [3, 14, 18],
   },
   {
@@ -292,6 +296,7 @@ const researchPillarVisuals = [
     methods: ["Refrigeration", "Heat pumps", "Thermal energy storage", "Maritime energy systems"],
     applications: ["R744 refrigeration", "Thermal storage", "Maritime energy systems"],
     tools: ["MATLAB/Simulink", "Simscape", "Model-based design"],
+    milestones: ["Optimised and controlled transcritical R744 supermarket refrigeration and thermal ice storage cycles."],
     publications: [1, 9, 25],
   },
   {
@@ -300,6 +305,7 @@ const researchPillarVisuals = [
     methods: ["Image processing", "Closed-loop control", "Molecular biology", "Biomedical devices"],
     applications: ["Cell biology", "Molecular biology", "Biomedical devices"],
     tools: ["Image processing", "Visual sensing", "Closed-loop control"],
+    milestones: ["Implemented image processing and closed-loop control for molecular and cell biology."],
     publications: [2, 12, 26],
   },
 ] as const;
@@ -328,7 +334,7 @@ function Research() {
           <img src={visual.image} alt={visual.alt} loading="lazy" className="max-h-48 w-full object-contain transition-transform duration-500 motion-safe:group-hover:scale-[1.06]" />
         </span>
         <span className="mt-3 max-w-[18rem] whitespace-normal font-research-display text-2xl font-semibold leading-tight text-research-navy">{title}</span>
-        <span className="absolute bottom-[8%] flex items-center gap-1 font-research-body text-[10px] font-semibold uppercase text-primary/80 opacity-75 transition-opacity group-hover:opacity-100">Click to explore <ChevronRight className="size-3" aria-hidden="true" /></span>
+        <span className="mt-2 flex items-center gap-1 font-research-body text-[10px] font-semibold uppercase text-primary/80 opacity-75 transition-opacity group-hover:opacity-100">Click to explore <ChevronRight className="size-3" aria-hidden="true" /></span>
       </Button>
     </article>;
   };
@@ -354,6 +360,10 @@ function Research() {
               </div>)}
             </div>
             <div className="mt-7 border-t border-border pt-6">
+              <p className="font-mono text-[10px] font-bold uppercase text-research-navy">Key Milestones &amp; Achievements</p>
+              <ul className="mt-3 space-y-3">{selected.milestones.map((milestone) => <li key={milestone} className="flex gap-3 text-sm leading-6 text-muted-foreground"><CheckCircle2 className="mt-1 size-4 shrink-0 text-highlight" aria-hidden="true" /><span>{milestone}</span></li>)}</ul>
+            </div>
+            <div className="mt-7 border-t border-border pt-6">
               <p className="font-mono text-[10px] font-bold uppercase text-research-navy">Related publications</p>
               <ul className="mt-3 space-y-2">{selected.publications.map((publicationIndex) => {
                 const publication = publications[publicationIndex];
@@ -365,7 +375,6 @@ function Research() {
         </div>
       </DialogContent>}
     </Dialog>
-    <div className="mt-12 grid gap-4 md:grid-cols-2">{["Delivered safety-critical closed-loop control for active marine vessel motion stabilisation.","Specified and commissioned a marine vessel test rig with integrated wave generation.","Engineered a real-time, multi-actuator control architecture for an electrohydraulic quadruped.","Developed vision-based motion sensing on a 700 kg hydraulic Stewart platform.","Established two permanent teaching and research testbeds at SDU as Principal Investigator."].map(x=><p key={x} className="flex gap-3 text-sm leading-6"><CheckCircle2 className="mt-1 size-4 shrink-0 text-highlight" />{x}</p>)}</div>
   </Section>;
 }
 
