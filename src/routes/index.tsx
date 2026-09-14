@@ -147,7 +147,7 @@ function Portfolio() {
       <Button asChild variant="outline" size="sm"><a href={cvAsset.url} download><Download className="size-4" /><span className="hidden sm:inline">CV</span></a></Button>
     </header>
     {drawer && <div className="fixed inset-0 z-50 lg:hidden"><button aria-label="Close navigation" className="absolute inset-0 bg-overlay" onClick={() => setDrawer(false)} /><aside className="absolute inset-y-0 left-0 w-[min(88vw,340px)] bg-sidebar shadow-drawer"><Button variant="ghost" size="icon" className="absolute right-3 top-3 z-10" onClick={() => setDrawer(false)} aria-label="Close navigation"><X className="size-5" /></Button><SidebarContent active={active} close={() => setDrawer(false)} showNav /></aside></div>}
-    <main className="relative z-10 lg:ml-[340px]">
+    <main className="relative lg:ml-[340px]">
       <TopNav active={active} />
       <Hero />
       <Profile />
@@ -361,6 +361,7 @@ function CareerGallery() {
   const [title, setTitle] = useState("");
   const [tag, setTag] = useState("");
   const [error, setError] = useState("");
+  const [lightbox, setLightbox] = useState<number | null>(null);
 
   useEffect(() => {
     try {
@@ -381,6 +382,13 @@ function CareerGallery() {
     document.addEventListener("keydown", closeOnEscape);
     return () => document.removeEventListener("keydown", closeOnEscape);
   }, [dialogOpen]);
+
+  useEffect(() => {
+    if (lightbox === null) return;
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setLightbox(null); };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [lightbox]);
 
   const addPhoto = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -406,10 +414,25 @@ function CareerGallery() {
   };
 
   const allMoments = [builtInCareerMoment, ...moments];
+  const activeMoment = lightbox !== null ? allMoments[lightbox] : null;
+
   return <Section id="gallery" eyebrow="Career Gallery" title="Career Moments" muted>
-    <div className="mb-6 flex justify-end"><Button onClick={() => { setError(""); setDialogOpen(true); }}><ImagePlus className="size-4" aria-hidden="true" />Add Photo</Button></div>
+    <div className="mb-6 flex justify-end"><Button onClick={() => { setLightbox(null); setError(""); setDialogOpen(true); }}><ImagePlus className="size-4" aria-hidden="true" />Add Photo</Button></div>
     <div className="grid auto-rows-[220px] gap-4 md:grid-cols-3">
-      {allMoments.map((moment, index) => <figure key={moment.id} className={cn("group relative overflow-hidden rounded-2xl border border-border bg-card", moment.featured ? "md:col-span-2 md:row-span-2" : index % 3 === 1 ? "md:row-span-2" : "")}><img src={moment.src} alt={moment.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" /><figcaption className="absolute inset-x-0 bottom-0 bg-overlay px-5 py-4 text-primary-foreground backdrop-blur-sm"><p className="font-display text-xl">{moment.title}</p>{moment.tag && <p className="mt-1 text-xs opacity-80">{moment.tag}</p>}</figcaption></figure>)}
+      {allMoments.map((moment, index) => (
+        <figure
+          key={moment.id}
+          role="button"
+          tabIndex={0}
+          aria-label={`Open ${moment.title} in lightbox`}
+          className={cn("group relative overflow-hidden rounded-2xl border border-border bg-card cursor-zoom-in transition-shadow hover:ring-2 hover:ring-primary/40 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none", moment.featured ? "md:col-span-2 md:row-span-2" : index % 3 === 1 ? "md:row-span-2" : "")}
+          onClick={() => setLightbox(index)}
+          onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setLightbox(index); } }}
+        >
+          <img src={moment.src} alt={moment.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
+          <figcaption className="absolute inset-x-0 bottom-0 bg-overlay px-5 py-4 text-primary-foreground backdrop-blur-sm"><p className="font-display text-xl">{moment.title}</p>{moment.tag && <p className="mt-1 text-xs opacity-80">{moment.tag}</p>}</figcaption>
+        </figure>
+      ))}
     </div>
     {dialogOpen && <div className="fixed inset-0 z-[70] grid place-items-center p-4">
       <Button variant="ghost" aria-label="Close add photo dialog" className="absolute inset-0 h-auto w-full rounded-none bg-overlay hover:bg-overlay" onClick={() => setDialogOpen(false)} />
@@ -424,6 +447,24 @@ function CareerGallery() {
         </form>
       </div>
     </div>}
+    {activeMoment && (
+      <div
+        className="fixed inset-0 z-[80] grid place-items-center bg-black/92 p-4 pt-20 backdrop-blur-sm lg:pt-4"
+        onClick={(event) => { if (event.target === event.currentTarget) setLightbox(null); }}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${activeMoment.title} lightbox`}
+      >
+        <Button variant="ghost" size="icon" className="absolute right-4 top-20 z-10 text-white hover:bg-white/10 lg:top-4" onClick={() => setLightbox(null)} aria-label="Close lightbox"><X className="size-7" /></Button>
+        <div className="flex max-h-full w-full max-w-6xl flex-col items-center gap-5">
+          <img src={activeMoment.src} alt={activeMoment.alt} className="max-h-[70vh] w-auto max-w-full rounded-xl object-contain shadow-2xl lg:max-h-[78vh]" />
+          <div className="max-w-2xl text-center text-white">
+            <p className="font-display text-2xl">{activeMoment.title}</p>
+            {activeMoment.tag && <p className="mt-1.5 text-sm font-medium opacity-80">{activeMoment.tag}</p>}
+          </div>
+        </div>
+      </div>
+    )}
   </Section>;
 }
 
