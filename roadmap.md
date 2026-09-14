@@ -10,3 +10,4 @@
 - [x] Reflow Research Pillars into a symmetric 2-1-2 desktop honeycomb
 - [x] Simplify Research Pillar faces and add interactive detail dialogs
 - [x] Correct Research Pillars to true pointy-top honeycomb geometry
+- [x] Replace fixed honeycomb overlaps with uniform geometry-driven spacing
