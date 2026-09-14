@@ -234,12 +234,23 @@ function Profile() { return <Section id="profile" eyebrow="Profile" title="Rigor
       <p className="mt-2 text-xs font-bold uppercase text-muted-foreground">{label}</p>
     </article>)}
   </div>
-  <div className="mt-14 grid gap-14 lg:grid-cols-[1.05fr_.95fr]">
-    <div><p className="section-kicker">Career path</p><h3 className="mt-2 font-display text-3xl">Journey</h3><JourneyTimeline /></div>
+  <div className="mt-14 grid gap-10 lg:grid-cols-2">
     <div>
-      <p className="section-kicker">Current focus</p><h3 className="mt-2 font-display text-3xl">Research Interests</h3>
+      <p className="section-kicker">Core methods</p>
+      <h3 className="mt-2 font-display text-3xl">Research Interests</h3>
       <div className="mt-7 flex flex-wrap gap-2">{researchInterests.map((interest) => <span key={interest} className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-2 text-sm font-semibold text-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"><Microscope className="size-3.5" aria-hidden="true" />{interest}</span>)}</div>
-      <div className="mt-9 rounded-md border-l-2 border-highlight bg-card/70 p-6"><p className="font-display text-xl">Research leadership</p><ul className="mt-5 space-y-4 text-sm text-muted-foreground">{["Led a three-partner consortium as Project Manager", "Principal Investigator on two competitive grants", "Supervised twelve Master's and Bachelor's projects", "Research spanning control, energy, and the engineering and biology interface"].map(x => <li key={x} className="flex gap-3"><ChevronRight className="mt-0.5 size-4 shrink-0 text-primary" />{x}</li>)}</ul></div>
+    </div>
+    <div>
+      <p className="section-kicker">Roles and responsibilities</p>
+      <h3 className="mt-2 font-display text-3xl">Research Leadership</h3>
+      <ul className="mt-7 space-y-4 text-sm leading-6 text-muted-foreground">{[
+        "Project Manager of SAFEMARVEL, a three-partner consortium spanning SDU, Dacoma ApS and SDU Physics Odense.",
+        "Research participant in AMCOSTAR, an international Eurostars / Eureka network project on active marine stabilisation.",
+        "Principal Investigator on two competitive grants from the Fabrikant Mads Clausen Fond.",
+        "Co-supervised six Master's dissertations and six Bachelor's projects in mechatronics and control.",
+        "Internal co-examiner for Master's courses in adaptive and nonlinear control, fault-tolerant control and statistical signal processing.",
+        "Grant writer and coordinator on proposals progressing through national and European funding schemes."
+      ].map(x => <li key={x} className="flex gap-3"><ChevronRight className="mt-1 size-4 shrink-0 text-primary" />{x}</li>)}</ul>
     </div>
   </div>
 </Section>; }
