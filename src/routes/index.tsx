@@ -293,8 +293,8 @@ function Research() {
     const visual = researchPillarVisuals[index];
     if (!visual) return null;
 
-    return <article key={title} className="research-hex-shell group w-full max-w-[22rem] transition-transform duration-300 motion-safe:hover:-translate-y-2">
-      <div className="research-hex-card flex min-h-[35rem] flex-col items-center bg-research-card px-9 pb-14 pt-14 text-center shadow-xl sm:min-h-[37rem] sm:px-11">
+    return <article key={title} className="research-hex-shell group w-full max-w-[29rem] transition-transform duration-300 motion-safe:hover:-translate-y-2">
+      <div className="research-hex-card flex min-h-[35rem] flex-col items-center bg-research-card px-9 pb-14 pt-14 text-center shadow-xl sm:min-h-[37rem] sm:px-12 lg:min-h-[39rem] lg:px-14">
         <span className="font-mono text-[11px] font-bold text-research-amber">PILLAR {String(index + 1).padStart(2, "0")}</span>
         <h3 className="mt-2 min-h-14 font-research-display text-2xl leading-tight text-research-navy">{title}</h3>
         <div className="my-4 flex h-44 w-full items-center justify-center overflow-hidden">
@@ -310,11 +310,14 @@ function Research() {
 
   return <Section id="research" eyebrow="Research" title="Connected research pillars" muted>
     <div className="mx-auto max-w-[72rem]">
-      <div className="grid justify-items-center gap-5 md:grid-cols-2 xl:grid-cols-3 xl:gap-4">
-        {researchPillars.slice(0, 3).map(renderPillar)}
+      <div className="mx-auto grid max-w-[60rem] justify-items-center gap-6 md:grid-cols-2 lg:gap-8">
+        {researchPillars.slice(0, 2).map(renderPillar)}
       </div>
-      <div className="mt-5 grid justify-items-center gap-5 md:grid-cols-2 xl:-mt-16 xl:mx-auto xl:max-w-[47rem] xl:gap-4">
-        {researchPillars.slice(3).map((pillar, index) => renderPillar(pillar, index + 3))}
+      <div className="mt-6 grid justify-items-center gap-6 md:grid-cols-2 lg:-mt-16 lg:ml-auto lg:max-w-[64rem] lg:pl-16 lg:gap-8">
+        {researchPillars.slice(2, 4).map((pillar, index) => renderPillar(pillar, index + 2))}
+      </div>
+      <div className="mt-6 flex justify-center lg:-mt-16">
+        {researchPillars.slice(4).map((pillar, index) => renderPillar(pillar, index + 4))}
       </div>
     </div>
     <div className="mt-12 grid gap-4 md:grid-cols-2">{["Delivered safety-critical closed-loop control for active marine vessel motion stabilisation.","Specified and commissioned a marine vessel test rig with integrated wave generation.","Engineered a real-time, multi-actuator control architecture for an electrohydraulic quadruped.","Developed vision-based motion sensing on a 700 kg hydraulic Stewart platform.","Established two permanent teaching and research testbeds at SDU as Principal Investigator."].map(x=><p key={x} className="flex gap-3 text-sm leading-6"><CheckCircle2 className="mt-1 size-4 shrink-0 text-highlight" />{x}</p>)}</div>
