@@ -13,6 +13,7 @@ import phdThesisAsset from "@/assets/phd-thesis.pdf.asset.json";
 import mastersThesisAsset from "@/assets/masters-dissertation.pdf.asset.json";
 import englishCertAsset from "@/assets/british-council-certificate.pdf.asset.json";
 import danishCertAsset from "@/assets/danish-module-certificate.pdf.asset.json";
+import teachingCertAsset from "@/assets/teaching-certificate.pdf.asset.json";
 import orcidLogo from "@/assets/orcid-logo.png.asset.json";
 import wosLogo from "@/assets/wos-logo.png.asset.json";
 import ieeeLogo from "@/assets/ieee-logo.png.asset.json";
