@@ -263,7 +263,7 @@ function Hero() {
               </span>
               <div className="min-w-0">
                 <h3 className={cn("text-base font-bold leading-snug", title)}>{label}</h3>
-                <span className={cn("mt-2 inline-flex items-center rounded-md border px-2 py-1 font-mono text-xs font-semibold", chipClasses)}>{chip}</span>
+                <span className={cn("mt-2 inline-flex items-center whitespace-nowrap rounded-md border px-2 py-1 font-mono text-xs font-semibold", chipClasses)}>{chip}</span>
               </div>
             </div>
           </article>
