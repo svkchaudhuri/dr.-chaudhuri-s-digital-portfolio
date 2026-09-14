@@ -14,7 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      scholar_metrics: {
+        Row: {
+          citations: number
+          created_at: string
+          h_index: number
+          i10_index: number | null
+          id: string
+          last_synced_at: string | null
+          publications: number
+          scholar_author_id: string
+        }
+        Insert: {
+          citations?: number
+          created_at?: string
+          h_index?: number
+          i10_index?: number | null
+          id?: string
+          last_synced_at?: string | null
+          publications?: number
+          scholar_author_id?: string
+        }
+        Update: {
+          citations?: number
+          created_at?: string
+          h_index?: number
+          i10_index?: number | null
+          id?: string
+          last_synced_at?: string | null
+          publications?: number
+          scholar_author_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
