@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  Award, BadgeCheck, BookOpen, BriefcaseBusiness, CheckCircle2, ChevronRight, Clock3, Download,
+  Activity, Anchor, Award, BadgeCheck, BookOpen, BriefcaseBusiness, CheckCircle2, ChevronRight, Clock3, Download,
   ExternalLink, FileImage, FileText, GraduationCap, Home, ImagePlus, Linkedin,
-  Globe2, Mail, MapPin, Menu, Microscope, Search, ShieldCheck, SlidersHorizontal, Users, Wrench, X,
+  Globe2, Mail, MapPin, Menu, Microscope, Search, ShieldCheck, SlidersHorizontal, Users, Waves, Wrench, X,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ComponentType } from "react";
 
@@ -238,7 +238,25 @@ function Hero() {
         {stats.map(([n,l]) => <div key={l} className="bg-background p-5"><p className="font-display text-3xl text-primary">{n}</p><p className="mt-1 text-xs font-bold uppercase text-muted-foreground">{l}</p></div>)}
       </div>
       {synced ? <p className="mt-3 max-w-3xl text-xs text-muted-foreground">Google Scholar metrics last synced {synced}.</p> : null}
-      <div className="mt-10 grid gap-3 md:grid-cols-3">{[{label:"Nonlinear & Adaptive Control"},{label:"Safety-critical Control",sub:"(CLF-CBF-QP)"},{label:"Maritime & Electrohydraulic Systems"}].map(({label,sub}) => <div className="flex items-start gap-3 border-l-2 border-highlight py-2 pl-4 text-sm font-bold" key={label}><CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" /><span className="flex flex-col leading-snug"><span>{label}</span>{sub ? <span className="text-[0.8rem] font-semibold text-muted-foreground">{sub}</span> : null}</span></div>)}</div>
+      <div className="mt-10 grid gap-4 md:grid-cols-3">
+        {[
+          { label: "Nonlinear & Adaptive Control", chip: "Lyapunov · Adaptive", Icon: SlidersHorizontal },
+          { label: "Safety-critical Control", chip: "CLF-CBF-QP", Icon: ShieldCheck },
+          { label: "Maritime & Electrohydraulic Systems", chip: "MIL · HIL Testbed", Icon: Anchor },
+        ].map(({ label, chip, Icon }) => (
+          <article key={label} className="group rounded-xl border border-border bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait">
+            <div className="flex items-start gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                <Icon className="size-5" aria-hidden="true" />
+              </span>
+              <div className="min-w-0">
+                <h3 className="text-base font-bold leading-snug text-foreground">{label}</h3>
+                <span className="mt-2 inline-flex items-center rounded-md border border-primary/20 bg-primary/5 px-2 py-1 font-mono text-xs font-semibold text-primary">{chip}</span>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
     </div>
   </section>;
 }
