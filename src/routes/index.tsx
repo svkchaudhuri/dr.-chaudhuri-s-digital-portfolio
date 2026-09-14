@@ -66,36 +66,36 @@ function SidebarContent({ active, close, showNav = false }: { active: string; cl
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
     close?.();
   };
-  return <div className="flex h-full min-h-0 flex-col justify-between gap-3 overflow-hidden px-5 py-6">
+  return <div className={cn("flex h-full min-h-0 flex-col justify-between overflow-hidden px-5", showNav ? "gap-1.5 py-3" : "gap-3 py-6")}>
     <div className="shrink-0 text-center">
       <div className="relative mx-auto w-fit">
         <div aria-hidden="true" className="absolute -inset-1.5 rounded-full bg-sidebar-primary/10" />
-        <img src={headshot.url} alt="Portrait of Dr. Shouvik Chaudhuri" className="relative mx-auto aspect-square w-[min(144px,42vw)] rounded-full border-4 border-sidebar-accent object-cover shadow-portrait" />
+        <img src={headshot.url} alt="Portrait of Dr. Shouvik Chaudhuri" className={cn("relative mx-auto aspect-square rounded-full border-4 border-sidebar-accent object-cover shadow-portrait", showNav ? "w-[104px]" : "w-[min(144px,42vw)]")} />
       </div>
-      <h2 className="mt-3 font-display text-[1.35rem] leading-tight text-sidebar-foreground">Shouvik Chaudhuri, Ph.D.</h2>
+      <h2 className={cn("font-display leading-tight text-sidebar-foreground", showNav ? "mt-2 text-lg" : "mt-3 text-[1.35rem]")}>Shouvik Chaudhuri, Ph.D.</h2>
       <p className="mt-1.5 text-[10.5px] font-bold leading-snug text-sidebar-primary">SMIEEE (US) · MIET (UK) · MIE (India)<br />Pursuing CEng status (IET)</p>
-      <p className="mt-1.5 text-[13px] font-semibold text-sidebar-foreground">Researcher in Dynamics and Control</p>
+      <p className={cn("mt-1.5 font-semibold text-sidebar-foreground", showNav ? "text-[11px]" : "text-[13px]")}>Researcher in Dynamics and Control</p>
     </div>
     <div className="shrink-0">
       <p className="text-center text-[9.5px] font-bold uppercase tracking-[0.18em] text-sidebar-foreground/70">Academic profiles</p>
-      <div className="mt-2 grid grid-cols-3 gap-2">
+      <div className={cn("grid grid-cols-3", showNav ? "mt-1 gap-1.5" : "mt-2 gap-2")}>
         {brandLinks.map((link) => {
           const inner = <>
             <BrandMark link={link} className="size-5" />
             <span className="mt-1 text-[9px] font-bold leading-none text-sidebar-card-foreground/80">{link.label === "Web of Science" ? "WoS" : link.label === "Google Scholar" ? "Scholar" : link.label}</span>
           </>;
           return link.url
-            ? <a key={link.label} href={link.url} target="_blank" rel="noreferrer" title={link.label} className="flex flex-col items-center justify-center rounded-xl border border-sidebar-border/60 bg-sidebar-card py-2 shadow-sm transition-all hover:-translate-y-0.5 hover:border-sidebar-primary hover:shadow-md">{inner}</a>
-            : <span key={link.label} title={link.value} className="flex flex-col items-center justify-center rounded-xl border border-sidebar-border/60 bg-sidebar-card py-2 shadow-sm">{inner}</span>;
+             ? <a key={link.label} href={link.url} target="_blank" rel="noreferrer" title={link.label} className={cn("flex flex-col items-center justify-center rounded-xl border border-sidebar-border/60 bg-sidebar-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-sidebar-primary hover:shadow-md", showNav ? "py-1" : "py-2")}>{inner}</a>
+             : <span key={link.label} title={link.value} className={cn("flex flex-col items-center justify-center rounded-xl border border-sidebar-border/60 bg-sidebar-card shadow-sm", showNav ? "py-1" : "py-2")}>{inner}</span>;
         })}
       </div>
     </div>
     {showNav && <nav aria-label="Portfolio sections" className="min-h-0 shrink-0 space-y-0.5">
-      {nav.map(([id, label, Icon]) => <button key={id} onClick={() => jump(id)} aria-current={active === id ? "true" : undefined} className={cn("grid w-full grid-cols-[20px_1fr] items-center gap-3 rounded-md px-3 py-[7px] text-left text-[13px] font-medium transition-colors", active === id ? "bg-sidebar-primary text-sidebar-primary-foreground" : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground")}>
+      {nav.map(([id, label, Icon]) => <button key={id} onClick={() => jump(id)} aria-current={active === id ? "true" : undefined} className={cn("grid w-full grid-cols-[20px_1fr] items-center gap-3 rounded-md px-3 py-1 text-left text-[12px] font-medium transition-colors", active === id ? "bg-sidebar-primary text-sidebar-primary-foreground" : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground")}>
         <Icon className="size-4 shrink-0" aria-hidden="true" /><span>{label}</span>
       </button>)}
     </nav>}
-    <div className="shrink-0">
+    <div className={cn("shrink-0", showNav && "hidden")}>
       <Button asChild className="w-full"><a href={cvAsset.url} download="Shouvik-Chaudhuri-CV.pdf"><Download className="size-4" />Download CV</a></Button>
       <div className="mt-3 space-y-1 border-t border-sidebar-border pt-3 text-[11.5px] text-sidebar-foreground/70">
         <a className="flex items-center gap-2 hover:text-sidebar-primary" href="mailto:svk.chaudhuri@gmail.com"><Mail className="size-3.5" />svk.chaudhuri@gmail.com</a>
