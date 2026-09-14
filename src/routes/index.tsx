@@ -240,18 +240,30 @@ function Hero() {
       {synced ? <p className="mt-3 max-w-3xl text-xs text-muted-foreground">Google Scholar metrics last synced {synced}.</p> : null}
       <div className="mt-10 grid gap-4 md:grid-cols-3">
         {[
-          { label: "Nonlinear & Adaptive Control", chip: "Lyapunov · Adaptive", Icon: SlidersHorizontal, theme: "home-card-1" },
-          { label: "Safety-critical Control", chip: "CLF-CBF-QP", Icon: ShieldCheck, theme: "home-card-2" },
-          { label: "Maritime & Electrohydraulic Systems", chip: "MIL · HIL Testbed", Icon: Anchor, theme: "home-card-3" },
-        ].map(({ label, chip, Icon, theme }) => (
-          <article key={label} className={cn("group rounded-xl border p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-portrait", `bg-[var(--${theme}-bg)] border-[var(--${theme}-border)] hover:border-[var(--${theme}-icon-text)]`)}>
+          { label: "Nonlinear & Adaptive Control", chip: "Lyapunov · Adaptive", Icon: SlidersHorizontal,
+            article: "bg-[var(--home-card-1-bg)] border-[var(--home-card-1-border)] hover:border-[var(--home-card-1-icon-text)]",
+            icon: "bg-[var(--home-card-1-icon-bg)] text-[var(--home-card-1-icon-text)] group-hover:bg-[var(--home-card-1-icon-text)] group-hover:text-[var(--home-card-1-icon-bg)]",
+            title: "text-[var(--home-card-1-icon-text)]",
+            chip: "border-[var(--home-card-1-chip-border)] bg-[var(--home-card-1-chip-bg)] text-[var(--home-card-1-chip-text)]" },
+          { label: "Safety-critical Control", chip: "CLF-CBF-QP", Icon: ShieldCheck,
+            article: "bg-[var(--home-card-2-bg)] border-[var(--home-card-2-border)] hover:border-[var(--home-card-2-icon-text)]",
+            icon: "bg-[var(--home-card-2-icon-bg)] text-[var(--home-card-2-icon-text)] group-hover:bg-[var(--home-card-2-icon-text)] group-hover:text-[var(--home-card-2-icon-bg)]",
+            title: "text-[var(--home-card-2-icon-text)]",
+            chip: "border-[var(--home-card-2-chip-border)] bg-[var(--home-card-2-chip-bg)] text-[var(--home-card-2-chip-text)]" },
+          { label: "Maritime & Electrohydraulic Systems", chip: "MIL · HIL Testbed", Icon: Anchor,
+            article: "bg-[var(--home-card-3-bg)] border-[var(--home-card-3-border)] hover:border-[var(--home-card-3-icon-text)]",
+            icon: "bg-[var(--home-card-3-icon-bg)] text-[var(--home-card-3-icon-text)] group-hover:bg-[var(--home-card-3-icon-text)] group-hover:text-[var(--home-card-3-icon-bg)]",
+            title: "text-[var(--home-card-3-icon-text)]",
+            chip: "border-[var(--home-card-3-chip-border)] bg-[var(--home-card-3-chip-bg)] text-[var(--home-card-3-chip-text)]" },
+        ].map(({ label, chip, Icon, article, icon, title, chip: chipClasses }) => (
+          <article key={label} className={cn("group rounded-xl border p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-portrait", article)}>
             <div className="flex items-start gap-4">
-              <span className={cn("grid size-10 shrink-0 place-items-center rounded-full transition-colors", `bg-[var(--${theme}-icon-bg)] text-[var(--${theme}-icon-text)] group-hover:bg-[var(--${theme}-icon-text)] group-hover:text-[var(--${theme}-icon-bg)]`)}>
+              <span className={cn("grid size-10 shrink-0 place-items-center rounded-full transition-colors", icon)}>
                 <Icon className="size-5" aria-hidden="true" />
               </span>
               <div className="min-w-0">
-                <h3 className={cn("text-base font-bold leading-snug", `text-[var(--${theme}-icon-text)]`)}>{label}</h3>
-                <span className={cn("mt-2 inline-flex items-center rounded-md border px-2 py-1 font-mono text-xs font-semibold", `border-[var(--${theme}-chip-border)] bg-[var(--${theme}-chip-bg)] text-[var(--${theme}-chip-text)]`)}>{chip}</span>
+                <h3 className={cn("text-base font-bold leading-snug", title)}>{label}</h3>
+                <span className={cn("mt-2 inline-flex items-center rounded-md border px-2 py-1 font-mono text-xs font-semibold", chipClasses)}>{chip}</span>
               </div>
             </div>
           </article>
