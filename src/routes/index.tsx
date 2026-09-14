@@ -321,27 +321,27 @@ function Research() {
     const visual = researchPillarVisuals[index];
     if (!visual) return null;
 
-    return <article key={title} className="research-hex-shell group w-full max-w-[27rem] transition-all duration-300 motion-safe:hover:-translate-y-1.5 motion-safe:hover:scale-[1.015]">
-      <Button variant="ghost" onClick={() => setSelectedPillar(index)} aria-label={`Explore ${title}`} className="research-hex-card relative flex h-[25rem] w-full cursor-pointer flex-col items-center justify-center overflow-hidden bg-research-card px-10 py-12 text-center shadow-none hover:bg-research-card focus-visible:ring-2 focus-visible:ring-research-navy focus-visible:ring-offset-4 sm:h-[27rem] lg:h-[28rem]">
-        <span className="absolute top-10 rounded-full border border-primary/20 bg-research-mist px-3 py-1 font-mono text-[10px] font-bold text-primary">PILLAR {String(index + 1).padStart(2, "0")}</span>
-        <span className="flex h-52 w-full items-center justify-center overflow-hidden sm:h-56">
-          <img src={visual.image} alt={visual.alt} loading="lazy" className="h-full w-full object-contain transition-transform duration-500 motion-safe:group-hover:scale-[1.06]" />
+    return <article key={title} className="research-hex-shell group w-full max-w-[26rem] transition-all duration-300 motion-safe:hover:-translate-y-1.5 motion-safe:hover:scale-[1.012]">
+      <Button variant="ghost" onClick={() => setSelectedPillar(index)} aria-label={`Explore ${title}`} className="research-hex-card relative flex aspect-[0.866/1] h-auto w-full cursor-pointer flex-col items-center justify-center overflow-hidden bg-research-card px-12 py-16 text-center shadow-none hover:bg-research-card focus-visible:ring-2 focus-visible:ring-research-navy focus-visible:ring-offset-4">
+        <span className="absolute top-[13%] rounded-full border border-primary/20 bg-research-mist px-3 py-1 font-mono text-[10px] font-bold text-primary">PILLAR {String(index + 1).padStart(2, "0")}</span>
+        <span className="flex h-32 w-full items-center justify-center overflow-hidden">
+          <img src={visual.image} alt={visual.alt} loading="lazy" className="max-h-32 w-full object-contain transition-transform duration-500 motion-safe:group-hover:scale-[1.06]" />
         </span>
-        <span className="mt-1 max-w-[19rem] whitespace-normal font-research-display text-2xl font-semibold leading-tight text-research-navy">{title}</span>
-        <span className="absolute bottom-8 flex items-center gap-1 font-research-body text-[10px] font-semibold uppercase text-primary/80 opacity-75 transition-opacity group-hover:opacity-100">Explore details <ChevronRight className="size-3" aria-hidden="true" /></span>
+        <span className="mt-5 max-w-[18rem] whitespace-normal font-research-display text-2xl font-semibold leading-tight text-research-navy">{title}</span>
+        <span className="absolute bottom-[12%] flex items-center gap-1 font-research-body text-[10px] font-semibold uppercase text-primary/80 opacity-75 transition-opacity group-hover:opacity-100">Click to explore <ChevronRight className="size-3" aria-hidden="true" /></span>
       </Button>
     </article>;
   };
 
   return <Section id="research" eyebrow="Research" title="Connected research pillars" muted>
-    <div className="mx-auto max-w-[58rem]">
-      <div className="mx-auto grid max-w-[55rem] justify-items-center gap-5 md:grid-cols-2 lg:gap-4">
+    <div className="mx-auto max-w-[53rem]">
+      <div className="mx-auto grid max-w-[52.25rem] justify-items-center gap-5 md:grid-cols-2 lg:gap-1">
         {researchPillars.slice(0, 2).map(renderPillar)}
       </div>
-      <div className="mt-5 flex justify-center lg:-mt-20">
+      <div className="mt-5 flex justify-center lg:-mt-[7rem]">
         {researchPillars.slice(2, 3).map((pillar, index) => renderPillar(pillar, index + 2))}
       </div>
-      <div className="mx-auto mt-5 grid max-w-[55rem] justify-items-center gap-5 md:grid-cols-2 lg:-mt-20 lg:gap-4">
+      <div className="mx-auto mt-5 grid max-w-[52.25rem] justify-items-center gap-5 md:grid-cols-2 lg:-mt-[7rem] lg:gap-1">
         {researchPillars.slice(3).map((pillar, index) => renderPillar(pillar, index + 3))}
       </div>
     </div>
