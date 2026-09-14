@@ -227,3 +227,56 @@
 @utility research-hex-card {
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 }
+
+@utility research-honeycomb {
+  display: flex;
+  width: 100%;
+  max-width: 52.875rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+
+  @media (min-width: 48rem) {
+    --hex-gap: 0.875rem;
+    --hex-width: calc((100% - var(--hex-gap)) / 2);
+    --hex-height: calc(var(--hex-width) / 0.8660254);
+    --hex-row-step: calc(var(--hex-height) * 0.75 + var(--hex-gap) * 0.8660254);
+
+    position: relative;
+    display: block;
+    height: calc(var(--hex-height) + var(--hex-row-step) * 2);
+
+    & > .research-hex-shell {
+      position: absolute;
+      width: var(--hex-width);
+      height: var(--hex-height);
+    }
+
+    & > .research-hex-shell:nth-child(1) {
+      inset: 0 auto auto 0;
+    }
+
+    & > .research-hex-shell:nth-child(2) {
+      inset: 0 0 auto auto;
+    }
+
+    & > .research-hex-shell:nth-child(3) {
+      top: var(--hex-row-step);
+      left: calc((var(--hex-width) + var(--hex-gap)) / 2);
+    }
+
+    & > .research-hex-shell:nth-child(4) {
+      top: calc(var(--hex-row-step) * 2);
+      left: 0;
+    }
+
+    & > .research-hex-shell:nth-child(5) {
+      top: calc(var(--hex-row-step) * 2);
+      right: 0;
+    }
+
+    & .research-hex-card {
+      height: 100%;
+    }
+  }
+}

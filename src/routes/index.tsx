@@ -334,16 +334,8 @@ function Research() {
   };
 
   return <Section id="research" eyebrow="Research" title="Connected research pillars" muted>
-    <div className="mx-auto max-w-[53rem]">
-      <div className="mx-auto grid max-w-[52.25rem] justify-items-center gap-5 md:grid-cols-2 lg:gap-1">
-        {researchPillars.slice(0, 2).map(renderPillar)}
-      </div>
-      <div className="mt-5 flex justify-center lg:-mt-[7rem]">
-        {researchPillars.slice(2, 3).map((pillar, index) => renderPillar(pillar, index + 2))}
-      </div>
-      <div className="mx-auto mt-5 grid max-w-[52.25rem] justify-items-center gap-5 md:grid-cols-2 lg:-mt-[7rem] lg:gap-1">
-        {researchPillars.slice(3).map((pillar, index) => renderPillar(pillar, index + 3))}
-      </div>
+    <div className="research-honeycomb mx-auto">
+      {researchPillars.map(renderPillar)}
     </div>
     <Dialog open={selectedPillar !== null} onOpenChange={(open) => { if (!open) setSelectedPillar(null); }}>
       {selected && selectedContent && <DialogContent className="max-h-[90vh] w-[calc(100%-2rem)] max-w-4xl overflow-y-auto border-primary/25 bg-background p-0 shadow-2xl sm:rounded-md">
