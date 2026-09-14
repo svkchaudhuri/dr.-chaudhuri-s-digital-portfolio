@@ -244,18 +244,18 @@ function Hero() {
             article: "bg-[var(--home-card-1-bg)] border-[var(--home-card-1-border)] hover:border-[var(--home-card-1-icon-text)]",
             icon: "bg-[var(--home-card-1-icon-bg)] text-[var(--home-card-1-icon-text)] group-hover:bg-[var(--home-card-1-icon-text)] group-hover:text-[var(--home-card-1-icon-bg)]",
             title: "text-[var(--home-card-1-icon-text)]",
-            chip: "border-[var(--home-card-1-chip-border)] bg-[var(--home-card-1-chip-bg)] text-[var(--home-card-1-chip-text)]" },
+            chipClasses: "border-[var(--home-card-1-chip-border)] bg-[var(--home-card-1-chip-bg)] text-[var(--home-card-1-chip-text)]" },
           { label: "Safety-critical Control", chip: "CLF-CBF-QP", Icon: ShieldCheck,
             article: "bg-[var(--home-card-2-bg)] border-[var(--home-card-2-border)] hover:border-[var(--home-card-2-icon-text)]",
             icon: "bg-[var(--home-card-2-icon-bg)] text-[var(--home-card-2-icon-text)] group-hover:bg-[var(--home-card-2-icon-text)] group-hover:text-[var(--home-card-2-icon-bg)]",
             title: "text-[var(--home-card-2-icon-text)]",
-            chip: "border-[var(--home-card-2-chip-border)] bg-[var(--home-card-2-chip-bg)] text-[var(--home-card-2-chip-text)]" },
+            chipClasses: "border-[var(--home-card-2-chip-border)] bg-[var(--home-card-2-chip-bg)] text-[var(--home-card-2-chip-text)]" },
           { label: "Maritime & Electrohydraulic Systems", chip: "MIL · HIL Testbed", Icon: Anchor,
             article: "bg-[var(--home-card-3-bg)] border-[var(--home-card-3-border)] hover:border-[var(--home-card-3-icon-text)]",
             icon: "bg-[var(--home-card-3-icon-bg)] text-[var(--home-card-3-icon-text)] group-hover:bg-[var(--home-card-3-icon-text)] group-hover:text-[var(--home-card-3-icon-bg)]",
             title: "text-[var(--home-card-3-icon-text)]",
-            chip: "border-[var(--home-card-3-chip-border)] bg-[var(--home-card-3-chip-bg)] text-[var(--home-card-3-chip-text)]" },
-        ].map(({ label, chip, Icon, article, icon, title, chip: chipClasses }) => (
+            chipClasses: "border-[var(--home-card-3-chip-border)] bg-[var(--home-card-3-chip-bg)] text-[var(--home-card-3-chip-text)]" },
+        ].map(({ label, chip, Icon, article, icon, title, chipClasses }) => (
           <article key={label} className={cn("group rounded-xl border p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-portrait", article)}>
             <div className="flex items-start gap-4">
               <span className={cn("grid size-10 shrink-0 place-items-center rounded-full transition-colors", icon)}>
