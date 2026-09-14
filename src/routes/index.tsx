@@ -268,7 +268,7 @@ const researchPillarVisuals = [
     methods: ["Adaptive control", "Nonlinear control", "Robust control", "Optimal control"],
     applications: ["Uncertain dynamical systems", "Safety-critical control", "Model-based design"],
     tools: ["MATLAB/Simulink", "Simscape", "MIL, SIL and HIL"],
-    publications: [0, 10, 14],
+    publications: [0, 10, 16],
   },
   {
     image: stewartPlatformImage.url,
@@ -276,7 +276,7 @@ const researchPillarVisuals = [
     methods: ["Real-time motion control", "Force control", "Vision sensing", "Parallel manipulators"],
     applications: ["Electrohydraulic actuation", "Stewart platforms", "Robotic manipulators"],
     tools: ["Speedgoat", "NI cRIO and myRIO", "LabVIEW and DAQ"],
-    publications: [7, 11, 19],
+    publications: [5, 7, 11],
   },
   {
     image: maritimeControlImage.url,
@@ -284,7 +284,7 @@ const researchPillarVisuals = [
     methods: ["Canting keels", "Airkeel systems", "CBF-QP safety filters", "Varying sea states"],
     applications: ["Marine motion control", "Roll stabilisation", "Crane operations"],
     tools: ["Digital twins", "Real-time HIL", "IMUs and encoders"],
-    publications: [3, 17, 18],
+    publications: [3, 14, 18],
   },
   {
     image: thermalEnergyImage.url,
@@ -292,7 +292,7 @@ const researchPillarVisuals = [
     methods: ["Refrigeration", "Heat pumps", "Thermal energy storage", "Maritime energy systems"],
     applications: ["R744 refrigeration", "Thermal storage", "Maritime energy systems"],
     tools: ["MATLAB/Simulink", "Simscape", "Model-based design"],
-    publications: [1, 9, 24],
+    publications: [1, 9, 25],
   },
   {
     image: bioprocessImage.url,
@@ -300,7 +300,7 @@ const researchPillarVisuals = [
     methods: ["Image processing", "Closed-loop control", "Molecular biology", "Biomedical devices"],
     applications: ["Cell biology", "Molecular biology", "Biomedical devices"],
     tools: ["Image processing", "Visual sensing", "Closed-loop control"],
-    publications: [2, 12, 25],
+    publications: [2, 12, 26],
   },
 ] as const;
 
@@ -311,7 +311,10 @@ function Research() {
 
   const jumpToPublications = () => {
     setSelectedPillar(null);
-    window.setTimeout(() => document.getElementById("publications")?.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
+    window.setTimeout(() => {
+      window.history.replaceState(null, "", "#publications");
+      document.getElementById("publications")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 120);
   };
 
   const renderPillar = ([title, text]: (typeof researchPillars)[number], index: number) => {
