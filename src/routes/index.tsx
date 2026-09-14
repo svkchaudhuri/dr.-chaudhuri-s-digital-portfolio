@@ -217,8 +217,9 @@ const profileHighlights = [
 
 
 const researchInterests = [
-  "Nonlinear control", "Adaptive control", "Safety-critical control", "CBF-QP filters",
-  "Electrohydraulic systems", "Stewart platforms", "Marine roll stabilisation",
+  "Nonlinear control", "Adaptive control", "Optimal and robust control", "Safety-critical control",
+  "CLF-CBF-QP filters", "Fluid power systems", "Electrohydraulic actuation",
+  "Stewart platforms", "Marine roll stabilisation", "Robotics",
   "Energy systems", "Digital twins", "Real-time HIL", "Engineering and biology",
 ] as const;
 
