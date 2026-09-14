@@ -362,7 +362,7 @@ function Research() {
               <p className="font-mono text-[10px] font-bold uppercase text-research-navy">Related publications</p>
               <ul className="mt-3 space-y-2">{selected.publications.map((publicationIndex) => {
                 const publication = publications[publicationIndex];
-                return publication ? <li key={publication.title} className="text-xs leading-5 text-muted-foreground"><span className="font-semibold text-foreground">{publication.year}</span> · {publication.title}</li> : null;
+                return publication ? <li key={`${publicationIndex}-${publication.title}`} className="text-xs leading-5 text-muted-foreground"><span className="font-semibold text-foreground">{publication.year}</span> · {publication.title}</li> : null;
               })}</ul>
               <Button className="mt-5" onClick={jumpToPublications}><BookOpen className="size-4" aria-hidden="true" />Explore related publications</Button>
             </div>
