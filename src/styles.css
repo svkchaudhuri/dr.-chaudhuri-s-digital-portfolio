@@ -238,12 +238,13 @@
 
   @media (min-width: 48rem) {
     --hex-gap: 0.875rem;
-    --hex-width: calc((100% - var(--hex-gap)) / 2);
+    --hex-width: calc((100cqi - var(--hex-gap)) / 2);
     --hex-height: calc(var(--hex-width) / 0.8660254);
     --hex-row-step: calc(var(--hex-height) * 0.75 + var(--hex-gap) * 0.8660254);
 
     position: relative;
     display: block;
+    container-type: inline-size;
     height: calc(var(--hex-height) + var(--hex-row-step) * 2);
 
     & > .research-hex-shell {
