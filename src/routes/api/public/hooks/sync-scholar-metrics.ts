@@ -82,8 +82,12 @@ export const Route = createFileRoute("/api/public/hooks/sync-scholar-metrics")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const unauthorized = await authenticateCronRequest(request);
-        if (unauthorized) return unauthorized;
+        const bearer = /^Bearer ([^\s,]+)$/.exec(request.headers.get("authorization") ?? "")?.[1];
+        const syncSecret = process.env["SCHOLAR_SYNC_SECRET"];
+        if (!syncSecret || bearer !== syncSecret) {
+          const unauthorized = await authenticateCronRequest(request);
+          if (unauthorized) return unauthorized;
+        }
 
         const result = await sync();
         return new Response(JSON.stringify(result), {
