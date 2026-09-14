@@ -26,6 +26,7 @@ import maritimeControlImage from "@/assets/maritime-keel-control.png.asset.json"
 import thermalEnergyImage from "@/assets/fluid-power-thermal-energy.png.asset.json";
 import bioprocessImage from "@/assets/microfluidics-bioprocess.png.asset.json";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { publications, researchPillars, skills } from "@/lib/portfolio-data";
 import { cn } from "@/lib/utils";
 
@@ -265,61 +266,113 @@ const researchPillarVisuals = [
     image: controlTheoryImage.url,
     alt: "Spring-mass control system with feedback loop and response curves",
     methods: ["Adaptive control", "Nonlinear control", "Robust control", "Optimal control"],
+    applications: ["Uncertain dynamical systems", "Safety-critical control", "Model-based design"],
+    tools: ["MATLAB/Simulink", "Simscape", "MIL, SIL and HIL"],
+    publications: [0, 10, 16],
   },
   {
     image: stewartPlatformImage.url,
     alt: "Six-axis electrohydraulic Stewart platform with visual sensing camera",
     methods: ["Real-time motion control", "Force control", "Vision sensing", "Parallel manipulators"],
+    applications: ["Electrohydraulic actuation", "Stewart platforms", "Robotic manipulators"],
+    tools: ["Speedgoat", "NI cRIO and myRIO", "LabVIEW and DAQ"],
+    publications: [5, 7, 11],
   },
   {
     image: maritimeControlImage.url,
     alt: "Marine research vessel with an actively controlled stabilising keel",
     methods: ["Canting keels", "Airkeel systems", "CBF-QP safety filters", "Varying sea states"],
+    applications: ["Marine motion control", "Roll stabilisation", "Crane operations"],
+    tools: ["Digital twins", "Real-time HIL", "IMUs and encoders"],
+    publications: [3, 14, 18],
   },
   {
     image: thermalEnergyImage.url,
     alt: "Thermal energy system with compressor, storage tank and heat exchangers",
     methods: ["Refrigeration", "Heat pumps", "Thermal energy storage", "Maritime energy systems"],
+    applications: ["R744 refrigeration", "Thermal storage", "Maritime energy systems"],
+    tools: ["MATLAB/Simulink", "Simscape", "Model-based design"],
+    publications: [1, 9, 25],
   },
   {
     image: bioprocessImage.url,
     alt: "Microscope and microfluidic cell imaging system with feedback arrows",
     methods: ["Image processing", "Closed-loop control", "Molecular biology", "Biomedical devices"],
+    applications: ["Cell biology", "Molecular biology", "Biomedical devices"],
+    tools: ["Image processing", "Visual sensing", "Closed-loop control"],
+    publications: [2, 12, 26],
   },
 ] as const;
 
 function Research() {
+  const [selectedPillar, setSelectedPillar] = useState<number | null>(null);
+  const selected = selectedPillar === null ? null : researchPillarVisuals[selectedPillar];
+  const selectedContent = selectedPillar === null ? null : researchPillars[selectedPillar];
+
+  const jumpToPublications = () => {
+    setSelectedPillar(null);
+    window.setTimeout(() => {
+      window.history.replaceState(null, "", "#publications");
+      document.getElementById("publications")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 120);
+  };
+
   const renderPillar = ([title, text]: (typeof researchPillars)[number], index: number) => {
     const visual = researchPillarVisuals[index];
     if (!visual) return null;
 
-    return <article key={title} className="research-hex-shell group w-full max-w-[29rem] transition-transform duration-300 motion-safe:hover:-translate-y-2">
-      <div className="research-hex-card flex min-h-[35rem] flex-col items-center bg-research-card px-9 pb-14 pt-14 text-center shadow-xl sm:min-h-[37rem] sm:px-12 lg:min-h-[39rem] lg:px-14">
-        <span className="font-mono text-[11px] font-bold text-research-amber">PILLAR {String(index + 1).padStart(2, "0")}</span>
-        <h3 className="mt-2 min-h-14 font-research-display text-2xl leading-tight text-research-navy">{title}</h3>
-        <div className="my-4 flex h-44 w-full items-center justify-center overflow-hidden">
-          <img src={visual.image} alt={visual.alt} loading="lazy" className="h-full w-full object-contain transition-transform duration-500 motion-safe:group-hover:scale-[1.04]" />
-        </div>
-        <p className="font-research-body text-[13px] leading-5 text-research-navy/75">{text}</p>
-        <div className="mt-5 flex flex-wrap justify-center gap-1.5" aria-label={`Key methodologies for ${title}`}>
-          {visual.methods.map((method) => <span key={method} className="rounded-sm bg-research-mist px-2 py-1 font-research-body text-[10px] font-semibold uppercase text-research-navy">{method}</span>)}
-        </div>
-      </div>
+    return <article key={title} className="research-hex-shell group w-full max-w-[27rem] transition-all duration-300 motion-safe:hover:-translate-y-1.5 motion-safe:hover:scale-[1.015]">
+      <Button variant="ghost" onClick={() => setSelectedPillar(index)} aria-label={`Explore ${title}`} className="research-hex-card relative flex h-[25rem] w-full cursor-pointer flex-col items-center justify-center overflow-hidden bg-research-card px-10 py-12 text-center shadow-none hover:bg-research-card focus-visible:ring-2 focus-visible:ring-research-navy focus-visible:ring-offset-4 sm:h-[27rem] lg:h-[28rem]">
+        <span className="absolute top-10 rounded-full border border-primary/20 bg-research-mist px-3 py-1 font-mono text-[10px] font-bold text-primary">PILLAR {String(index + 1).padStart(2, "0")}</span>
+        <span className="flex h-52 w-full items-center justify-center overflow-hidden sm:h-56">
+          <img src={visual.image} alt={visual.alt} loading="lazy" className="h-full w-full object-contain transition-transform duration-500 motion-safe:group-hover:scale-[1.06]" />
+        </span>
+        <span className="mt-1 max-w-[19rem] whitespace-normal font-research-display text-2xl font-semibold leading-tight text-research-navy">{title}</span>
+        <span className="absolute bottom-8 flex items-center gap-1 font-research-body text-[10px] font-semibold uppercase text-primary/80 opacity-75 transition-opacity group-hover:opacity-100">Explore details <ChevronRight className="size-3" aria-hidden="true" /></span>
+      </Button>
     </article>;
   };
 
   return <Section id="research" eyebrow="Research" title="Connected research pillars" muted>
-    <div className="mx-auto max-w-[72rem]">
-      <div className="mx-auto grid max-w-[60rem] justify-items-center gap-6 md:grid-cols-2 lg:gap-8">
+    <div className="mx-auto max-w-[58rem]">
+      <div className="mx-auto grid max-w-[55rem] justify-items-center gap-5 md:grid-cols-2 lg:gap-4">
         {researchPillars.slice(0, 2).map(renderPillar)}
       </div>
-      <div className="mt-6 flex justify-center lg:-mt-16">
+      <div className="mt-5 flex justify-center lg:-mt-20">
         {researchPillars.slice(2, 3).map((pillar, index) => renderPillar(pillar, index + 2))}
       </div>
-      <div className="mx-auto mt-6 grid max-w-[60rem] justify-items-center gap-6 md:grid-cols-2 lg:-mt-16 lg:gap-8">
+      <div className="mx-auto mt-5 grid max-w-[55rem] justify-items-center gap-5 md:grid-cols-2 lg:-mt-20 lg:gap-4">
         {researchPillars.slice(3).map((pillar, index) => renderPillar(pillar, index + 3))}
       </div>
     </div>
+    <Dialog open={selectedPillar !== null} onOpenChange={(open) => { if (!open) setSelectedPillar(null); }}>
+      {selected && selectedContent && <DialogContent className="max-h-[90vh] w-[calc(100%-2rem)] max-w-4xl overflow-y-auto border-primary/25 bg-background p-0 shadow-2xl sm:rounded-md">
+        <div className="grid lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="flex min-h-72 items-center justify-center bg-research-mist/70 p-8 lg:min-h-full">
+            <img src={selected.image} alt={selected.alt} className="max-h-[25rem] w-full object-contain" />
+          </div>
+          <div className="p-6 sm:p-8">
+            <span className="font-mono text-[11px] font-bold text-primary">PILLAR {String(researchPillarVisuals.indexOf(selected) + 1).padStart(2, "0")}</span>
+            <DialogTitle className="mt-2 pr-8 font-research-display text-3xl font-semibold leading-tight text-research-navy">{selectedContent[0]}</DialogTitle>
+            <DialogDescription className="mt-4 font-research-body text-sm leading-6 text-muted-foreground">{selectedContent[1]}</DialogDescription>
+            <div className="mt-7 space-y-6">
+              {[{ label: "Research keywords", values: selected.methods }, { label: "Key applications", values: selected.applications }, { label: "Tools and validation", values: selected.tools }].map((group) => <div key={group.label}>
+                <p className="font-mono text-[10px] font-bold uppercase text-research-navy">{group.label}</p>
+                <div className="mt-2 flex flex-wrap gap-2">{group.values.map((value) => <span key={value} className="rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-foreground">{value}</span>)}</div>
+              </div>)}
+            </div>
+            <div className="mt-7 border-t border-border pt-6">
+              <p className="font-mono text-[10px] font-bold uppercase text-research-navy">Related publications</p>
+              <ul className="mt-3 space-y-2">{selected.publications.map((publicationIndex) => {
+                const publication = publications[publicationIndex];
+                return publication ? <li key={`${publicationIndex}-${publication.title}`} className="text-xs leading-5 text-muted-foreground"><span className="font-semibold text-foreground">{publication.year}</span> · {publication.title}</li> : null;
+              })}</ul>
+              <Button className="mt-5" onClick={jumpToPublications}><BookOpen className="size-4" aria-hidden="true" />Explore related publications</Button>
+            </div>
+          </div>
+        </div>
+      </DialogContent>}
+    </Dialog>
     <div className="mt-12 grid gap-4 md:grid-cols-2">{["Delivered safety-critical closed-loop control for active marine vessel motion stabilisation.","Specified and commissioned a marine vessel test rig with integrated wave generation.","Engineered a real-time, multi-actuator control architecture for an electrohydraulic quadruped.","Developed vision-based motion sensing on a 700 kg hydraulic Stewart platform.","Established two permanent teaching and research testbeds at SDU as Principal Investigator."].map(x=><p key={x} className="flex gap-3 text-sm leading-6"><CheckCircle2 className="mt-1 size-4 shrink-0 text-highlight" />{x}</p>)}</div>
   </Section>;
 }
