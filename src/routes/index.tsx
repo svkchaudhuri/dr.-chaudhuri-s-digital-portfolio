@@ -215,13 +215,6 @@ const profileHighlights = [
   { value: "3", label: "Countries represented", Icon: Globe2 },
 ] as const;
 
-const journeyMilestones = [
-  ["2012 to 2013", "Masters GATE Fellow", "BARC, Mumbai", "First-principles modelling and simulation of a compact pressurised water reactor."],
-  ["2013 to 2022", "Research Fellow", "Jadavpur University, Kolkata", "Robotics, electrohydraulic control, real-time actuation and experimental validation."],
-  ["2015 to 2021", "Ph.D. in Engineering", "Jadavpur University", "Adaptive-neuro-sliding mode control and vision sensing for electrohydraulic systems."],
-  ["2022 to 2026", "Postdoctoral Researcher", "University of Southern Denmark, Sønderborg", "Maritime control systems, safety-critical roll stabilisation and research leadership."],
-  ["June 2023", "Visiting Researcher", "TU Ilmenau, Germany", "PUREWATER secondment with the Control Systems Group and KOMPASS GmbH."],
-] as const;
 
 const researchInterests = [
   "Nonlinear control", "Adaptive control", "Safety-critical control", "CBF-QP filters",
