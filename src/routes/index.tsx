@@ -240,18 +240,18 @@ function Hero() {
       {synced ? <p className="mt-3 max-w-3xl text-xs text-muted-foreground">Google Scholar metrics last synced {synced}.</p> : null}
       <div className="mt-10 grid gap-4 md:grid-cols-3">
         {[
-          { label: "Nonlinear & Adaptive Control", chip: "Lyapunov · Adaptive", Icon: SlidersHorizontal },
-          { label: "Safety-critical Control", chip: "CLF-CBF-QP", Icon: ShieldCheck },
-          { label: "Maritime & Electrohydraulic Systems", chip: "MIL · HIL Testbed", Icon: Anchor },
-        ].map(({ label, chip, Icon }) => (
-          <article key={label} className="group rounded-xl border border-border bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait">
+          { label: "Nonlinear & Adaptive Control", chip: "Lyapunov · Adaptive", Icon: SlidersHorizontal, theme: "home-card-1" },
+          { label: "Safety-critical Control", chip: "CLF-CBF-QP", Icon: ShieldCheck, theme: "home-card-2" },
+          { label: "Maritime & Electrohydraulic Systems", chip: "MIL · HIL Testbed", Icon: Anchor, theme: "home-card-3" },
+        ].map(({ label, chip, Icon, theme }) => (
+          <article key={label} className={cn("group rounded-xl border p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-portrait", `bg-[var(--${theme}-bg)] border-[var(--${theme}-border)] hover:border-[var(--${theme}-icon-text)]`)}>
             <div className="flex items-start gap-4">
-              <span className="grid size-10 shrink-0 place-items-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+              <span className={cn("grid size-10 shrink-0 place-items-center rounded-full transition-colors", `bg-[var(--${theme}-icon-bg)] text-[var(--${theme}-icon-text)] group-hover:bg-[var(--${theme}-icon-text)] group-hover:text-[var(--${theme}-icon-bg)]`)}>
                 <Icon className="size-5" aria-hidden="true" />
               </span>
               <div className="min-w-0">
-                <h3 className="text-base font-bold leading-snug text-foreground">{label}</h3>
-                <span className="mt-2 inline-flex items-center rounded-md border border-primary/20 bg-primary/5 px-2 py-1 font-mono text-xs font-semibold text-primary">{chip}</span>
+                <h3 className={cn("text-base font-bold leading-snug", `text-[var(--${theme}-icon-text)]`)}>{label}</h3>
+                <span className={cn("mt-2 inline-flex items-center rounded-md border px-2 py-1 font-mono text-xs font-semibold", `border-[var(--${theme}-chip-border)] bg-[var(--${theme}-chip-bg)] text-[var(--${theme}-chip-text)]`)}>{chip}</span>
               </div>
             </div>
           </article>
