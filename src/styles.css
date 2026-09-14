@@ -22,6 +22,8 @@
   --font-sans: "Manrope", sans-serif;
   --font-display: "Fraunces", serif;
   --font-mono: "IBM Plex Mono", monospace;
+  --font-research-display: "Instrument Serif", serif;
+  --font-research-body: "Work Sans", sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -66,6 +68,10 @@
   --color-sidebar-card-foreground: var(--sidebar-card-foreground);
   --color-highlight: var(--highlight);
   --color-overlay: var(--overlay);
+  --color-research-card: var(--research-card);
+  --color-research-navy: var(--research-navy);
+  --color-research-mist: var(--research-mist);
+  --color-research-amber: var(--research-amber);
   --shadow-portrait: 0 14px 38px color-mix(in oklab, var(--primary) 18%, transparent);
   --shadow-drawer: 18px 0 50px color-mix(in oklab, var(--foreground) 18%, transparent);
 }
@@ -108,6 +114,10 @@
   --sidebar-card-foreground: oklch(0.22 0.04 202);
   --highlight: oklch(0.7 0.12 80);
   --overlay: oklch(0.15 0.02 190 / 55%);
+  --research-card: oklch(1 0 0);
+  --research-navy: oklch(0.34 0.075 251);
+  --research-mist: oklch(0.945 0.012 248);
+  --research-amber: oklch(0.7 0.135 75);
 }
 
 .dark {
@@ -143,6 +153,10 @@
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
+  --research-card: oklch(0.985 0.004 248);
+  --research-navy: oklch(0.28 0.055 251);
+  --research-mist: oklch(0.91 0.018 248);
+  --research-amber: oklch(0.76 0.12 75);
 }
 
 @layer base {
@@ -196,4 +210,16 @@
   background-image: linear-gradient(to right, color-mix(in oklab, var(--border) 60%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--border) 60%, transparent) 1px, transparent 1px);
   background-size: 44px 44px;
   mask-image: linear-gradient(to bottom, black, transparent 88%);
+}
+
+@utility research-hex-shell {
+  position: relative;
+  padding: 1px;
+  background: linear-gradient(145deg, var(--research-amber), var(--research-navy) 52%, var(--research-amber));
+  clip-path: polygon(50% 0%, 100% 9%, 100% 91%, 50% 100%, 0% 91%, 0% 9%);
+  filter: drop-shadow(0 18px 22px color-mix(in oklab, var(--research-navy) 15%, transparent));
+}
+
+@utility research-hex-card {
+  clip-path: polygon(50% 0%, 100% 9%, 100% 91%, 50% 100%, 0% 91%, 0% 9%);
 }

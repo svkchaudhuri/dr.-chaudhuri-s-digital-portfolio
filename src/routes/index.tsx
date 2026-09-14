@@ -20,8 +20,12 @@ import ieeeLogo from "@/assets/ieee-logo.png.asset.json";
 import scopusLogo from "@/assets/scopus-logo.png.asset.json";
 import sduBg from "@/assets/sdu-sonderborg.jpeg.asset.json";
 import heroBg from "@/assets/hero-bg.jpg.asset.json";
+import controlTheoryImage from "@/assets/control-theory-spring-mass.png.asset.json";
+import stewartPlatformImage from "@/assets/robotic-stewart-platform.png.asset.json";
+import maritimeControlImage from "@/assets/maritime-keel-control.png.asset.json";
+import thermalEnergyImage from "@/assets/fluid-power-thermal-energy.png.asset.json";
+import bioprocessImage from "@/assets/microfluidics-bioprocess.png.asset.json";
 import { Button } from "@/components/ui/button";
-import { pillarGraphics } from "@/components/pillar-graphics";
 import { publications, researchPillars, skills } from "@/lib/portfolio-data";
 import { cn } from "@/lib/utils";
 
@@ -256,7 +260,66 @@ function Profile() { return <Section id="profile" eyebrow="Profile" title="Rigor
   </div>
 </Section>; }
 
-function Research() { return <Section id="research" eyebrow="Research" title="Connected research pillars" muted><div className="grid gap-px overflow-hidden rounded-md border border-border bg-border md:grid-cols-2 xl:grid-cols-3">{researchPillars.map(([title, text], i) => { const Graphic = pillarGraphics[i]; return <article key={title} className={cn("flex flex-col bg-background p-7", i === 0 && "md:col-span-2 xl:col-span-1")}><span className="font-mono text-xs text-primary">0{i+1}</span><h3 className="mt-4 font-display text-2xl">{title}</h3>{Graphic && <div className="mt-5 overflow-hidden rounded-md border border-border bg-muted/40 p-3"><Graphic className="h-[124px] w-full text-primary" /></div>}<p className="mt-4 text-sm leading-6 text-muted-foreground">{text}</p></article>; })}</div><div className="mt-12 grid gap-4 md:grid-cols-2">{["Delivered safety-critical closed-loop control for active marine vessel motion stabilisation.","Specified and commissioned a marine vessel test rig with integrated wave generation.","Engineered a real-time, multi-actuator control architecture for an electrohydraulic quadruped.","Developed vision-based motion sensing on a 700 kg hydraulic Stewart platform.","Established two permanent teaching and research testbeds at SDU as Principal Investigator."].map(x=><p key={x} className="flex gap-3 text-sm leading-6"><CheckCircle2 className="mt-1 size-4 shrink-0 text-highlight" />{x}</p>)}</div></Section>; }
+const researchPillarVisuals = [
+  {
+    image: controlTheoryImage.url,
+    alt: "Spring-mass control system with feedback loop and response curves",
+    methods: ["Adaptive control", "Nonlinear control", "Robust control", "Optimal control"],
+  },
+  {
+    image: stewartPlatformImage.url,
+    alt: "Six-axis electrohydraulic Stewart platform with visual sensing camera",
+    methods: ["Real-time motion control", "Force control", "Vision sensing", "Parallel manipulators"],
+  },
+  {
+    image: maritimeControlImage.url,
+    alt: "Marine research vessel with an actively controlled stabilising keel",
+    methods: ["Canting keels", "Airkeel systems", "CBF-QP safety filters", "Varying sea states"],
+  },
+  {
+    image: thermalEnergyImage.url,
+    alt: "Thermal energy system with compressor, storage tank and heat exchangers",
+    methods: ["Refrigeration", "Heat pumps", "Thermal energy storage", "Maritime energy systems"],
+  },
+  {
+    image: bioprocessImage.url,
+    alt: "Microscope and microfluidic cell imaging system with feedback arrows",
+    methods: ["Image processing", "Closed-loop control", "Molecular biology", "Biomedical devices"],
+  },
+] as const;
+
+function Research() {
+  const renderPillar = ([title, text]: (typeof researchPillars)[number], index: number) => {
+    const visual = researchPillarVisuals[index];
+    if (!visual) return null;
+
+    return <article key={title} className="research-hex-shell group w-full max-w-[22rem] transition-transform duration-300 motion-safe:hover:-translate-y-2">
+      <div className="research-hex-card flex min-h-[35rem] flex-col items-center bg-research-card px-9 pb-14 pt-14 text-center shadow-xl sm:min-h-[37rem] sm:px-11">
+        <span className="font-mono text-[11px] font-bold text-research-amber">PILLAR {String(index + 1).padStart(2, "0")}</span>
+        <h3 className="mt-2 min-h-14 font-research-display text-2xl leading-tight text-research-navy">{title}</h3>
+        <div className="my-4 flex h-44 w-full items-center justify-center overflow-hidden">
+          <img src={visual.image} alt={visual.alt} loading="lazy" className="h-full w-full object-contain transition-transform duration-500 motion-safe:group-hover:scale-[1.04]" />
+        </div>
+        <p className="font-research-body text-[13px] leading-5 text-research-navy/75">{text}</p>
+        <div className="mt-5 flex flex-wrap justify-center gap-1.5" aria-label={`Key methodologies for ${title}`}>
+          {visual.methods.map((method) => <span key={method} className="rounded-sm bg-research-mist px-2 py-1 font-research-body text-[10px] font-semibold uppercase text-research-navy">{method}</span>)}
+        </div>
+      </div>
+    </article>;
+  };
+
+  return <Section id="research" eyebrow="Research" title="Connected research pillars" muted>
+    <div className="mx-auto max-w-[72rem]">
+      <div className="grid justify-items-center gap-5 md:grid-cols-2 xl:grid-cols-3 xl:gap-4">
+        {researchPillars.slice(0, 3).map(renderPillar)}
+      </div>
+      <div className="mt-5 grid justify-items-center gap-5 md:grid-cols-2 xl:-mt-16 xl:mx-auto xl:max-w-[47rem] xl:gap-4">
+        {researchPillars.slice(3).map((pillar, index) => renderPillar(pillar, index + 3))}
+      </div>
+    </div>
+    <div className="mt-12 grid gap-4 md:grid-cols-2">{["Delivered safety-critical closed-loop control for active marine vessel motion stabilisation.","Specified and commissioned a marine vessel test rig with integrated wave generation.","Engineered a real-time, multi-actuator control architecture for an electrohydraulic quadruped.","Developed vision-based motion sensing on a 700 kg hydraulic Stewart platform.","Established two permanent teaching and research testbeds at SDU as Principal Investigator."].map(x=><p key={x} className="flex gap-3 text-sm leading-6"><CheckCircle2 className="mt-1 size-4 shrink-0 text-highlight" />{x}</p>)}</div>
+  </Section>;
+}
 
 const experiences = [
   { date:"03/2022 - 02/2026", role:"Postdoctoral Researcher - Maritime Control Systems", org:"Centre for Industrial Mechanics, University of Southern Denmark · Sønderborg", projects:[{name:"SAFEMARVEL",url:"https://www.linkedin.com/in/project-safemarvel-4a5362304/",desc:"Safety-critical control framework for roll stabilisation of marine vessels. Project Manager and Research Lead; Den Danske Maritime Fond; SDU, Dacoma ApS and SDU Physics Odense."},{name:"AMCOSTAR",url:"https://www.dacoma.dk/amcostar",desc:"Dynamic Airkeel stabiliser for increasing the capacity of smaller boats through active control. Researcher and Project Participant; Eurostars/Eureka Network and Innovation Fund Denmark."}]},
