@@ -6,3 +6,4 @@
 - [x] Verify desktop and mobile presentation
 - [x] Redesign Research Pillars as an interlocking hexagonal illustration grid
 - [x] Verify the Research Pillars grid on desktop and mobile
+- [x] Reflow Research Pillars into a wider 2-2-1 desktop honeycomb
