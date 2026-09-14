@@ -10,33 +10,44 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicHooksSyncScholarMetricsRouteImport } from './routes/api/public/hooks/sync-scholar-metrics'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksSyncScholarMetricsRoute =
+  ApiPublicHooksSyncScholarMetricsRouteImport.update({
+    id: '/api/public/hooks/sync-scholar-metrics',
+    path: '/api/public/hooks/sync-scholar-metrics',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/public/hooks/sync-scholar-metrics': typeof ApiPublicHooksSyncScholarMetricsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/public/hooks/sync-scholar-metrics': typeof ApiPublicHooksSyncScholarMetricsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/public/hooks/sync-scholar-metrics': typeof ApiPublicHooksSyncScholarMetricsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/api/public/hooks/sync-scholar-metrics'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/api/public/hooks/sync-scholar-metrics'
+  id: '__root__' | '/' | '/api/public/hooks/sync-scholar-metrics'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiPublicHooksSyncScholarMetricsRoute: typeof ApiPublicHooksSyncScholarMetricsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +59,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/sync-scholar-metrics': {
+      id: '/api/public/hooks/sync-scholar-metrics'
+      path: '/api/public/hooks/sync-scholar-metrics'
+      fullPath: '/api/public/hooks/sync-scholar-metrics'
+      preLoaderRoute: typeof ApiPublicHooksSyncScholarMetricsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiPublicHooksSyncScholarMetricsRoute: ApiPublicHooksSyncScholarMetricsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

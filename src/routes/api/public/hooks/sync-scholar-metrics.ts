@@ -51,11 +51,18 @@ async function sync() {
   const i10Index = readMetric(table, "i10_index");
   const publications = Array.isArray(payload.articles) ? payload.articles.length : undefined;
 
-  const update: Record<string, number | string> = { last_synced_at: new Date().toISOString() };
-  if (typeof citations === "number") update["citations"] = citations;
-  if (typeof hIndex === "number") update["h_index"] = hIndex;
-  if (typeof i10Index === "number") update["i10_index"] = i10Index;
-  if (typeof publications === "number" && publications > 0) update["publications"] = publications;
+  const update: {
+    last_synced_at: string;
+    citations?: number;
+    h_index?: number;
+    i10_index?: number;
+    publications?: number;
+  } = { last_synced_at: new Date().toISOString() };
+  if (typeof citations === "number") update.citations = citations;
+  if (typeof hIndex === "number") update.h_index = hIndex;
+  if (typeof i10Index === "number") update.i10_index = i10Index;
+  if (typeof publications === "number" && publications > 0) update.publications = publications;
+
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { error } = await supabaseAdmin
