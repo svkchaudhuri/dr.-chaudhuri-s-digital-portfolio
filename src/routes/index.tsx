@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   Activity, Anchor, Award, BadgeCheck, BookOpen, BriefcaseBusiness, CheckCircle2, ChevronRight, Clock3, Download,
   ExternalLink, FileImage, FileText, GraduationCap, Home, ImagePlus, Linkedin,
-  Globe2, Lock, LockOpen, Mail, MapPin, Menu, Microscope, RefreshCw, Search, ShieldCheck, SlidersHorizontal, Users, Waves, Wrench, X, Youtube,
+  Globe2, Lock, LockOpen, Mail, MapPin, Menu, Microscope, Pencil, RefreshCw, Search, ShieldCheck, SlidersHorizontal, Users, Waves, Wrench, X, Youtube,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ComponentType } from "react";
 
@@ -648,7 +648,8 @@ const languages: readonly Language[] = [
 
 function Service() { return <Section id="service" eyebrow="Service" title="Professional standing and peer review"><div className="grid gap-10 lg:grid-cols-2"><div><h3 className="font-display text-2xl">Memberships & honours</h3><div className="mt-5 space-y-4">{[['Senior Member, IEEE','Elevated 2026 · member since 2016 · ID 90902393'],['Member, IET','ID 1101020475 · pursuing CEng status'],['Member & Chartered Engineer (India), IE(I)','ID M-1848040'],['Associate Member, INAE','Application under review, 2026'],['IEEE COVID-19 App Development Contest','Winner, 2020 · CovCov mobile application']].map(([a,b])=><div key={a} className="border-l-2 border-highlight pl-4"><p className="font-semibold">{a}</p><p className="text-sm text-muted-foreground">{b}</p></div>)}</div></div><div><div className="flex items-end justify-between"><h3 className="font-display text-2xl">Verified peer review</h3><p className="font-display text-4xl text-primary">55</p></div><p className="mt-2 text-sm text-muted-foreground">Reviews of 42 manuscripts · September 2015–September 2026</p><div className="mt-5 divide-y divide-border border-y border-border">{reviews.map(([a,n])=><div key={a} className="grid grid-cols-[1fr_auto] gap-3 py-2.5 text-xs"><span>{a}</span><strong className="text-primary">{n}</strong></div>)}</div></div></div></Section>; }
 
-type CareerMoment = { id: string; title: string; tag: string; src: string; alt: string; featured?: boolean };
+type CareerMoment = { id: string; title: string; tag: string; src: string; alt: string; featured?: boolean; caption?: string };
+type MomentOverride = { title?: string; tag?: string; caption?: string };
 const builtInCareerMoments: CareerMoment[] = [
   { id: "sdu-sonderborg", title: "SDU Sønderborg", tag: "Campus and Als Fjord · Maritime control research", src: sduBg.url, alt: "University of Southern Denmark campus beside Als Fjord", featured: true },
   { id: "tower-crane-demo", title: "Tower Crane Demo to Danfoss CEO Kim Fausing", tag: "Industrial demo · Danfoss leadership visit", src: craneDemoAsset.url, alt: "Live tower crane control demonstration presented to Danfoss CEO Kim Fausing" },
@@ -665,6 +666,7 @@ const builtInCareerMoments: CareerMoment[] = [
 const careerStorageKey = "shouvik-career-moments";
 const adminStorageKey = "shouvik-gallery-admin";
 const adminPasscode = "sc2026";
+const overridesStorageKey = "shouvik-career-overrides";
 
 function CareerGallery() {
   const [moments, setMoments] = useState<CareerMoment[]>([]);
@@ -678,6 +680,22 @@ function CareerGallery() {
   const [passcodeOpen, setPasscodeOpen] = useState(false);
   const [passcode, setPasscode] = useState("");
   const [passcodeError, setPasscodeError] = useState("");
+  const [overrides, setOverrides] = useState<Record<string, MomentOverride>>({});
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editTag, setEditTag] = useState("");
+  const [editCaption, setEditCaption] = useState("");
+
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(overridesStorageKey);
+      if (!stored) return;
+      const parsed: unknown = JSON.parse(stored);
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) setOverrides(parsed as Record<string, MomentOverride>);
+    } catch {
+      window.localStorage.removeItem(overridesStorageKey);
+    }
+  }, []);
 
   useEffect(() => {
     if (window.localStorage.getItem(adminStorageKey) === "true") { setIsAdmin(true); return; }
@@ -746,8 +764,44 @@ function CareerGallery() {
     setImageUrl(""); setTitle(""); setTag(""); setError(""); setDialogOpen(false);
   };
 
-  const allMoments = [...builtInCareerMoments, ...moments];
+  const allMoments = [...builtInCareerMoments, ...moments].map((moment) => {
+    const override = overrides[moment.id];
+    if (!override) return moment;
+    return {
+      ...moment,
+      title: override.title ?? moment.title,
+      tag: override.tag ?? moment.tag,
+      caption: override.caption ?? moment.caption,
+    };
+  });
   const activeMoment = lightbox !== null ? allMoments[lightbox] : null;
+  const editingMoment = editingId ? allMoments.find((moment) => moment.id === editingId) ?? null : null;
+
+  const openEditor = (moment: { id: string; title: string; tag?: string | undefined; caption?: string | undefined }) => {
+    setLightbox(null);
+    setEditingId(moment.id);
+    setEditTitle(moment.title);
+    setEditTag(moment.tag ?? "");
+    setEditCaption(moment.caption ?? "");
+  };
+
+  const saveEdit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!editingId) return;
+    const next = { ...overrides, [editingId]: { title: editTitle.trim(), tag: editTag.trim(), caption: editCaption.trim() } };
+    setOverrides(next);
+    window.localStorage.setItem(overridesStorageKey, JSON.stringify(next));
+    setEditingId(null);
+  };
+
+  const resetEdit = () => {
+    if (!editingId) return;
+    const next = { ...overrides };
+    delete next[editingId];
+    setOverrides(next);
+    window.localStorage.setItem(overridesStorageKey, JSON.stringify(next));
+    setEditingId(null);
+  };
 
   return <Section id="gallery" eyebrow="Career Gallery" title="Career Moments" muted>
     <div className="mb-6 flex items-center justify-end gap-2">
@@ -781,7 +835,8 @@ function CareerGallery() {
           onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setLightbox(index); } }}
         >
           <img src={moment.src} alt={moment.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
-          <figcaption className="absolute inset-x-0 bottom-0 bg-overlay px-5 py-4 text-primary-foreground backdrop-blur-sm"><p className="font-display text-xl">{moment.title}</p>{moment.tag && <p className="mt-1 text-xs opacity-80">{moment.tag}</p>}</figcaption>
+          {isAdmin && <Button variant="outline" size="icon" aria-label={`Edit details for ${moment.title}`} className="absolute right-3 top-3 z-10 bg-background/90" onClick={(event) => { event.stopPropagation(); openEditor(moment); }}><Pencil className="size-4" aria-hidden="true" /></Button>}
+          <figcaption className="absolute inset-x-0 bottom-0 bg-overlay px-5 py-4 text-primary-foreground backdrop-blur-sm"><p className="font-display text-xl">{moment.title}</p>{moment.tag && <p className="mt-1 text-xs opacity-80">{moment.tag}</p>}{moment.caption && <p className="mt-1 text-xs opacity-70">{moment.caption}</p>}</figcaption>
         </figure>
       ))}
     </div>
@@ -812,10 +867,24 @@ function CareerGallery() {
           <div className="max-w-2xl text-center text-white">
             <p className="font-display text-2xl">{activeMoment.title}</p>
             {activeMoment.tag && <p className="mt-1.5 text-sm font-medium opacity-80">{activeMoment.tag}</p>}
+            {activeMoment.caption && <p className="mt-2 text-sm opacity-75">{activeMoment.caption}</p>}
+            {isAdmin && <Button variant="outline" size="sm" className="mt-4 bg-background/90" onClick={() => openEditor(activeMoment)}><Pencil className="size-4" aria-hidden="true" />Edit details</Button>}
           </div>
         </div>
       </div>
     )}
+    {editingMoment && <div className="fixed inset-0 z-[90] grid place-items-center p-4">
+      <Button variant="ghost" aria-label="Close edit photo dialog" className="absolute inset-0 h-auto w-full rounded-none bg-overlay hover:bg-overlay" onClick={() => setEditingId(null)} />
+      <div role="dialog" aria-modal="true" aria-labelledby="edit-photo-title" className="relative z-10 w-full max-w-lg rounded-xl border border-border bg-background p-6 shadow-drawer">
+        <div className="flex items-start justify-between gap-4"><div><h3 id="edit-photo-title" className="font-display text-2xl">Edit Photo Details</h3><p className="mt-1 text-sm text-muted-foreground">Update the text shown on this moment.</p></div><Button variant="ghost" size="icon" onClick={() => setEditingId(null)} aria-label="Close dialog"><X className="size-5" /></Button></div>
+        <form className="mt-6 space-y-4" onSubmit={saveEdit}>
+          <label className="block text-sm font-semibold">Title<input required maxLength={120} value={editTitle} onChange={(event) => setEditTitle(event.target.value)} className="mt-2 h-10 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" /></label>
+          <label className="block text-sm font-semibold">Year or tag<input maxLength={80} value={editTag} onChange={(event) => setEditTag(event.target.value)} className="mt-2 h-10 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" /></label>
+          <label className="block text-sm font-semibold">Caption<textarea maxLength={280} rows={3} value={editCaption} onChange={(event) => setEditCaption(event.target.value)} className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring" /></label>
+          <div className="flex flex-wrap justify-end gap-2 pt-2"><Button type="button" variant="ghost" onClick={resetEdit}>Reset to default</Button><Button type="button" variant="outline" onClick={() => setEditingId(null)}>Cancel</Button><Button type="submit">Save changes</Button></div>
+        </form>
+      </div>
+    </div>}
   </Section>;
 }
 
