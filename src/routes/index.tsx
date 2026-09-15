@@ -855,7 +855,7 @@ function CareerGallery() {
           onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setLightbox(index); } }}
         >
           <img src={moment.src} alt={moment.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
-          {isAdmin && <Button variant="outline" size="icon" aria-label={`Edit details for ${moment.title}`} className="absolute right-3 top-3 z-10 bg-background/90" onClick={(event) => { event.stopPropagation(); openEditor(moment); }}><Pencil className="size-4" aria-hidden="true" /></Button>}
+          {isAdmin && <Button variant="outline" size="sm" aria-label={`Edit details for ${moment.title}`} className="absolute right-3 top-3 z-20 border-2 border-primary bg-card text-foreground shadow-drawer hover:bg-card" onClick={(event) => { event.stopPropagation(); openEditor(moment); }}><Pencil className="size-4" aria-hidden="true" />Edit</Button>}
           <figcaption className="absolute inset-x-0 bottom-0 bg-overlay px-5 py-4 text-primary-foreground backdrop-blur-sm"><p className="font-display text-xl">{moment.title}</p>{moment.tag && <p className="mt-1 text-xs opacity-80">{moment.tag}</p>}{moment.caption && <p className="mt-1 text-xs opacity-70">{moment.caption}</p>}</figcaption>
         </figure>
       ))}
