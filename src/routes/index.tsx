@@ -828,6 +828,7 @@ function CareerGallery() {
       {isAdmin ? <>
         <Button onClick={() => { setLightbox(null); setError(""); setDialogOpen(true); }}><ImagePlus className="size-4" aria-hidden="true" />Add Photo</Button>
         <Button variant="outline" size="sm" onClick={() => window.dispatchEvent(new Event(scholarSyncEvent))}><RefreshCw className="size-4" aria-hidden="true" />Sync Scholar</Button>
+        <span role="status" className="inline-flex items-center gap-2 rounded-full border-2 border-primary bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary"><LockOpen className="size-3.5" aria-hidden="true" />Admin Mode Active</span>
         <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={lockAdmin}><Lock className="size-4" aria-hidden="true" />Exit admin</Button>
       </> : <Button variant="ghost" size="icon" aria-label="Unlock gallery editing" className="text-muted-foreground/40 hover:text-muted-foreground" onClick={() => { setPasscodeError(""); setPasscodeOpen(true); }}><LockOpen className="size-4" aria-hidden="true" /></Button>}
     </div>
