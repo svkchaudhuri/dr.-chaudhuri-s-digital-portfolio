@@ -29,6 +29,18 @@ async function sync(force: boolean) {
     return { synced: false, reason: "missing_api_key" as const };
   }
 
+  const { supabaseAdmin: cooldownClient } = await import("@/integrations/supabase/client.server");
+  const { data: existing } = await cooldownClient
+    .from("scholar_metrics")
+    .select("last_synced_at")
+    .eq("scholar_author_id", AUTHOR_ID)
+    .maybeSingle();
+
+  const lastSynced = existing?.last_synced_at ? Date.parse(existing.last_synced_at) : 0;
+  if (!force && Date.now() - lastSynced < COOLDOWN_MS) {
+    return { synced: false, reason: "cooldown" as const, last_synced_at: existing?.last_synced_at ?? null };
+  }
+
   const url = new URL("https://serpapi.com/search.json");
   url.searchParams.set("engine", "google_scholar_author");
   url.searchParams.set("author_id", AUTHOR_ID);
@@ -86,12 +98,14 @@ export const Route = createFileRoute("/api/public/hooks/sync-scholar-metrics")({
       POST: async ({ request }) => {
         const bearer = /^Bearer ([^\s,]+)$/.exec(request.headers.get("authorization") ?? "")?.[1];
         const syncSecret = process.env["SCHOLAR_SYNC_SECRET"];
-        if (!syncSecret || bearer !== syncSecret) {
+        let trusted = Boolean(syncSecret && bearer === syncSecret);
+        if (!trusted) {
           const unauthorized = await authenticateCronRequest(request);
-          if (unauthorized) return unauthorized;
+          trusted = !unauthorized;
         }
 
-        const result = await sync();
+        // Public callers (the portfolio page on load) are always cooldown limited.
+        const result = await sync(trusted);
         return new Response(JSON.stringify(result), {
           headers: { "Content-Type": "application/json" },
         });
