@@ -299,7 +299,7 @@
   @media (min-width: 64rem) {
     flex: 1;
     container-type: size;
-    --profile-hex-height: min(calc(var(--profile-hex-width) * 0.8660254), calc((100cqh - var(--profile-hex-gap) * 6.5) / 7.5));
+    --profile-hex-height: min(calc((100cqh - var(--profile-hex-gap) * 6.5) / 7.5), calc(((100cqw - var(--profile-hex-gap) * 0.8660254) / 1.75) * 0.8660254));
     --profile-hex-width: calc(var(--profile-hex-height) / 0.8660254);
   }
 }
