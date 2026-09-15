@@ -703,6 +703,8 @@ function CareerGallery() {
   const [passcode, setPasscode] = useState("");
   const [passcodeError, setPasscodeError] = useState("");
   const [overrides, setOverrides] = useState<Record<string, MomentOverride>>({});
+  const [pinnedIds, setPinnedIds] = useState<string[]>([]);
+  const [pinNotice, setPinNotice] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editTag, setEditTag] = useState("");
