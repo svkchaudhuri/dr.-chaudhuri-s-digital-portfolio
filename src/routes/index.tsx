@@ -867,6 +867,8 @@ function CareerGallery() {
           <div className="max-w-2xl text-center text-white">
             <p className="font-display text-2xl">{activeMoment.title}</p>
             {activeMoment.tag && <p className="mt-1.5 text-sm font-medium opacity-80">{activeMoment.tag}</p>}
+            {activeMoment.caption && <p className="mt-2 text-sm opacity-75">{activeMoment.caption}</p>}
+            {isAdmin && <Button variant="outline" size="sm" className="mt-4 bg-background/90" onClick={() => openEditor(activeMoment)}><Pencil className="size-4" aria-hidden="true" />Edit details</Button>}
           </div>
         </div>
       </div>
