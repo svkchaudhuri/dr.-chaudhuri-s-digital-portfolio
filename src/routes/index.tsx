@@ -680,6 +680,22 @@ function CareerGallery() {
   const [passcodeOpen, setPasscodeOpen] = useState(false);
   const [passcode, setPasscode] = useState("");
   const [passcodeError, setPasscodeError] = useState("");
+  const [overrides, setOverrides] = useState<Record<string, MomentOverride>>({});
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editTag, setEditTag] = useState("");
+  const [editCaption, setEditCaption] = useState("");
+
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(overridesStorageKey);
+      if (!stored) return;
+      const parsed: unknown = JSON.parse(stored);
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) setOverrides(parsed as Record<string, MomentOverride>);
+    } catch {
+      window.localStorage.removeItem(overridesStorageKey);
+    }
+  }, []);
 
   useEffect(() => {
     if (window.localStorage.getItem(adminStorageKey) === "true") { setIsAdmin(true); return; }
