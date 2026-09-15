@@ -1,54 +1,98 @@
-# Dr. Chaudhuri's Digital Portfolio
+# Dr. Shouvik Chaudhuri - Academic Digital Portfolio
 
-Build a modern, high-impact digital resume and academic portfolio for Dr. Shouvik Chaudhuri using a two-panel structure.
+An interactive, responsive academic portfolio and curriculum vitae for **Dr. Shouvik Chaudhuri, PhD** (Researcher in Nonlinear Dynamics & Control, with a specialization in electrohydraulic, robotic, and maritime systems).
 
-Design & Layout:
-1. Left Panel (Sticky Sidebar):
-- Profile picture using the attached headshot (shouvik_headshot_round.png).
-- Name: "Shouvik Chaudhuri, Ph.D."
-- Titles & Honors: SMIEEE (US) | MIET (UK) | MIE (India) | Pursuing CEng status (IET); "Researcher in Dynamics and Control".
-- Direct clickable profile links with crisp icons:
-  * ORCID: https://orcid.org/0000-0001-8957-5086
-  * Web of Science: https://www.webofscience.com/wos/author/record/S-9653-2019 (ResearcherID: S-9653-2019)
-  * Google Scholar: https://scholar.google.com/citations?user=sXYaj-AAAAAJ
-  * Scopus: https://www.scopus.com/authid/detail.uri?authorId=14062861300
-  * LinkedIn: https://www.linkedin.com/in/drshouvikchaudhuri
-  * IEEE: Member ID 90902393 (Senior Member)
-  * Email (svk.chaudhuri@gmail.com), Location (Kolkata, India / SDU Denmark)
-- Sidebar navigation matching the style in attached image.png with deep teal active indicators: Home, Profile, Research, Experience, Funding, Education, Publications, Teaching, Skills, Service, Downloads, Contact.
-- Download CV button linking to the attached PDF.
+## Overview
 
-2. Right Panel (Main Content):
-- Home / Hero: Executive research summary, key bibliometrics (h-index, citations, papers), core specializations (Nonlinear & Adaptive Control, Safety-Critical Control / CBF-QP, Maritime & Electrohydraulic Systems).
-- Profile & Research: Detailed breakdown of research pillars (Dynamics & Control, Electrohydraulics & Stewart Platform, Marine Roll Stabilisation / SAFEMARVEL & AMCOSTAR, Energy Systems, Engineering-Biology Interface).
-- Publications (First-class interactive explorer):
-  * Category tabs: All, Journals (14), Conference Proceedings (11), Books (1), Book Chapters (2).
-  * Search bar & filter by keyword or year.
-  * Every publication entry must feature full citation, authors (highlighting S. Chaudhuri), journal/conference name, year, and a direct clickable DOI badge/link opening the paper download/landing page.
-- Experience: Postdoc at SDU (SAFEMARVEL & AMCOSTAR), Secondment at TU Ilmenau, Research Fellow at Jadavpur University (CARS & DARO projects with DRDO), BARC GATE Fellow.
-- Research Funding & Grants: Funded projects (SAFEMARVEL, Fabrikant Mads Clausen Fond grants), mobility awards, and proposals.
-- Education: Ph.D. in Engineering (JU, CGPA 10.00/10.00), M.E. in Nuclear Engineering (JU, CGPA 9.02), B.Tech in Electrical Engineering.
-- Teaching & Supervision: Courses taught at SDU (XCOS, EXT, SPRO4ME, CoE1) and list of 6 Master's and 6 Bachelor's theses supervised.
-- Technical Skills & Service: Hardware rigs, real-time targets (Speedgoat, NI cRIO), simulation tools, and 55 verified peer reviews across 13 journals.
-- Responsive mobile drawer support for seamless browsing on phones. Extract all verbatim details and links from the attached TeX and PDF files.
+This digital portfolio features:
 
-This project was built with [Lovable](https://lovable.dev).
+- **Two-Panel Academic Layout:** Personal sidebar with high-resolution portrait, verified academic badges (ORCID, Google Scholar, Scopus, Web of Science, IEEE, LinkedIn), and direct CV downloads.
+- **Dynamic Google Scholar Metrics:** Automated sync of citations, h-index, and publication counts.
+- **Interlocking Research Pillars:** Interactive 2-1-2 hexagonal honeycomb showcasing research domains, methodologies, key milestones, and linked publications.
+- **Categorized Publications:** Comprehensive list of journal articles, conferences, book chapters, and theses with clickable DOIs and embedded experimental video demonstrations.
+- **Career Moments Gallery:** Masonry jigsaw gallery featuring lab milestones, student supervisions, and international collaborations, equipped with an uncropped full-screen lightbox, photo pinning, and a private admin edit mode.
+- **Teaching & Supervision:** Course links, student supervision records, and verified teaching credentials.
+- **Core Competencies:** Technical engineering proficiencies alongside CEFR-scaled language dials with official certificates.
 
-## Build with Lovable
+---
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/b008d9bf-26cb-4de7-9b99-5d978dd0b426).
+## Tech Stack & Architecture
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+- **Framework:** [React 19](https://react.dev/) + [TanStack Start](https://tanstack.com/start) + [Vite](https://vitejs.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- **Routing:** [TanStack Router](https://tanstack.com/router) (file-based)
+- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/) (Radix UI primitives)
+- **Icons:** [Lucide React](https://lucide.dev/)
+- **Backend & Integrations:** Lovable Cloud (database, auth, storage) powering the scheduled Scholar metrics sync
 
-## Development
+---
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## Repository Structure
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+```text
+├── public/                 # Static web assets, favicons, PWA manifest
+├── src/
+│   ├── assets/             # CDN asset pointers (photos, certificates, logos, documents)
+│   ├── components/         # UI components (shadcn/ui, dialogs, pillar graphics)
+│   ├── integrations/       # Backend client and auth configuration
+│   ├── lib/                # Portfolio data, utility helpers, and error tracking
+│   ├── routes/
+│   │   ├── index.tsx       # Main portfolio application page
+│   │   └── api/            # Server endpoints (Scholar metrics sync hook)
+│   ├── styles.css          # Global styling, honeycomb geometry, animations
+│   ├── router.tsx          # Application routing setup
+│   └── start.ts            # Entrypoint
+├── supabase/
+│   └── config.toml         # Backend project configuration
+├── package.json            # Project dependencies and npm scripts
+├── tsconfig.json           # TypeScript configuration
+└── vite.config.ts          # Vite build and plugin configuration
 ```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18+ recommended) or Bun / pnpm
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/svkchaudhuri/digital-portfolio.git
+   cd digital-portfolio
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   bun install
+   ```
+
+3. Run the local development server:
+   ```bash
+   npm run dev
+   # or
+   bun dev
+   ```
+   Open [http://localhost:8080](http://localhost:8080) in your browser to view the site.
+
+4. Build for production:
+   ```bash
+   npm run build
+   ```
+
+---
+
+## Built with Lovable
+
+This project was built with [Lovable](https://lovable.dev) and stays in two-way sync with GitHub: changes made in Lovable are committed straight to this repository, and commits pushed here sync back into Lovable.
+
+---
+
+## License & Contact
+
+Copyright © 2026 Dr. Shouvik Chaudhuri. All rights reserved.
+For academic inquiries and collaboration, reach out via [LinkedIn](https://www.linkedin.com/in/shouvik-chaudhuri-phd/).
