@@ -47,7 +47,7 @@ const nav = [
   ["home", "Home", Home], ["profile", "Profile", Users], ["research", "Research", Microscope],
   ["experience", "Work Experience", BriefcaseBusiness], ["funding", "Funding", Award],
   ["education", "Education", GraduationCap], ["publications", "Publications", BookOpen],
-  ["teaching", "Teaching", Users], ["skills", "Skills", Wrench], ["service", "Service", ShieldCheck],
+  ["teaching", "Teaching", Users], ["skills", "Core Competencies", Wrench], ["service", "Service", ShieldCheck],
   ["gallery", "Career Moments", FileImage],
   ["downloads", "Downloads", Download], ["contact", "Contact", Mail],
 ] as const;
@@ -203,18 +203,58 @@ function TypedTerm() {
 
 type ScholarMetrics = { h_index: number; citations: number; publications: number; last_synced_at: string | null };
 
+const scholarSyncCooldownMs = 4 * 60 * 60 * 1000;
+const scholarSyncAttemptKey = "shouvik-scholar-sync-attempt";
+export const scholarSyncEvent = "shouvik-scholar-sync";
+
+async function requestScholarSync() {
+  try {
+    await fetch("/api/public/hooks/sync-scholar-metrics", { method: "POST" });
+  } catch {
+    // Offline or unreachable: the cached numbers stay on screen.
+  }
+}
+
 function useScholarMetrics() {
   const [metrics, setMetrics] = useState<ScholarMetrics | null>(null);
+
   useEffect(() => {
     let active = true;
-    supabase
-      .from("scholar_metrics")
-      .select("h_index, citations, publications, last_synced_at")
-      .eq("scholar_author_id", "sXYaj-AAAAAJ")
-      .maybeSingle()
-      .then(({ data }) => { if (active && data) setMetrics(data as ScholarMetrics); });
-    return () => { active = false; };
+
+    const load = async () => {
+      const { data } = await supabase
+        .from("scholar_metrics")
+        .select("h_index, citations, publications, last_synced_at")
+        .eq("scholar_author_id", "sXYaj-AAAAAJ")
+        .maybeSingle();
+      if (!active || !data) return null;
+      setMetrics(data as ScholarMetrics);
+      return data as ScholarMetrics;
+    };
+
+    const run = async (force: boolean) => {
+      const current = await load();
+      if (!active) return;
+      const lastSynced = current?.last_synced_at ? Date.parse(current.last_synced_at) : 0;
+      const lastAttempt = Number(window.localStorage.getItem(scholarSyncAttemptKey) ?? 0);
+      const now = Date.now();
+      const fresh = now - lastSynced < scholarSyncCooldownMs || now - lastAttempt < scholarSyncCooldownMs;
+      if (!force && fresh) return;
+      window.localStorage.setItem(scholarSyncAttemptKey, String(now));
+      await requestScholarSync();
+      if (active) await load();
+    };
+
+    void run(false);
+
+    const onManualSync = () => {
+      window.localStorage.removeItem(scholarSyncAttemptKey);
+      void run(true);
+    };
+    window.addEventListener(scholarSyncEvent, onManualSync);
+    return () => { active = false; window.removeEventListener(scholarSyncEvent, onManualSync); };
   }, []);
+
   return metrics;
 }
 
@@ -500,7 +540,7 @@ const courses: { code: string; text: string; url?: string }[] = [
 ];
 function Teaching() { return <Section id="teaching" eyebrow="Teaching" title="Teaching & Supervision"><div><div className="flex flex-wrap items-center justify-between gap-3"><h3 className="font-display text-2xl">Course Teaching</h3><Button asChild variant="outline" size="sm"><a href={teachingCertAsset.url} target="_blank" rel="noreferrer"><ExternalLink className="size-4" />View Certificate</a></Button></div><div className="mt-5 grid gap-4 md:grid-cols-2">{courses.map(c=>{const inner=<><p className="flex items-center gap-1.5 font-mono text-xs font-bold text-primary">{c.code}{c.url&&<ExternalLink className="size-3.5" aria-hidden="true" />}</p><p className="mt-2 text-sm leading-6">{c.text}</p></>;return c.url?<a key={c.code} href={c.url} target="_blank" rel="noreferrer" className="block rounded-md border border-border bg-background p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait">{inner}</a>:<div className="rounded-md border border-border bg-background p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait" key={c.code}>{inner}</div>;})}</div><p className="mt-5 text-sm text-muted-foreground">Teaching assistant: Control of Autonomous Systems (Autumn 2022) and Construct Mechatronics (Spring 2022).</p></div><div className="mt-14 border-t border-border pt-8"><h3 className="font-display text-3xl">Student Supervision</h3><p className="mt-2 text-sm text-muted-foreground">Six Master's dissertations and six Bachelor's projects.</p><div className="mt-8 grid gap-12 lg:grid-cols-2"><ThesisList title="Master's dissertations" items={masters}/><ThesisList title="Bachelor's projects" items={bachelors}/></div></div><div className="mt-14 border-t border-border pt-8"><h3 className="font-display text-3xl">Examination &amp; Assessment</h3><article className="mt-5 rounded-md border border-border bg-card p-6"><p className="text-sm font-extrabold text-primary">Internal co-examiner · University of Southern Denmark</p><p className="mt-3 text-sm leading-6 text-muted-foreground">Master's courses: Adaptive and Nonlinear Control, Fault-Tolerant Control, and Statistical Signal Processing.</p></article></div></Section>; }
 
-function Skills() { return <Section id="skills" eyebrow="Technical skills" title="Technical Skills" muted>
+function Skills() { return <Section id="skills" eyebrow="Core competencies" title="Core Competencies" muted>
   <div>
     <h3 className="font-display text-2xl">Engineering &amp; Technical Competencies</h3>
     <div className="mt-5 grid gap-px overflow-hidden rounded-md border border-border bg-border md:grid-cols-2">{skills.map(([t,d])=><article className="bg-background p-6" key={t}><h3 className="text-sm font-extrabold text-primary">{t}</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">{d}</p></article>)}</div>
@@ -625,6 +665,7 @@ function CareerGallery() {
     <div className="mb-6 flex items-center justify-end gap-2">
       {isAdmin ? <>
         <Button onClick={() => { setLightbox(null); setError(""); setDialogOpen(true); }}><ImagePlus className="size-4" aria-hidden="true" />Add Photo</Button>
+        <Button variant="outline" size="sm" onClick={() => window.dispatchEvent(new Event(scholarSyncEvent))}><RefreshCw className="size-4" aria-hidden="true" />Sync Scholar</Button>
         <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={lockAdmin}><Lock className="size-4" aria-hidden="true" />Exit admin</Button>
       </> : <Button variant="ghost" size="icon" aria-label="Unlock gallery editing" className="text-muted-foreground/40 hover:text-muted-foreground" onClick={() => { setPasscodeError(""); setPasscodeOpen(true); }}><LockOpen className="size-4" aria-hidden="true" /></Button>}
     </div>
