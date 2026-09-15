@@ -672,6 +672,16 @@ const builtInCareerMoments: CareerMoment[] = [
   { id: "section-dinner-2022", title: "1st Section Dinner", tag: "2022 · Section colleagues", src: sectionDinner2022Asset.url, alt: "First section dinner with department colleagues" },
   { id: "section-dinner-2024", title: "Section Dinner", tag: "2024 · Section colleagues", src: sectionDinner2024Asset.url, alt: "Section dinner with department colleagues in 2024" },
   { id: "section-lunch-2024", title: "Section Lunch", tag: "2024 · Section colleagues", src: sectionLunch2024Asset.url, alt: "Section lunch gathering with department colleagues in 2024" },
+  { id: "systems-setup-lab-2026", title: "Systems Setup at Cyber Physical Lab", tag: "2026 · Lab infrastructure", src: systemsSetupLabAsset.url, alt: "Experimental systems set up inside the Cyber Physical Lab" },
+  { id: "dinner-with-students", title: "Dinner with Students", tag: "Mentorship and student community", src: dinnerStudentsAsset.url, alt: "Dinner gathering with supervised students" },
+  { id: "new-lab-setup-2026", title: "New Setup of Cyber Physical Lab", tag: "2026 · Research testbed expansion", src: newLabSetupAsset.url, alt: "New research testbed setup in the Cyber Physical Lab with colleagues" },
+  { id: "poster-odense-2025", title: "Poster Presentation at Mini-Conference in Odense", tag: "2025 · SAFEMARVEL and AMCOSTAR presentation", src: posterOdenseAsset.url, alt: "Poster presentation of SAFEMARVEL and AMCOSTAR projects in Odense" },
+  { id: "safemarvel-first-2024", title: "SAFEMARVEL 1st Biannual Meeting", tag: "2024 · Consortium milestone meeting", src: safemarvelFirstAsset.url, alt: "SAFEMARVEL consortium members at the first biannual meeting" },
+  { id: "safemarvel-second-2025", title: "SAFEMARVEL 2nd Biannual Meeting", tag: "2025 · Consortium milestone meeting", src: safemarvelSecondAsset.url, alt: "SAFEMARVEL consortium members at the second biannual meeting" },
+  { id: "scholars-bbq", title: "Scholars BBQ", tag: "Community and campus gathering", src: scholarsBbqAsset.url, alt: "Scholars barbecue gathering beside the campus waterfront" },
+  { id: "defense-jana-jakub-2026", title: "Student Defense (Jana and Jakub)", tag: "2026 · Supervision and thesis defense", src: defenseJanaJakubAsset.url, alt: "Thesis defense of Jana and Jakub with supervisors and industry partners" },
+  { id: "defense-zofia-henrik-2025", title: "Student Defense (Zofia and Henrik)", tag: "2025 · Supervision and thesis defense", src: defenseZofiaHenrikAsset.url, alt: "Thesis defense of Zofia and Henrik with the supervision panel" },
+  { id: "ilmenau-supper", title: "Supper with Professors and Colleagues, TU Ilmenau", tag: "MSCA secondment and academic exchange", src: ilmenauSupperAsset.url, alt: "Supper with professors and colleagues during the TU Ilmenau secondment" },
 ];
 const careerStorageKey = "shouvik-career-moments";
 const adminStorageKey = "shouvik-gallery-admin";
