@@ -777,7 +777,7 @@ function CareerGallery() {
   const activeMoment = lightbox !== null ? allMoments[lightbox] : null;
   const editingMoment = editingId ? allMoments.find((moment) => moment.id === editingId) ?? null : null;
 
-  const openEditor = (moment: { id: string; title: string; tag?: string; caption?: string }) => {
+  const openEditor = (moment: { id: string; title: string; tag?: string | undefined; caption?: string | undefined }) => {
     setLightbox(null);
     setEditingId(moment.id);
     setEditTitle(moment.title);
