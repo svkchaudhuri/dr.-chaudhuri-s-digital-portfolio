@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   Activity, Anchor, Award, BadgeCheck, BookOpen, BriefcaseBusiness, CheckCircle2, ChevronRight, Clock3, Download,
   ExternalLink, FileImage, FileText, GraduationCap, Home, ImagePlus, Linkedin,
-  Globe2, Lock, LockOpen, Mail, MapPin, Menu, Microscope, Search, ShieldCheck, SlidersHorizontal, Users, Waves, Wrench, X,
+  Globe2, Lock, LockOpen, Mail, MapPin, Menu, Microscope, RefreshCw, Search, ShieldCheck, SlidersHorizontal, Users, Waves, Wrench, X,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ComponentType } from "react";
 

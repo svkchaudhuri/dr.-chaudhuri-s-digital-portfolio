@@ -20,7 +20,9 @@ function readMetric(table: SerpTableRow[] | undefined, key: string): number | un
   return undefined;
 }
 
-async function sync() {
+const COOLDOWN_MS = 4 * 60 * 60 * 1000;
+
+async function sync(force: boolean) {
   const apiKey = process.env["SERPAPI_API_KEY"];
   if (!apiKey) {
     console.warn("SERPAPI_API_KEY is not set; keeping the existing baseline metrics.");
