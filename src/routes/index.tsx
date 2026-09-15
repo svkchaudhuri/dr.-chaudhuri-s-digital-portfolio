@@ -687,6 +687,8 @@ const careerStorageKey = "shouvik-career-moments";
 const adminStorageKey = "shouvik-gallery-admin";
 const adminPasscode = "sc2026";
 const overridesStorageKey = "shouvik-career-overrides";
+const pinnedStorageKey = "shouvik-career-pinned";
+const maxPinned = 5;
 
 function CareerGallery() {
   const [moments, setMoments] = useState<CareerMoment[]>([]);
