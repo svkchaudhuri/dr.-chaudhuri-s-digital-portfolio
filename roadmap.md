@@ -16,3 +16,4 @@
 - [x] Apply distinct indigo / emerald / ocean tints to the Home focus cards in both light and dark modes
 
 - [x] Automated Google Scholar metrics sync (weekly) with live Home stats
+- [x] Upgrade Profile interests and leadership into interactive connected infographics

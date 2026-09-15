@@ -323,14 +323,51 @@ const profileHighlights = [
 
 
 const researchInterests = [
-  "Nonlinear control", "Adaptive control", "Optimal and robust control", "Safety-critical control",
-  "CLF-CBF-QP filters", "Fluid power systems", "Electrohydraulic actuation",
-  "Stewart platforms", "Marine roll stabilisation", "Robotics",
-  "Energy systems", "Digital twins", "Real-time HIL", "Engineering and biology",
+  { name: "Nonlinear control", summary: "Nonlinear control design for uncertain dynamical systems, including sliding mode methods and stability-focused closed-loop analysis.", publications: [0, 9, 19, 20, 21, 27], Icon: Activity },
+  { name: "Adaptive control", summary: "Adaptive algorithms for uncertain systems, including neural, fuzzy and sliding mode approaches for motion and force tracking.", publications: [9, 19, 20, 21, 27], Icon: SlidersHorizontal },
+  { name: "Optimal and robust control", summary: "Robust and optimal control methods that connect model-based design, uncertainty handling and measurable closed-loop performance.", publications: [1, 24, 26], Icon: ShieldCheck },
+  { name: "Safety-critical control", summary: "Safety-enhanced control frameworks that augment nominal controllers while maintaining stability and operational constraints.", publications: [13, 15], Icon: ShieldCheck },
+  { name: "CLF-CBF-QP filters", summary: "Control Lyapunov and control barrier function filters formulated through quadratic programming for safety-critical control.", publications: [13, 15], Icon: SlidersHorizontal },
+  { name: "Fluid power systems", summary: "Dynamics, modelling and control of hydraulic actuation, valves, pumps and industry-grade fluid power test systems.", publications: [0, 5, 6, 7, 9, 10, 19, 20, 21, 27], Icon: Wrench },
+  { name: "Electrohydraulic actuation", summary: "Real-time motion and force control for nonlinear electrohydraulic systems using sensing, compensation and feedback design.", publications: [0, 5, 6, 7, 9, 10, 19, 20, 21, 27], Icon: Activity },
+  { name: "Stewart platforms", summary: "Parallel manipulator research combining coupled motion analysis, visual sensing and real-time electrohydraulic control.", publications: [10, 18], Icon: Wrench },
+  { name: "Marine roll stabilisation", summary: "Modelling, control and experimental validation of canting keel and Airkeel systems under wave-induced disturbances.", publications: [3, 13, 15, 16, 17], Icon: Anchor },
+  { name: "Robotics", summary: "Control, sensing and trajectory research for manipulators, parallel mechanisms and biomedical robotic devices.", publications: [18, 26], Icon: Wrench },
+  { name: "Energy systems", summary: "Control and optimisation of refrigeration, thermal energy storage, heat transfer and related energy systems.", publications: [1, 8], Icon: Waves },
+  { name: "Digital twins", summary: "Model-based digital representations used to study control, stability and real-time system behaviour.", publications: [14], Icon: Activity },
+  { name: "Real-time HIL", summary: "MIL, SIL and HIL workflows for progressing control designs from simulation to real-time experimental validation.", publications: [3, 14, 18], Icon: SlidersHorizontal },
+  { name: "Engineering and biology", summary: "Image processing and closed-loop control contributions spanning molecular biology, cell biology and biomedical devices.", publications: [2, 11, 12, 26], Icon: Microscope },
 ] as const;
 
+const researchLeadership = [
+  { label: "Consortium leadership", description: "Project Manager of SAFEMARVEL, a three-partner consortium spanning SDU, Dacoma ApS and SDU Physics Odense.", badge: "SAFEMARVEL · SDU · Dacoma", Icon: Users },
+  { label: "International research network", description: "Research participant in AMCOSTAR, an international Eurostars / Eureka network project on active marine stabilisation.", badge: "AMCOSTAR · Eurostars", Icon: Globe2 },
+  { label: "Principal investigator", description: "Principal Investigator on two competitive grants from the Fabrikant Mads Clausen Fond.", badge: "Fabrikant Mads Clausen Fond", Icon: Award },
+  { label: "Experimental infrastructure", description: "Established two permanent teaching and research testbeds at SDU as Principal Investigator.", badge: "2 Permanent SDU Testbeds", Icon: Wrench },
+  { label: "Student mentorship", description: "Co-supervised six Master's dissertations and six Bachelor's projects in mechatronics and control.", badge: "12 Theses Supervised", Icon: GraduationCap },
+  { label: "Academic examination", description: "Internal co-examiner for Master's courses in adaptive and nonlinear control, fault-tolerant control and statistical signal processing.", badge: "Master's Course Assessment", Icon: BadgeCheck },
+  { label: "Grant strategy", description: "Grant writer and coordinator on proposals progressing through national and European funding schemes.", badge: "National · European", Icon: FileText },
+] as const;
 
-function Profile() { return <Section id="profile" eyebrow="Profile" title="Rigorous research through-lines">
+const publicationFilterEvent = "shouvik-publication-filter";
+
+
+function Profile() {
+  const [selectedInterest, setSelectedInterest] = useState<number | null>(null);
+  const selected = selectedInterest === null ? null : researchInterests[selectedInterest];
+
+  const viewFilteredPublications = () => {
+    if (!selected) return;
+    const detail = { label: selected.name, indices: [...selected.publications] };
+    setSelectedInterest(null);
+    window.setTimeout(() => {
+      window.dispatchEvent(new CustomEvent(publicationFilterEvent, { detail }));
+      window.history.replaceState(null, "", "#publications");
+      document.getElementById("publications")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 120);
+  };
+
+  return <Section id="profile" eyebrow="Profile" title="Rigorous research through-lines">
   <div className="max-w-4xl text-[1.03rem] leading-8 text-muted-foreground">
     <p>I am a control engineer with more than twelve years of experience in nonlinear and adaptive control of uncertain dynamical systems. My research connects rigorous mathematical formulation with simulation, MIL, SIL and HIL workflows, and real-time validation on purpose-built experimental rigs.</p>
   </div>
@@ -344,22 +381,46 @@ function Profile() { return <Section id="profile" eyebrow="Profile" title="Rigor
     <div>
       <p className="section-kicker">Core methods</p>
       <h3 className="mt-2 font-display text-3xl">Research Interests</h3>
-      <div className="mt-7 flex flex-wrap gap-2">{researchInterests.map((interest) => <span key={interest} className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-2 text-sm font-semibold text-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"><Microscope className="size-3.5" aria-hidden="true" />{interest}</span>)}</div>
+      <div className="profile-interest-network mt-7">{researchInterests.map(({ name, Icon }, index) => <Button key={name} variant="ghost" onClick={() => setSelectedInterest(index)} aria-label={`Explore research interest: ${name}`} className="profile-interest-node group h-auto min-h-20 w-full justify-start whitespace-normal rounded-md border border-border bg-card px-4 py-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary hover:bg-card hover:shadow-portrait">
+        <span className="grid size-9 shrink-0 place-items-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground"><Icon className="size-4" aria-hidden="true" /></span>
+        <span className="min-w-0"><span className="block text-sm font-bold leading-snug text-foreground">{name}</span><span className="mt-1 flex items-center gap-1 text-[10px] font-bold uppercase text-primary">Explore topic <ChevronRight className="size-3" aria-hidden="true" /></span></span>
+      </Button>)}</div>
     </div>
     <div>
       <p className="section-kicker">Roles and responsibilities</p>
       <h3 className="mt-2 font-display text-3xl">Research Leadership</h3>
-      <ul className="mt-7 space-y-4 text-sm leading-6 text-muted-foreground">{[
-        "Project Manager of SAFEMARVEL, a three-partner consortium spanning SDU, Dacoma ApS and SDU Physics Odense.",
-        "Research participant in AMCOSTAR, an international Eurostars / Eureka network project on active marine stabilisation.",
-        "Principal Investigator on two competitive grants from the Fabrikant Mads Clausen Fond.",
-        "Established two permanent teaching and research testbeds at SDU as Principal Investigator.",
-        "Co-supervised six Master's dissertations and six Bachelor's projects in mechatronics and control.",
-        "Internal co-examiner for Master's courses in adaptive and nonlinear control, fault-tolerant control and statistical signal processing.",
-        "Grant writer and coordinator on proposals progressing through national and European funding schemes."
-      ].map(x => <li key={x} className="flex gap-3"><ChevronRight className="mt-1 size-4 shrink-0 text-primary" />{x}</li>)}</ul>
+      <ol className="profile-leadership-rail mt-7 space-y-3">{researchLeadership.map(({ label, description, badge, Icon }) => <li key={label} className="relative pl-12">
+        <span className="absolute left-0 top-4 z-10 grid size-9 place-items-center rounded-full border border-primary/30 bg-background text-primary shadow-sm"><Icon className="size-4" aria-hidden="true" /></span>
+        <article className="rounded-md border border-border bg-card p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait">
+          <p className="text-sm font-extrabold text-foreground">{label}</p>
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
+          <span className="mt-3 inline-flex max-w-full rounded-md border border-primary/20 bg-primary/5 px-2.5 py-1 font-mono text-[10px] font-bold text-primary">{badge}</span>
+        </article>
+      </li>)}</ol>
     </div>
   </div>
+  <Dialog open={selectedInterest !== null} onOpenChange={(open) => { if (!open) setSelectedInterest(null); }}>
+    {selected && <DialogContent className="max-h-[90vh] w-[calc(100%-2rem)] max-w-3xl overflow-y-auto border-primary/25 bg-background p-0 shadow-2xl sm:rounded-md">
+      <div className="border-b border-border bg-primary/5 px-6 py-7 sm:px-8">
+        <span className="inline-flex items-center gap-2 font-mono text-[10px] font-bold uppercase text-primary"><Microscope className="size-4" aria-hidden="true" />Research interest</span>
+        <DialogTitle className="mt-3 pr-8 font-display text-3xl leading-tight text-foreground">{selected.name}</DialogTitle>
+        <DialogDescription className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">{selected.summary}</DialogDescription>
+      </div>
+      <div className="px-6 pb-7 sm:px-8">
+        <p className="font-mono text-[10px] font-bold uppercase text-primary">Related publications</p>
+        <ul className="mt-4 space-y-3">{selected.publications.map((publicationIndex) => {
+          const publication = publications[publicationIndex];
+          return publication ? <li key={`${selected.name}-${publicationIndex}`} className="rounded-md border border-border bg-card p-4">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="min-w-0 flex-1"><p className="font-mono text-[10px] font-bold text-primary">{publication.year}</p><p className="mt-1 text-sm font-bold leading-5 text-foreground">{publication.title}</p><p className="mt-2 text-xs italic leading-5 text-muted-foreground">{publication.venue}</p></div>
+              {publication.doi ? <Button asChild variant="outline" size="sm"><a href={`https://doi.org/${publication.doi}`} target="_blank" rel="noreferrer">DOI <ExternalLink className="size-3" aria-hidden="true" /></a></Button> : <span className="rounded-full bg-muted px-3 py-1.5 text-xs text-muted-foreground">DOI not listed</span>}
+            </div>
+          </li> : null;
+        })}</ul>
+        <Button className="mt-6" onClick={viewFilteredPublications}><BookOpen className="size-4" aria-hidden="true" />View filtered publications</Button>
+      </div>
+    </DialogContent>}
+  </Dialog>
 </Section>; }
 
 const researchPillarVisuals = [
@@ -524,9 +585,19 @@ function Theses() { return <div className="grid gap-4 md:grid-cols-2">{theses.ma
 function HighlightAuthors({ text }: { text: string }) { const parts=text.split("S. Chaudhuri"); return <>{parts.map((p,i)=><span key={`${p}-${i}`}>{p}{i<parts.length-1&&<strong className="text-primary">S. Chaudhuri</strong>}</span>)}</>; }
 function Publications() {
   const [category,setCategory]=useState("All"); const [query,setQuery]=useState(""); const [year,setYear]=useState("All");
+  const [topicFilter,setTopicFilter]=useState<{ label: string; indices: number[] } | null>(null);
+  useEffect(() => {
+    const applyTopicFilter = (event: Event) => {
+      const detail = (event as CustomEvent<{ label: string; indices: number[] }>).detail;
+      if (!detail) return;
+      setCategory("All"); setYear("All"); setQuery(""); setTopicFilter(detail);
+    };
+    window.addEventListener(publicationFilterEvent, applyTopicFilter);
+    return () => window.removeEventListener(publicationFilterEvent, applyTopicFilter);
+  }, []);
   const years=useMemo(()=>Array.from(new Set(publications.map(p=>p.year))).sort((a,b)=>b-a),[]);
-  const filtered=useMemo(()=>publications.filter(p=>(category==="All"||p.category===category)&&(year==="All"||p.year===Number(year))&&`${p.authors} ${p.title} ${p.venue} ${p.doi??""} ${p.year}`.toLowerCase().includes(query.toLowerCase())),[category,query,year]);
-  return <Section id="publications" eyebrow="Publications" title="Searchable body of work" muted><div className="flex gap-2 overflow-x-auto pb-2" role="tablist" aria-label="Publication category">{Object.entries(categoryCounts).map(([c,n])=><Button key={c} size="sm" variant={category===c?"default":"outline"} onClick={()=>setCategory(c)} role="tab" aria-selected={category===c}>{c} <span className="opacity-60">{n}</span></Button>)}</div>{category==="Theses & Dissertations"?<div className="mt-6"><Theses /></div>:<><div className="mt-5 grid gap-3 sm:grid-cols-[1fr_150px_auto]"><label className="relative"><span className="sr-only">Search publications</span><Search className="absolute left-3 top-3 size-4 text-muted-foreground" /><input className="h-10 w-full rounded-md border border-input bg-background pl-10 pr-3 text-sm outline-none focus:ring-2 focus:ring-ring" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search title, author, venue or DOI" /></label><label><span className="sr-only">Filter by year</span><select className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm" value={year} onChange={e=>setYear(e.target.value)}><option>All</option>{years.map(y=><option key={y}>{y}</option>)}</select></label><Button variant="ghost" onClick={()=>{setQuery("");setYear("All");setCategory("All")}}><SlidersHorizontal className="size-4" />Clear</Button></div><p className="mt-4 text-xs font-bold uppercase text-muted-foreground">{filtered.length} result{filtered.length===1?"":"s"}</p><div className="mt-4 space-y-3">{filtered.map((p,i)=><article className="rounded-md border border-border bg-background p-5 sm:p-6" key={`${p.title}-${p.year}`}><div className="grid gap-4 sm:grid-cols-[48px_1fr_auto]"><span className="font-mono text-xs text-muted-foreground">{String(i+1).padStart(2,'0')}</span><div className="min-w-0"><p className="text-sm leading-6 text-muted-foreground"><HighlightAuthors text={p.authors} /></p><h3 className="mt-2 font-display text-xl leading-snug">“{p.title}”</h3><p className="mt-3 text-sm font-semibold italic">{p.venue}</p><p className="mt-1 text-xs text-muted-foreground">{p.details}</p></div><div className="flex items-start sm:justify-end">{p.doi?<a href={`https://doi.org/${p.doi}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-bold text-primary hover:bg-primary hover:text-primary-foreground">DOI <ExternalLink className="size-3" /></a>:<span className="rounded-full bg-muted px-3 py-1.5 text-xs text-muted-foreground">DOI not listed</span>}</div></div>{p.videos&&<div className="mt-4 flex flex-wrap gap-2 border-t border-border pt-4">{p.videos.map(v=><a key={v.label} href={v.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-bold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"><Youtube className="size-3.5" aria-hidden="true" />{v.label}</a>)}</div>}</article>)}{filtered.length===0&&<div className="border border-dashed border-border py-16 text-center text-muted-foreground">No publications match these filters.</div>}</div></>}</Section>;
+  const filtered=useMemo(()=>publications.filter((p,publicationIndex)=>(!topicFilter||topicFilter.indices.includes(publicationIndex))&&(category==="All"||p.category===category)&&(year==="All"||p.year===Number(year))&&`${p.authors} ${p.title} ${p.venue} ${p.doi??""} ${p.year}`.toLowerCase().includes(query.toLowerCase())),[category,query,topicFilter,year]);
+  return <Section id="publications" eyebrow="Publications" title="Searchable body of work" muted><div className="flex gap-2 overflow-x-auto pb-2" role="tablist" aria-label="Publication category">{Object.entries(categoryCounts).map(([c,n])=><Button key={c} size="sm" variant={category===c?"default":"outline"} onClick={()=>setCategory(c)} role="tab" aria-selected={category===c}>{c} <span className="opacity-60">{n}</span></Button>)}</div>{category==="Theses & Dissertations"?<div className="mt-6"><Theses /></div>:<><div className="mt-5 grid gap-3 sm:grid-cols-[1fr_150px_auto]"><label className="relative"><span className="sr-only">Search publications</span><Search className="absolute left-3 top-3 size-4 text-muted-foreground" /><input className="h-10 w-full rounded-md border border-input bg-background pl-10 pr-3 text-sm outline-none focus:ring-2 focus:ring-ring" value={query} onChange={e=>{setQuery(e.target.value);setTopicFilter(null)}} placeholder="Search title, author, venue or DOI" /></label><label><span className="sr-only">Filter by year</span><select className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm" value={year} onChange={e=>setYear(e.target.value)}><option>All</option>{years.map(y=><option key={y}>{y}</option>)}</select></label><Button variant="ghost" onClick={()=>{setQuery("");setYear("All");setCategory("All");setTopicFilter(null)}}><SlidersHorizontal className="size-4" />Clear</Button></div>{topicFilter&&<div className="mt-4 flex flex-wrap items-center gap-2"><span className="text-xs font-bold uppercase text-muted-foreground">Topic filter</span><Button variant="outline" size="sm" onClick={()=>setTopicFilter(null)} className="h-7 border-primary/30 bg-primary/5 text-primary hover:bg-primary hover:text-primary-foreground">{topicFilter.label}<X className="size-3" aria-hidden="true" /></Button></div>}<p className="mt-4 text-xs font-bold uppercase text-muted-foreground">{filtered.length} result{filtered.length===1?"":"s"}</p><div className="mt-4 space-y-3">{filtered.map((p,i)=><article className="rounded-md border border-border bg-background p-5 sm:p-6" key={`${p.title}-${p.year}`}><div className="grid gap-4 sm:grid-cols-[48px_1fr_auto]"><span className="font-mono text-xs text-muted-foreground">{String(i+1).padStart(2,'0')}</span><div className="min-w-0"><p className="text-sm leading-6 text-muted-foreground"><HighlightAuthors text={p.authors} /></p><h3 className="mt-2 font-display text-xl leading-snug">“{p.title}”</h3><p className="mt-3 text-sm font-semibold italic">{p.venue}</p><p className="mt-1 text-xs text-muted-foreground">{p.details}</p></div><div className="flex items-start sm:justify-end">{p.doi?<a href={`https://doi.org/${p.doi}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-bold text-primary hover:bg-primary hover:text-primary-foreground">DOI <ExternalLink className="size-3" /></a>:<span className="rounded-full bg-muted px-3 py-1.5 text-xs text-muted-foreground">DOI not listed</span>}</div></div>{p.videos&&<div className="mt-4 flex flex-wrap gap-2 border-t border-border pt-4">{p.videos.map(v=><a key={v.label} href={v.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-bold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"><Youtube className="size-3.5" aria-hidden="true" />{v.label}</a>)}</div>}</article>)}{filtered.length===0&&<div className="border border-dashed border-border py-16 text-center text-muted-foreground">No publications match these filters.</div>}</div></>}</Section>;
 }
 
 const masters=[['Flow-Controlled Underfloor Heating Using PCM-Assisted Flow Wall Systems','Bragi Sigurjónsson · 2026'],['Amfitrack EMF Data Fusion','Frej Karlinsky Scherfig · 2025'],['Development of Trajectory Generation Algorithms for CNC Foam Cutting Machines','Arnas Serva · 2025'],['Autonomous Aerial Mapping and SLAM: A Drone-Based Approach for 3D Environmental Reconstruction','David Milošević · 2025'],['Design and Development of a Diesel Dosing Unit for Active Regeneration of DPF Filters in Exhaust After-Treatment Systems','Arfeen Ahmed Ali · 2025'],['Verification and Validation of Custom Code Generation from Model-Based Design using Simulink','Jacob Thomas Puthukeril · 2023']];
