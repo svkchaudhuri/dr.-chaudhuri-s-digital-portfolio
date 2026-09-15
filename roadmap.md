@@ -19,3 +19,4 @@
 - [x] Upgrade Profile interests and leadership into interactive connected infographics
 - [x] Rebuild Profile interests as a balanced honeycomb matching the leadership rail height
 - [x] Reorient Profile interests into a flat-top interlocking honeycomb without connector rails
+- [x] Replace the default favicon and add Apple and installable home-screen icons
