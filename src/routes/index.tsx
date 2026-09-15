@@ -824,7 +824,7 @@ function CareerGallery() {
   };
 
   return <Section id="gallery" eyebrow="Career Gallery" title="Career Moments" muted>
-    <div className="mb-6 flex items-center justify-end gap-2">
+    <div className="mb-6 flex flex-wrap items-center justify-end gap-2">
       {isAdmin ? <>
         <Button onClick={() => { setLightbox(null); setError(""); setDialogOpen(true); }}><ImagePlus className="size-4" aria-hidden="true" />Add Photo</Button>
         <Button variant="outline" size="sm" onClick={() => window.dispatchEvent(new Event(scholarSyncEvent))}><RefreshCw className="size-4" aria-hidden="true" />Sync Scholar</Button>
