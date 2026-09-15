@@ -689,6 +689,8 @@ const adminPasscode = "sc2026";
 const overridesStorageKey = "shouvik-career-overrides";
 const pinnedStorageKey = "shouvik-career-pinned";
 const maxPinned = 5;
+// Permanent default pins, shown first for every visitor until an admin overrides them.
+const defaultPinnedIds = ["sdu-sonderborg", "tower-crane-demo", "phd-convocation-2023", "cyber-physical-lab-2023", "sdu-farewell-2026"];
 
 function CareerGallery() {
   const [moments, setMoments] = useState<CareerMoment[]>([]);
@@ -703,7 +705,7 @@ function CareerGallery() {
   const [passcode, setPasscode] = useState("");
   const [passcodeError, setPasscodeError] = useState("");
   const [overrides, setOverrides] = useState<Record<string, MomentOverride>>({});
-  const [pinnedIds, setPinnedIds] = useState<string[]>([]);
+  const [pinnedIds, setPinnedIds] = useState<string[]>(defaultPinnedIds);
   const [pinNotice, setPinNotice] = useState("");
   const [shuffleSeed, setShuffleSeed] = useState(0);
   const [editingId, setEditingId] = useState<string | null>(null);
