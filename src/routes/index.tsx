@@ -705,6 +705,7 @@ function CareerGallery() {
   const [overrides, setOverrides] = useState<Record<string, MomentOverride>>({});
   const [pinnedIds, setPinnedIds] = useState<string[]>([]);
   const [pinNotice, setPinNotice] = useState("");
+  const [shuffleSeed, setShuffleSeed] = useState(0);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editTag, setEditTag] = useState("");
