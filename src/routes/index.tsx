@@ -114,10 +114,10 @@ function SidebarContent({ active, close, showNav = false }: { active: string; cl
 
 function TopNav({ active }: { active: string }) {
   const jump = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  const rows = [nav.slice(0, 7), nav.slice(7)];
+  const rows = [nav.slice(0, 8), nav.slice(8)];
   return <div className="sticky top-0 z-20 hidden border-b border-border bg-background/90 backdrop-blur lg:block">
     <nav aria-label="Portfolio sections" className="overflow-hidden px-5 py-2 xl:px-8">
-      {rows.map((row, rowIndex) => <div key={rowIndex} className={cn("flex flex-nowrap gap-1", rowIndex === 1 && "mt-1 justify-center")}>
+      {rows.map((row, rowIndex) => <div key={rowIndex} className={cn("flex flex-nowrap justify-center gap-1", rowIndex === 1 && "mt-1")}>
         {row.map(([id, label, Icon]) => <Button key={id} variant="ghost" size="sm" onClick={() => jump(id)} aria-current={active === id ? "true" : undefined} className={cn("h-7 shrink min-w-0 gap-1 px-2 text-[11.5px] xl:px-2.5 xl:text-xs", active === id && "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground")}>
           <Icon className="size-3.5 shrink-0" aria-hidden="true" /><span className="whitespace-nowrap">{label}</span>
         </Button>)}
@@ -540,7 +540,7 @@ const courses: { code: string; text: string; url?: string }[] = [
 ];
 function Teaching() { return <Section id="teaching" eyebrow="Teaching" title="Teaching & Supervision"><div><div className="flex flex-wrap items-center justify-between gap-3"><h3 className="font-display text-2xl">Course Teaching</h3><Button asChild variant="outline" size="sm"><a href={teachingCertAsset.url} target="_blank" rel="noreferrer"><ExternalLink className="size-4" />View Certificate</a></Button></div><div className="mt-5 grid gap-4 md:grid-cols-2">{courses.map(c=>{const inner=<><p className="flex items-center gap-1.5 font-mono text-xs font-bold text-primary">{c.code}{c.url&&<ExternalLink className="size-3.5" aria-hidden="true" />}</p><p className="mt-2 text-sm leading-6">{c.text}</p></>;return c.url?<a key={c.code} href={c.url} target="_blank" rel="noreferrer" className="block rounded-md border border-border bg-background p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait">{inner}</a>:<div className="rounded-md border border-border bg-background p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait" key={c.code}>{inner}</div>;})}</div><p className="mt-5 text-sm text-muted-foreground">Teaching assistant: Control of Autonomous Systems (Autumn 2022) and Construct Mechatronics (Spring 2022).</p></div><div className="mt-14 border-t border-border pt-8"><h3 className="font-display text-3xl">Student Supervision</h3><p className="mt-2 text-sm text-muted-foreground">Six Master's dissertations and six Bachelor's projects.</p><div className="mt-8 grid gap-12 lg:grid-cols-2"><ThesisList title="Master's dissertations" items={masters}/><ThesisList title="Bachelor's projects" items={bachelors}/></div></div><div className="mt-14 border-t border-border pt-8"><h3 className="font-display text-3xl">Examination &amp; Assessment</h3><article className="mt-5 rounded-md border border-border bg-card p-6"><p className="text-sm font-extrabold text-primary">Internal co-examiner · University of Southern Denmark</p><p className="mt-3 text-sm leading-6 text-muted-foreground">Master's courses: Adaptive and Nonlinear Control, Fault-Tolerant Control, and Statistical Signal Processing.</p></article></div></Section>; }
 
-function Skills() { return <Section id="skills" eyebrow="Competencies" title="Skills" muted>
+function Skills() { return <Section id="skills" eyebrow="Skills" title="Core Competencies" muted>
   <div>
     <h3 className="font-display text-2xl">Engineering &amp; Technical Competencies</h3>
     <div className="mt-5 grid gap-px overflow-hidden rounded-md border border-border bg-border md:grid-cols-2">{skills.map(([t,d])=><article className="bg-background p-6" key={t}><h3 className="text-sm font-extrabold text-primary">{t}</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">{d}</p></article>)}</div>
