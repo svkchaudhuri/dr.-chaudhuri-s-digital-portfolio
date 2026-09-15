@@ -19,6 +19,16 @@ import wosLogo from "@/assets/wos-logo.png.asset.json";
 import ieeeLogo from "@/assets/ieee-logo.png.asset.json";
 import scopusLogo from "@/assets/scopus-logo.png.asset.json";
 import sduBg from "@/assets/sdu-sonderborg.jpeg.asset.json";
+import craneDemoAsset from "@/assets/career-tower-crane-demo-to-danfoss-ceo-kim-fausing.jpg.asset.json";
+import sectionDinner2022Asset from "@/assets/career-1st-section-dinner-2022.jpeg.asset.json";
+import cyberLabAsset from "@/assets/career-cyber-physical-lab-2023.jpeg.asset.json";
+import boatRideAsset from "@/assets/career-demo-boat-ride-at-svendborg-2022.jpeg.asset.json";
+import mastersConvocationAsset from "@/assets/career-masters-convocation-24th-dec-2013.jpg.asset.json";
+import phdConvocationAsset from "@/assets/career-phd-convocation-24th-dec-2023.jpg.asset.json";
+import sduFarewellAsset from "@/assets/career-sdu-farewell-feb-2026.jpeg.asset.json";
+import sectionDinner2024Asset from "@/assets/career-section-dinner-2024.jpeg.asset.json";
+import sectionLunch2024Asset from "@/assets/career-section-lunch-2024.jpeg.asset.json";
+import studentDefenseAsset from "@/assets/career-student-defense-david-2025.jpeg.asset.json";
 import heroBg from "@/assets/hero-bg.jpg.asset.json";
 import controlTheoryImage from "@/assets/control-theory-spring-mass.png.asset.json";
 import stewartPlatformImage from "@/assets/robotic-stewart-platform.png.asset.json";
@@ -639,14 +649,19 @@ const languages: readonly Language[] = [
 function Service() { return <Section id="service" eyebrow="Service" title="Professional standing and peer review"><div className="grid gap-10 lg:grid-cols-2"><div><h3 className="font-display text-2xl">Memberships & honours</h3><div className="mt-5 space-y-4">{[['Senior Member, IEEE','Elevated 2026 · member since 2016 · ID 90902393'],['Member, IET','ID 1101020475 · pursuing CEng status'],['Member & Chartered Engineer (India), IE(I)','ID M-1848040'],['Associate Member, INAE','Application under review, 2026'],['IEEE COVID-19 App Development Contest','Winner, 2020 · CovCov mobile application']].map(([a,b])=><div key={a} className="border-l-2 border-highlight pl-4"><p className="font-semibold">{a}</p><p className="text-sm text-muted-foreground">{b}</p></div>)}</div></div><div><div className="flex items-end justify-between"><h3 className="font-display text-2xl">Verified peer review</h3><p className="font-display text-4xl text-primary">55</p></div><p className="mt-2 text-sm text-muted-foreground">Reviews of 42 manuscripts · September 2015–September 2026</p><div className="mt-5 divide-y divide-border border-y border-border">{reviews.map(([a,n])=><div key={a} className="grid grid-cols-[1fr_auto] gap-3 py-2.5 text-xs"><span>{a}</span><strong className="text-primary">{n}</strong></div>)}</div></div></div></Section>; }
 
 type CareerMoment = { id: string; title: string; tag: string; src: string; alt: string; featured?: boolean };
-const builtInCareerMoment: CareerMoment = {
-  id: "sdu-sonderborg",
-  title: "SDU Sønderborg",
-  tag: "Campus and Als Fjord · Maritime control research",
-  src: sduBg.url,
-  alt: "University of Southern Denmark campus beside Als Fjord",
-  featured: true,
-};
+const builtInCareerMoments: CareerMoment[] = [
+  { id: "sdu-sonderborg", title: "SDU Sønderborg", tag: "Campus and Als Fjord · Maritime control research", src: sduBg.url, alt: "University of Southern Denmark campus beside Als Fjord", featured: true },
+  { id: "tower-crane-demo", title: "Tower Crane Demo to Danfoss CEO Kim Fausing", tag: "Industrial demo · Danfoss leadership visit", src: craneDemoAsset.url, alt: "Live tower crane control demonstration presented to Danfoss CEO Kim Fausing" },
+  { id: "cyber-physical-lab-2023", title: "Cyber Physical Lab", tag: "2023 · Teaching and research testbeds", src: cyberLabAsset.url, alt: "Cyber Physical Lab with control experiment testbeds at SDU" },
+  { id: "boat-ride-svendborg-2022", title: "Demo Boat Ride at Svendborg", tag: "2022 · Maritime trials", src: boatRideAsset.url, alt: "Instrumented demonstration boat moored at Svendborg harbour during maritime trials" },
+  { id: "student-defense-david-2025", title: "Student Defense, David", tag: "2025 · Supervision and mentorship", src: studentDefenseAsset.url, alt: "Student thesis defense with supervisors and a drone platform" },
+  { id: "sdu-farewell-2026", title: "SDU Farewell", tag: "February 2026 · Colleagues and research group", src: sduFarewellAsset.url, alt: "Farewell gathering with SDU colleagues and research group members" },
+  { id: "phd-convocation-2023", title: "PhD Convocation, Degree Awarding Ceremony", tag: "2023 · Jadavpur University", src: phdConvocationAsset.url, alt: "PhD degree awarding ceremony at Jadavpur University" },
+  { id: "masters-convocation-2013", title: "Master's Convocation, 58th Annual Convocation", tag: "2013 · Jadavpur University", src: mastersConvocationAsset.url, alt: "Receiving the master's degree at the 58th Annual Convocation of Jadavpur University" },
+  { id: "section-dinner-2022", title: "1st Section Dinner", tag: "2022 · Section colleagues", src: sectionDinner2022Asset.url, alt: "First section dinner with department colleagues" },
+  { id: "section-dinner-2024", title: "Section Dinner", tag: "2024 · Section colleagues", src: sectionDinner2024Asset.url, alt: "Section dinner with department colleagues in 2024" },
+  { id: "section-lunch-2024", title: "Section Lunch", tag: "2024 · Section colleagues", src: sectionLunch2024Asset.url, alt: "Section lunch gathering with department colleagues in 2024" },
+];
 const careerStorageKey = "shouvik-career-moments";
 const adminStorageKey = "shouvik-gallery-admin";
 const adminPasscode = "sc2026";
@@ -731,7 +746,7 @@ function CareerGallery() {
     setImageUrl(""); setTitle(""); setTag(""); setError(""); setDialogOpen(false);
   };
 
-  const allMoments = [builtInCareerMoment, ...moments];
+  const allMoments = [...builtInCareerMoments, ...moments];
   const activeMoment = lightbox !== null ? allMoments[lightbox] : null;
 
   return <Section id="gallery" eyebrow="Career Gallery" title="Career Moments" muted>
