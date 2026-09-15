@@ -47,7 +47,7 @@ const nav = [
   ["home", "Home", Home], ["profile", "Profile", Users], ["research", "Research", Microscope],
   ["experience", "Work Experience", BriefcaseBusiness], ["funding", "Funding", Award],
   ["education", "Education", GraduationCap], ["publications", "Publications", BookOpen],
-  ["teaching", "Teaching", Users], ["skills", "Core Competencies", Wrench], ["service", "Service", ShieldCheck],
+  ["teaching", "Teaching", Users], ["skills", "Skills", Wrench], ["service", "Service", ShieldCheck],
   ["gallery", "Career Moments", FileImage],
   ["downloads", "Downloads", Download], ["contact", "Contact", Mail],
 ] as const;
@@ -540,7 +540,7 @@ const courses: { code: string; text: string; url?: string }[] = [
 ];
 function Teaching() { return <Section id="teaching" eyebrow="Teaching" title="Teaching & Supervision"><div><div className="flex flex-wrap items-center justify-between gap-3"><h3 className="font-display text-2xl">Course Teaching</h3><Button asChild variant="outline" size="sm"><a href={teachingCertAsset.url} target="_blank" rel="noreferrer"><ExternalLink className="size-4" />View Certificate</a></Button></div><div className="mt-5 grid gap-4 md:grid-cols-2">{courses.map(c=>{const inner=<><p className="flex items-center gap-1.5 font-mono text-xs font-bold text-primary">{c.code}{c.url&&<ExternalLink className="size-3.5" aria-hidden="true" />}</p><p className="mt-2 text-sm leading-6">{c.text}</p></>;return c.url?<a key={c.code} href={c.url} target="_blank" rel="noreferrer" className="block rounded-md border border-border bg-background p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait">{inner}</a>:<div className="rounded-md border border-border bg-background p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait" key={c.code}>{inner}</div>;})}</div><p className="mt-5 text-sm text-muted-foreground">Teaching assistant: Control of Autonomous Systems (Autumn 2022) and Construct Mechatronics (Spring 2022).</p></div><div className="mt-14 border-t border-border pt-8"><h3 className="font-display text-3xl">Student Supervision</h3><p className="mt-2 text-sm text-muted-foreground">Six Master's dissertations and six Bachelor's projects.</p><div className="mt-8 grid gap-12 lg:grid-cols-2"><ThesisList title="Master's dissertations" items={masters}/><ThesisList title="Bachelor's projects" items={bachelors}/></div></div><div className="mt-14 border-t border-border pt-8"><h3 className="font-display text-3xl">Examination &amp; Assessment</h3><article className="mt-5 rounded-md border border-border bg-card p-6"><p className="text-sm font-extrabold text-primary">Internal co-examiner · University of Southern Denmark</p><p className="mt-3 text-sm leading-6 text-muted-foreground">Master's courses: Adaptive and Nonlinear Control, Fault-Tolerant Control, and Statistical Signal Processing.</p></article></div></Section>; }
 
-function Skills() { return <Section id="skills" eyebrow="Core competencies" title="Core Competencies" muted>
+function Skills() { return <Section id="skills" eyebrow="Competencies" title="Skills" muted>
   <div>
     <h3 className="font-display text-2xl">Engineering &amp; Technical Competencies</h3>
     <div className="mt-5 grid gap-px overflow-hidden rounded-md border border-border bg-border md:grid-cols-2">{skills.map(([t,d])=><article className="bg-background p-6" key={t}><h3 className="text-sm font-extrabold text-primary">{t}</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">{d}</p></article>)}</div>
