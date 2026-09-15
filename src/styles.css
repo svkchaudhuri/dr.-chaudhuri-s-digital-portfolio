@@ -264,61 +264,43 @@
 
 @utility profile-interest-network {
   --profile-hex-gap: 0.875rem;
-  --profile-hex-width: min(calc((100cqi - var(--profile-hex-gap)) / 2), 11rem);
-  --profile-hex-height: calc(var(--profile-hex-width) / 0.8660254);
-  --profile-hex-step: calc(var(--profile-hex-height) * 0.75 + var(--profile-hex-gap) * 0.8660254);
+  --profile-hex-width: min(calc((100cqi - var(--profile-hex-gap) * 0.8660254) / 1.75), 12rem);
+  --profile-hex-height: calc(var(--profile-hex-width) * 0.8660254);
+  --profile-column-step: calc(var(--profile-hex-height) + var(--profile-hex-gap));
+  --profile-column-shift: calc(var(--profile-hex-width) * 0.75 + var(--profile-hex-gap) * 0.8660254);
+  --profile-row-shift: calc((var(--profile-hex-height) + var(--profile-hex-gap)) / 2);
 
   position: relative;
   container-type: inline-size;
-  height: calc(var(--profile-hex-height) + var(--profile-hex-step) * 6.5);
-
-  &::before {
-    position: absolute;
-    inset: calc(var(--profile-hex-height) * 0.25) auto calc(var(--profile-hex-height) * 0.25) 50%;
-    width: 1px;
-    content: "";
-    background: color-mix(in oklab, var(--primary) 40%, var(--border));
-  }
+  height: calc(var(--profile-hex-height) * 7.5 + var(--profile-hex-gap) * 6.5);
 
   & > .profile-interest-node:nth-child(odd) {
-    left: calc(50% - var(--profile-hex-gap) / 2 - var(--profile-hex-width));
+    left: calc((100% - var(--profile-hex-width) - var(--profile-column-shift)) / 2);
   }
 
   & > .profile-interest-node:nth-child(even) {
-    left: calc(50% + var(--profile-hex-gap) / 2);
+    left: calc((100% - var(--profile-hex-width) - var(--profile-column-shift)) / 2 + var(--profile-column-shift));
   }
 
-  & > .profile-interest-node:nth-child(2) { top: calc(var(--profile-hex-step) * 0.5); }
-  & > .profile-interest-node:nth-child(3) { top: var(--profile-hex-step); }
-  & > .profile-interest-node:nth-child(4) { top: calc(var(--profile-hex-step) * 1.5); }
-  & > .profile-interest-node:nth-child(5) { top: calc(var(--profile-hex-step) * 2); }
-  & > .profile-interest-node:nth-child(6) { top: calc(var(--profile-hex-step) * 2.5); }
-  & > .profile-interest-node:nth-child(7) { top: calc(var(--profile-hex-step) * 3); }
-  & > .profile-interest-node:nth-child(8) { top: calc(var(--profile-hex-step) * 3.5); }
-  & > .profile-interest-node:nth-child(9) { top: calc(var(--profile-hex-step) * 4); }
-  & > .profile-interest-node:nth-child(10) { top: calc(var(--profile-hex-step) * 4.5); }
-  & > .profile-interest-node:nth-child(11) { top: calc(var(--profile-hex-step) * 5); }
-  & > .profile-interest-node:nth-child(12) { top: calc(var(--profile-hex-step) * 5.5); }
-  & > .profile-interest-node:nth-child(13) { top: calc(var(--profile-hex-step) * 6); }
-  & > .profile-interest-node:nth-child(14) { top: calc(var(--profile-hex-step) * 6.5); }
+  & > .profile-interest-node:nth-child(2) { top: var(--profile-row-shift); }
+  & > .profile-interest-node:nth-child(3) { top: var(--profile-column-step); }
+  & > .profile-interest-node:nth-child(4) { top: calc(var(--profile-column-step) + var(--profile-row-shift)); }
+  & > .profile-interest-node:nth-child(5) { top: calc(var(--profile-column-step) * 2); }
+  & > .profile-interest-node:nth-child(6) { top: calc(var(--profile-column-step) * 2 + var(--profile-row-shift)); }
+  & > .profile-interest-node:nth-child(7) { top: calc(var(--profile-column-step) * 3); }
+  & > .profile-interest-node:nth-child(8) { top: calc(var(--profile-column-step) * 3 + var(--profile-row-shift)); }
+  & > .profile-interest-node:nth-child(9) { top: calc(var(--profile-column-step) * 4); }
+  & > .profile-interest-node:nth-child(10) { top: calc(var(--profile-column-step) * 4 + var(--profile-row-shift)); }
+  & > .profile-interest-node:nth-child(11) { top: calc(var(--profile-column-step) * 5); }
+  & > .profile-interest-node:nth-child(12) { top: calc(var(--profile-column-step) * 5 + var(--profile-row-shift)); }
+  & > .profile-interest-node:nth-child(13) { top: calc(var(--profile-column-step) * 6); }
+  & > .profile-interest-node:nth-child(14) { top: calc(var(--profile-column-step) * 6 + var(--profile-row-shift)); }
 
   @media (min-width: 64rem) {
     flex: 1;
-    --profile-hex-rise: calc((100% - var(--profile-hex-height)) / 13);
-
-    & > .profile-interest-node:nth-child(2) { top: var(--profile-hex-rise); }
-    & > .profile-interest-node:nth-child(3) { top: calc(var(--profile-hex-rise) * 2); }
-    & > .profile-interest-node:nth-child(4) { top: calc(var(--profile-hex-rise) * 3); }
-    & > .profile-interest-node:nth-child(5) { top: calc(var(--profile-hex-rise) * 4); }
-    & > .profile-interest-node:nth-child(6) { top: calc(var(--profile-hex-rise) * 5); }
-    & > .profile-interest-node:nth-child(7) { top: calc(var(--profile-hex-rise) * 6); }
-    & > .profile-interest-node:nth-child(8) { top: calc(var(--profile-hex-rise) * 7); }
-    & > .profile-interest-node:nth-child(9) { top: calc(var(--profile-hex-rise) * 8); }
-    & > .profile-interest-node:nth-child(10) { top: calc(var(--profile-hex-rise) * 9); }
-    & > .profile-interest-node:nth-child(11) { top: calc(var(--profile-hex-rise) * 10); }
-    & > .profile-interest-node:nth-child(12) { top: calc(var(--profile-hex-rise) * 11); }
-    & > .profile-interest-node:nth-child(13) { top: calc(var(--profile-hex-rise) * 12); }
-    & > .profile-interest-node:nth-child(14) { top: calc(var(--profile-hex-rise) * 13); }
+    container-type: size;
+    --profile-hex-height: min(calc(var(--profile-hex-width) * 0.8660254), calc((100cqh - var(--profile-hex-gap) * 6.5) / 7.5));
+    --profile-hex-width: calc(var(--profile-hex-height) / 0.8660254);
   }
 }
 
@@ -329,22 +311,9 @@
   height: var(--profile-hex-height);
   padding: 1.5px;
   background: color-mix(in oklab, var(--primary) 65%, var(--border));
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
   filter: drop-shadow(0 8px 12px color-mix(in oklab, var(--foreground) 10%, transparent));
   transition: filter 200ms ease, transform 200ms ease;
-
-  &::after {
-    position: absolute;
-    top: 50%;
-    z-index: -1;
-    width: calc(var(--profile-hex-gap) + 2px);
-    height: 1px;
-    content: "";
-    background: color-mix(in oklab, var(--primary) 42%, var(--border));
-  }
-
-  &:nth-child(odd)::after { right: calc(var(--profile-hex-gap) * -1); }
-  &:nth-child(even)::after { left: calc(var(--profile-hex-gap) * -1); }
 
   &:hover {
     z-index: 2;
@@ -354,7 +323,7 @@
 }
 
 @utility profile-interest-card {
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
 }
 
 @utility profile-column {
