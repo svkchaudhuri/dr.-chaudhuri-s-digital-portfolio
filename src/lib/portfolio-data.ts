@@ -6,13 +6,19 @@ export type Publication = {
   year: number;
   details?: string;
   doi?: string;
+  videos?: { label: string; url: string }[];
 };
 
 export const publications: Publication[] = [
   { category: "Journals", authors: "V. Joseph, B.K. Sarkar, A. Chatterjee, S. Chaudhuri", title: "Fast nonsingular terminal sliding mode controller design for Francis turbine with electrohydraulic IGV: an experimental investigation", venue: "Proceedings of the Institution of Mechanical Engineers, Part I: Journal of Systems and Control Engineering", year: 2026, details: "Jan. 2026", doi: "10.1177/09596518251399972" },
   { category: "Journals", authors: "Y. Sheikh Kilo, R. Izadi-Zamanabadi, H. Ramezani, P. Gullo, S. Chaudhuri", title: "Cost-effective optimization for charging/discharging cycles of thermal energy ice storages in transcritical R744 supermarket refrigeration systems", venue: "Energy Conversion and Management", year: 2025, details: "vol. 334, 119790, Jun. 2025. ISSN 0196-8904", doi: "10.1016/j.enconman.2025.119790" },
   { category: "Journals", authors: "S. Paul, S. Das, M. Banerjea, S. Chaudhuri, B. Das", title: "The ATP-dependent DEAD-box RNA helicase Dbp2 regulates the glucose/nitrogen stress response in baker's yeast by modulating reversible nuclear retention and decay of SKS1 mRNA", venue: "Genetics", year: 2025, details: "vol. 229, no. 3, iyae221, Mar. 2025", doi: "10.1093/genetics/iyae221" },
-  { category: "Journals", authors: "H. Ramezani, S. Chaudhuri, J. Jouffroy, A. Baurichter, S.M. Hansen", title: "On roll stabilisation using a canting keel", venue: "IEEE Transactions on Control Systems Technology", year: 2025, details: "vol. 33, no. 2, pp. 539–553, Mar. 2025 (early access Nov. 2024). ISSN 1558-0865", doi: "10.1109/TCST.2024.3494237" },
+  { category: "Journals", authors: "H. Ramezani, S. Chaudhuri, J. Jouffroy, A. Baurichter, S.M. Hansen", title: "On roll stabilisation using a canting keel", venue: "IEEE Transactions on Control Systems Technology", year: 2025, details: "vol. 33, no. 2, pp. 539–553, Mar. 2025 (early access Nov. 2024). ISSN 1558-0865", doi: "10.1109/TCST.2024.3494237", videos: [
+    { label: "Water Tank Test for Conventional Keel (CK)", url: "https://youtu.be/N89cQXGlHnY" },
+    { label: "Water Tank Test for Airkeel (AK)", url: "https://youtu.be/Ri43Zp2B0pI" },
+    { label: "Field Test for Conventional Keel (CK)", url: "https://youtu.be/8M-48dO4nR0" },
+    { label: "Field Test for Airkeel (AK)", url: "https://youtu.be/fORjzl04tpQ" },
+  ] },
   { category: "Journals", authors: "N. Taghva, S. Chaudhuri", title: "How language-specific and cross-linguistic factors affect speech rhythm", venue: "Estudios de Fonética Experimental", year: 2024, details: "vol. 33, pp. 169–190, Sep. 2024", doi: "10.1344/EFE-2024-33-169-190" },
   { category: "Journals", authors: "A. Sarkar, S. Dasmahapatra, S. Chaudhuri, R. Saha, S. Mookherjee, D. Sanyal", title: "A novel order-separated generalized feedforward design for motion control in energy-efficient electrohydraulic systems with proportional and integral feedback", venue: "ISA Transactions", year: 2024, details: "vol. 146, pp. 336–351, Jan. 2024. ISSN 0019-0578", doi: "10.1016/j.isatra.2024.01.012" },
   { category: "Journals", authors: "I. De, S. Sarkar, S. Chaudhuri, N. Mondal, N. Kumar", title: "Effect of dynamic swivelling torque and eccentricity on the design of compensator cylinders for a variable displacement axial piston pump", venue: "Jordan Journal of Mechanical and Industrial Engineering", year: 2023, details: "vol. 17, no. 2, pp. 255–268, Jun. 2023. ISSN 1995-6665", doi: "10.59038/jjmie/170209" },
