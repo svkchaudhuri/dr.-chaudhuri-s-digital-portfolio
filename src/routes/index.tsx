@@ -28,6 +28,16 @@ import phdConvocationAsset from "@/assets/career-phd-convocation-24th-dec-2023.j
 import sduFarewellAsset from "@/assets/career-sdu-farewell-feb-2026.jpeg.asset.json";
 import sectionDinner2024Asset from "@/assets/career-section-dinner-2024.jpeg.asset.json";
 import sectionLunch2024Asset from "@/assets/career-section-lunch-2024.jpeg.asset.json";
+import systemsSetupLabAsset from "@/assets/career-systems-setup-at-cyber-physical-lab-2026.jpeg.asset.json";
+import dinnerStudentsAsset from "@/assets/career-dinner-with-students.jpeg.asset.json";
+import newLabSetupAsset from "@/assets/career-new-setup-of-cyber-physical-lab-2026.jpeg.asset.json";
+import posterOdenseAsset from "@/assets/career-poster-presentation-at-mini-conference-in-odense-2025.jpeg.asset.json";
+import safemarvelFirstAsset from "@/assets/career-safemarvel-first-biannual-meeting-2024.jpg.asset.json";
+import safemarvelSecondAsset from "@/assets/career-safemarvel-second-biannual-meeting-2025.jpg.asset.json";
+import scholarsBbqAsset from "@/assets/career-scholars-bbq.jpeg.asset.json";
+import defenseJanaJakubAsset from "@/assets/career-student-defense-jana-and-jakub-2026.jpeg.asset.json";
+import defenseZofiaHenrikAsset from "@/assets/career-student-defense-zofia-and-henrik-2025.jpeg.asset.json";
+import ilmenauSupperAsset from "@/assets/career-supper-with-professors-and-colleagues-tu-ilmenau.jpeg.asset.json";
 import studentDefenseAsset from "@/assets/career-student-defense-david-2025.jpeg.asset.json";
 import heroBg from "@/assets/hero-bg.jpg.asset.json";
 import controlTheoryImage from "@/assets/control-theory-spring-mass.png.asset.json";
