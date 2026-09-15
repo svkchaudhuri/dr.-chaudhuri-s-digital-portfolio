@@ -263,74 +263,93 @@
 }
 
 @utility profile-interest-network {
+  --profile-hex-gap: 0.875rem;
+  --profile-hex-width: min(calc((100cqi - var(--profile-hex-gap)) / 2), 9.25rem);
+  --profile-hex-height: calc(var(--profile-hex-width) / 0.8660254);
+  --profile-hex-step: calc(var(--profile-hex-height) * 0.75 + var(--profile-hex-gap) * 0.8660254);
+
   position: relative;
-  display: grid;
-  gap: 0.75rem;
-  padding-left: 2rem;
+  container-type: inline-size;
+  height: calc(var(--profile-hex-height) + var(--profile-hex-step) * 6.5);
 
   &::before {
     position: absolute;
-    inset: 0.75rem auto 0.75rem 0.625rem;
+    inset: calc(var(--profile-hex-height) * 0.25) auto calc(var(--profile-hex-height) * 0.25) 50%;
     width: 1px;
     content: "";
     background: color-mix(in oklab, var(--primary) 40%, var(--border));
   }
 
-  & > .profile-interest-node::before {
-    position: absolute;
-    top: 50%;
-    left: -1.375rem;
-    width: 1.375rem;
-    height: 1px;
-    content: "";
-    background: color-mix(in oklab, var(--primary) 40%, var(--border));
+  & > .profile-interest-node:nth-child(odd) {
+    left: calc(50% - var(--profile-hex-gap) / 2 - var(--profile-hex-width));
   }
 
-  & > .profile-interest-node::after {
-    position: absolute;
-    top: calc(50% - 0.25rem);
-    left: -1.625rem;
-    width: 0.5rem;
-    height: 0.5rem;
-    border: 2px solid var(--primary);
-    border-radius: 9999px;
-    content: "";
-    background: var(--background);
+  & > .profile-interest-node:nth-child(even) {
+    left: calc(50% + var(--profile-hex-gap) / 2);
   }
 
-  @media (min-width: 40rem) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 2rem;
-    padding-left: 0;
+  & > .profile-interest-node:nth-child(2) { top: calc(var(--profile-hex-step) * 0.5); }
+  & > .profile-interest-node:nth-child(3) { top: var(--profile-hex-step); }
+  & > .profile-interest-node:nth-child(4) { top: calc(var(--profile-hex-step) * 1.5); }
+  & > .profile-interest-node:nth-child(5) { top: calc(var(--profile-hex-step) * 2); }
+  & > .profile-interest-node:nth-child(6) { top: calc(var(--profile-hex-step) * 2.5); }
+  & > .profile-interest-node:nth-child(7) { top: calc(var(--profile-hex-step) * 3); }
+  & > .profile-interest-node:nth-child(8) { top: calc(var(--profile-hex-step) * 3.5); }
+  & > .profile-interest-node:nth-child(9) { top: calc(var(--profile-hex-step) * 4); }
+  & > .profile-interest-node:nth-child(10) { top: calc(var(--profile-hex-step) * 4.5); }
+  & > .profile-interest-node:nth-child(11) { top: calc(var(--profile-hex-step) * 5); }
+  & > .profile-interest-node:nth-child(12) { top: calc(var(--profile-hex-step) * 5.5); }
+  & > .profile-interest-node:nth-child(13) { top: calc(var(--profile-hex-step) * 6); }
+  & > .profile-interest-node:nth-child(14) { top: calc(var(--profile-hex-step) * 6.5); }
 
-    &::before {
-      inset: 0.75rem auto 0.75rem 50%;
-    }
-
-    & > .profile-interest-node:nth-child(odd)::before {
-      right: -1rem;
-      left: auto;
-      width: 1rem;
-    }
-
-    & > .profile-interest-node:nth-child(odd)::after {
-      right: -1.25rem;
-      left: auto;
-    }
-
-    & > .profile-interest-node:nth-child(even)::before {
-      left: -1rem;
-      width: 1rem;
-    }
-
-    & > .profile-interest-node:nth-child(even)::after {
-      left: -1.25rem;
-    }
+  @media (min-width: 64rem) {
+    flex: 1;
   }
 }
 
 @utility profile-interest-node {
-  position: relative;
+  position: absolute;
+  top: 0;
+  width: var(--profile-hex-width);
+  height: var(--profile-hex-height);
+  padding: 1.5px;
+  background: color-mix(in oklab, var(--primary) 65%, var(--border));
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  filter: drop-shadow(0 8px 12px color-mix(in oklab, var(--foreground) 10%, transparent));
+  transition: filter 200ms ease, transform 200ms ease;
+
+  &::after {
+    position: absolute;
+    top: 50%;
+    z-index: -1;
+    width: calc(var(--profile-hex-gap) + 2px);
+    height: 1px;
+    content: "";
+    background: color-mix(in oklab, var(--primary) 42%, var(--border));
+  }
+
+  &:nth-child(odd)::after { right: calc(var(--profile-hex-gap) * -1); }
+  &:nth-child(even)::after { left: calc(var(--profile-hex-gap) * -1); }
+
+  &:hover {
+    z-index: 2;
+    filter: drop-shadow(0 14px 18px color-mix(in oklab, var(--primary) 20%, transparent));
+    transform: translateY(-2px) scale(1.015);
+  }
+}
+
+@utility profile-interest-card {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+@utility profile-column {
+  min-width: 0;
+
+  @media (min-width: 64rem) {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+  }
 }
 
 @utility profile-leadership-rail {
