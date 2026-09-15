@@ -821,8 +821,25 @@ function CareerGallery() {
       caption: override.caption ?? moment.caption,
     };
   });
-  const activeMoment = lightbox !== null ? allMoments[lightbox] : null;
-  const editingMoment = editingId ? allMoments.find((moment) => moment.id === editingId) ?? null : null;
+
+  const orderedMoments = useMemo(() => {
+    const pinned = pinnedIds.map((id) => allMoments.find((moment) => moment.id === id)).filter((moment): moment is CareerMoment => Boolean(moment));
+    const rest = allMoments.filter((moment) => !pinnedIds.includes(moment.id));
+    if (shuffleSeed === 0) return [...pinned, ...rest];
+    let seed = shuffleSeed;
+    const random = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
+    for (let index = rest.length - 1; index > 0; index -= 1) {
+      const swap = Math.floor(random() * (index + 1));
+      const current = rest[index]!;
+      rest[index] = rest[swap]!;
+      rest[swap] = current;
+    }
+    return [...pinned, ...rest];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(allMoments), pinnedIds, shuffleSeed]);
+
+  const activeMoment = lightbox !== null ? orderedMoments[lightbox] : null;
+  const editingMoment = editingId ? orderedMoments.find((moment) => moment.id === editingId) ?? null : null;
 
   const openEditor = (moment: { id: string; title: string; tag?: string | undefined; caption?: string | undefined }) => {
     setLightbox(null);
