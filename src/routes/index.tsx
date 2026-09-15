@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   Activity, Anchor, Award, BadgeCheck, BookOpen, BriefcaseBusiness, CheckCircle2, ChevronRight, Clock3, Download,
   ExternalLink, FileImage, FileText, GraduationCap, Home, ImagePlus, Linkedin,
-  Globe2, Lock, LockOpen, Mail, MapPin, Menu, Microscope, Pencil, RefreshCw, Search, ShieldCheck, SlidersHorizontal, Users, Waves, Wrench, X, Youtube,
+  Globe2, Lock, LockOpen, Mail, MapPin, Menu, Microscope, Pencil, Pin, PinOff, RefreshCw, Search, ShieldCheck, SlidersHorizontal, Users, Waves, Wrench, X, Youtube,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ComponentType } from "react";
 
@@ -687,6 +687,8 @@ const careerStorageKey = "shouvik-career-moments";
 const adminStorageKey = "shouvik-gallery-admin";
 const adminPasscode = "sc2026";
 const overridesStorageKey = "shouvik-career-overrides";
+const pinnedStorageKey = "shouvik-career-pinned";
+const maxPinned = 5;
 
 function CareerGallery() {
   const [moments, setMoments] = useState<CareerMoment[]>([]);
@@ -701,6 +703,9 @@ function CareerGallery() {
   const [passcode, setPasscode] = useState("");
   const [passcodeError, setPasscodeError] = useState("");
   const [overrides, setOverrides] = useState<Record<string, MomentOverride>>({});
+  const [pinnedIds, setPinnedIds] = useState<string[]>([]);
+  const [pinNotice, setPinNotice] = useState("");
+  const [shuffleSeed, setShuffleSeed] = useState(0);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editTag, setEditTag] = useState("");
@@ -716,6 +721,32 @@ function CareerGallery() {
       window.localStorage.removeItem(overridesStorageKey);
     }
   }, []);
+
+  useEffect(() => { setShuffleSeed(Math.floor(Math.random() * 4294967295) + 1); }, []);
+
+
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(pinnedStorageKey);
+      if (!stored) return;
+      const parsed: unknown = JSON.parse(stored);
+      if (Array.isArray(parsed)) setPinnedIds(parsed.filter((item): item is string => typeof item === "string").slice(0, maxPinned));
+    } catch {
+      window.localStorage.removeItem(pinnedStorageKey);
+    }
+  }, []);
+
+  const togglePin = (id: string) => {
+    setPinNotice("");
+    const isPinned = pinnedIds.includes(id);
+    if (!isPinned && pinnedIds.length >= maxPinned) {
+      setPinNotice(`You can pin up to ${maxPinned} photos. Unpin one first.`);
+      return;
+    }
+    const next = isPinned ? pinnedIds.filter((item) => item !== id) : [...pinnedIds, id];
+    setPinnedIds(next);
+    window.localStorage.setItem(pinnedStorageKey, JSON.stringify(next));
+  };
 
   useEffect(() => {
     if (window.localStorage.getItem(adminStorageKey) === "true") { setIsAdmin(true); return; }
@@ -794,8 +825,25 @@ function CareerGallery() {
       caption: override.caption ?? moment.caption,
     };
   });
-  const activeMoment = lightbox !== null ? allMoments[lightbox] : null;
-  const editingMoment = editingId ? allMoments.find((moment) => moment.id === editingId) ?? null : null;
+
+  const orderedMoments = useMemo(() => {
+    const pinned = pinnedIds.map((id) => allMoments.find((moment) => moment.id === id)).filter((moment): moment is CareerMoment => Boolean(moment));
+    const rest = allMoments.filter((moment) => !pinnedIds.includes(moment.id));
+    if (shuffleSeed === 0) return [...pinned, ...rest];
+    let seed = shuffleSeed;
+    const random = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
+    for (let index = rest.length - 1; index > 0; index -= 1) {
+      const swap = Math.floor(random() * (index + 1));
+      const current = rest[index]!;
+      rest[index] = rest[swap]!;
+      rest[swap] = current;
+    }
+    return [...pinned, ...rest];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(allMoments), pinnedIds, shuffleSeed]);
+
+  const activeMoment = lightbox !== null ? orderedMoments[lightbox] : null;
+  const editingMoment = editingId ? orderedMoments.find((moment) => moment.id === editingId) ?? null : null;
 
   const openEditor = (moment: { id: string; title: string; tag?: string | undefined; caption?: string | undefined }) => {
     setLightbox(null);
@@ -844,8 +892,9 @@ function CareerGallery() {
         </form>
       </div>
     </div>}
+    {isAdmin && <p className="mb-4 text-right text-xs text-muted-foreground">{pinnedIds.length} of {maxPinned} photos pinned to the top.{pinNotice && <span className="ml-2 font-semibold text-destructive">{pinNotice}</span>}</p>}
     <div className="grid auto-rows-[220px] gap-4 md:grid-cols-3">
-      {allMoments.map((moment, index) => (
+      {orderedMoments.map((moment, index) => (
         <figure
           key={moment.id}
           role="button"
@@ -856,11 +905,16 @@ function CareerGallery() {
           onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setLightbox(index); } }}
         >
           <img src={moment.src} alt={moment.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
-          {isAdmin && <Button variant="outline" size="sm" aria-label={`Edit details for ${moment.title}`} className="absolute right-3 top-3 z-20 border-2 border-primary bg-card text-foreground shadow-drawer hover:bg-card" onClick={(event) => { event.stopPropagation(); openEditor(moment); }}><Pencil className="size-4" aria-hidden="true" />Edit</Button>}
+          {isAdmin && <div className="absolute right-3 top-3 z-20 flex flex-wrap justify-end gap-2">
+            <Button variant="outline" size="sm" aria-pressed={pinnedIds.includes(moment.id)} aria-label={pinnedIds.includes(moment.id) ? `Unpin ${moment.title}` : `Pin ${moment.title}`} className={cn("border-2 shadow-drawer", pinnedIds.includes(moment.id) ? "border-primary bg-primary text-primary-foreground hover:bg-primary" : "border-primary bg-card text-foreground hover:bg-card")} onClick={(event) => { event.stopPropagation(); togglePin(moment.id); }}>{pinnedIds.includes(moment.id) ? <PinOff className="size-4" aria-hidden="true" /> : <Pin className="size-4" aria-hidden="true" />}{pinnedIds.includes(moment.id) ? "Unpin" : "Pin"}</Button>
+            <Button variant="outline" size="sm" aria-label={`Edit details for ${moment.title}`} className="border-2 border-primary bg-card text-foreground shadow-drawer hover:bg-card" onClick={(event) => { event.stopPropagation(); openEditor(moment); }}><Pencil className="size-4" aria-hidden="true" />Edit</Button>
+          </div>}
+          {!isAdmin && pinnedIds.includes(moment.id) && <span className="absolute right-3 top-3 z-20 inline-flex items-center gap-1 rounded-full bg-overlay px-2.5 py-1 text-xs font-semibold text-primary-foreground"><Pin className="size-3" aria-hidden="true" />Pinned</span>}
           <figcaption className="absolute inset-x-0 bottom-0 bg-overlay px-5 py-4 text-primary-foreground backdrop-blur-sm"><p className="font-display text-xl">{moment.title}</p>{moment.tag && <p className="mt-1 text-xs opacity-80">{moment.tag}</p>}{moment.caption && <p className="mt-1 text-xs opacity-70">{moment.caption}</p>}</figcaption>
         </figure>
       ))}
     </div>
+
     {dialogOpen && <div className="fixed inset-0 z-[70] grid place-items-center p-4">
       <Button variant="ghost" aria-label="Close add photo dialog" className="absolute inset-0 h-auto w-full rounded-none bg-overlay hover:bg-overlay" onClick={() => setDialogOpen(false)} />
       <div role="dialog" aria-modal="true" aria-labelledby="add-photo-title" className="relative z-10 w-full max-w-lg rounded-xl border border-border bg-background p-6 shadow-drawer">
