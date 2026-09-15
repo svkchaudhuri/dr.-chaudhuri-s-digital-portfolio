@@ -18,3 +18,4 @@
 - [x] Automated Google Scholar metrics sync (weekly) with live Home stats
 - [x] Upgrade Profile interests and leadership into interactive connected infographics
 - [x] Rebuild Profile interests as a balanced honeycomb matching the leadership rail height
+- [x] Reorient Profile interests into a flat-top interlocking honeycomb without connector rails
