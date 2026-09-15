@@ -28,6 +28,16 @@ import phdConvocationAsset from "@/assets/career-phd-convocation-24th-dec-2023.j
 import sduFarewellAsset from "@/assets/career-sdu-farewell-feb-2026.jpeg.asset.json";
 import sectionDinner2024Asset from "@/assets/career-section-dinner-2024.jpeg.asset.json";
 import sectionLunch2024Asset from "@/assets/career-section-lunch-2024.jpeg.asset.json";
+import systemsSetupLabAsset from "@/assets/career-systems-setup-at-cyber-physical-lab-2026.jpeg.asset.json";
+import dinnerStudentsAsset from "@/assets/career-dinner-with-students.jpeg.asset.json";
+import newLabSetupAsset from "@/assets/career-new-setup-of-cyber-physical-lab-2026.jpeg.asset.json";
+import posterOdenseAsset from "@/assets/career-poster-presentation-at-mini-conference-in-odense-2025.jpeg.asset.json";
+import safemarvelFirstAsset from "@/assets/career-safemarvel-first-biannual-meeting-2024.jpg.asset.json";
+import safemarvelSecondAsset from "@/assets/career-safemarvel-second-biannual-meeting-2025.jpg.asset.json";
+import scholarsBbqAsset from "@/assets/career-scholars-bbq.jpeg.asset.json";
+import defenseJanaJakubAsset from "@/assets/career-student-defense-jana-and-jakub-2026.jpeg.asset.json";
+import defenseZofiaHenrikAsset from "@/assets/career-student-defense-zofia-and-henrik-2025.jpeg.asset.json";
+import ilmenauSupperAsset from "@/assets/career-supper-with-professors-and-colleagues-tu-ilmenau.jpeg.asset.json";
 import studentDefenseAsset from "@/assets/career-student-defense-david-2025.jpeg.asset.json";
 import heroBg from "@/assets/hero-bg.jpg.asset.json";
 import controlTheoryImage from "@/assets/control-theory-spring-mass.png.asset.json";
@@ -662,6 +672,16 @@ const builtInCareerMoments: CareerMoment[] = [
   { id: "section-dinner-2022", title: "1st Section Dinner", tag: "2022 · Section colleagues", src: sectionDinner2022Asset.url, alt: "First section dinner with department colleagues" },
   { id: "section-dinner-2024", title: "Section Dinner", tag: "2024 · Section colleagues", src: sectionDinner2024Asset.url, alt: "Section dinner with department colleagues in 2024" },
   { id: "section-lunch-2024", title: "Section Lunch", tag: "2024 · Section colleagues", src: sectionLunch2024Asset.url, alt: "Section lunch gathering with department colleagues in 2024" },
+  { id: "systems-setup-lab-2026", title: "Systems Setup at Cyber Physical Lab", tag: "2026 · Lab infrastructure", src: systemsSetupLabAsset.url, alt: "Experimental systems set up inside the Cyber Physical Lab" },
+  { id: "dinner-with-students", title: "Dinner with Students", tag: "Mentorship and student community", src: dinnerStudentsAsset.url, alt: "Dinner gathering with supervised students" },
+  { id: "new-lab-setup-2026", title: "New Setup of Cyber Physical Lab", tag: "2026 · Research testbed expansion", src: newLabSetupAsset.url, alt: "New research testbed setup in the Cyber Physical Lab with colleagues" },
+  { id: "poster-odense-2025", title: "Poster Presentation at Mini-Conference in Odense", tag: "2025 · SAFEMARVEL and AMCOSTAR presentation", src: posterOdenseAsset.url, alt: "Poster presentation of SAFEMARVEL and AMCOSTAR projects in Odense" },
+  { id: "safemarvel-first-2024", title: "SAFEMARVEL 1st Biannual Meeting", tag: "2024 · Consortium milestone meeting", src: safemarvelFirstAsset.url, alt: "SAFEMARVEL consortium members at the first biannual meeting" },
+  { id: "safemarvel-second-2025", title: "SAFEMARVEL 2nd Biannual Meeting", tag: "2025 · Consortium milestone meeting", src: safemarvelSecondAsset.url, alt: "SAFEMARVEL consortium members at the second biannual meeting" },
+  { id: "scholars-bbq", title: "Scholars BBQ", tag: "Community and campus gathering", src: scholarsBbqAsset.url, alt: "Scholars barbecue gathering beside the campus waterfront" },
+  { id: "defense-jana-jakub-2026", title: "Student Defense (Jana and Jakub)", tag: "2026 · Supervision and thesis defense", src: defenseJanaJakubAsset.url, alt: "Thesis defense of Jana and Jakub with supervisors and industry partners" },
+  { id: "defense-zofia-henrik-2025", title: "Student Defense (Zofia and Henrik)", tag: "2025 · Supervision and thesis defense", src: defenseZofiaHenrikAsset.url, alt: "Thesis defense of Zofia and Henrik with the supervision panel" },
+  { id: "ilmenau-supper", title: "Supper with Professors and Colleagues, TU Ilmenau", tag: "MSCA secondment and academic exchange", src: ilmenauSupperAsset.url, alt: "Supper with professors and colleagues during the TU Ilmenau secondment" },
 ];
 const careerStorageKey = "shouvik-career-moments";
 const adminStorageKey = "shouvik-gallery-admin";
@@ -804,10 +824,11 @@ function CareerGallery() {
   };
 
   return <Section id="gallery" eyebrow="Career Gallery" title="Career Moments" muted>
-    <div className="mb-6 flex items-center justify-end gap-2">
+    <div className="mb-6 flex flex-wrap items-center justify-end gap-2">
       {isAdmin ? <>
         <Button onClick={() => { setLightbox(null); setError(""); setDialogOpen(true); }}><ImagePlus className="size-4" aria-hidden="true" />Add Photo</Button>
         <Button variant="outline" size="sm" onClick={() => window.dispatchEvent(new Event(scholarSyncEvent))}><RefreshCw className="size-4" aria-hidden="true" />Sync Scholar</Button>
+        <span role="status" className="inline-flex items-center gap-2 rounded-full border-2 border-primary bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary"><LockOpen className="size-3.5" aria-hidden="true" />Admin Mode Active</span>
         <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={lockAdmin}><Lock className="size-4" aria-hidden="true" />Exit admin</Button>
       </> : <Button variant="ghost" size="icon" aria-label="Unlock gallery editing" className="text-muted-foreground/40 hover:text-muted-foreground" onClick={() => { setPasscodeError(""); setPasscodeOpen(true); }}><LockOpen className="size-4" aria-hidden="true" /></Button>}
     </div>
@@ -835,7 +856,7 @@ function CareerGallery() {
           onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setLightbox(index); } }}
         >
           <img src={moment.src} alt={moment.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
-          {isAdmin && <Button variant="outline" size="icon" aria-label={`Edit details for ${moment.title}`} className="absolute right-3 top-3 z-10 bg-background/90" onClick={(event) => { event.stopPropagation(); openEditor(moment); }}><Pencil className="size-4" aria-hidden="true" /></Button>}
+          {isAdmin && <Button variant="outline" size="sm" aria-label={`Edit details for ${moment.title}`} className="absolute right-3 top-3 z-20 border-2 border-primary bg-card text-foreground shadow-drawer hover:bg-card" onClick={(event) => { event.stopPropagation(); openEditor(moment); }}><Pencil className="size-4" aria-hidden="true" />Edit</Button>}
           <figcaption className="absolute inset-x-0 bottom-0 bg-overlay px-5 py-4 text-primary-foreground backdrop-blur-sm"><p className="font-display text-xl">{moment.title}</p>{moment.tag && <p className="mt-1 text-xs opacity-80">{moment.tag}</p>}{moment.caption && <p className="mt-1 text-xs opacity-70">{moment.caption}</p>}</figcaption>
         </figure>
       ))}
