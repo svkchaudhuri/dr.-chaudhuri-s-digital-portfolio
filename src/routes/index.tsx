@@ -746,8 +746,44 @@ function CareerGallery() {
     setImageUrl(""); setTitle(""); setTag(""); setError(""); setDialogOpen(false);
   };
 
-  const allMoments = [...builtInCareerMoments, ...moments];
+  const allMoments = [...builtInCareerMoments, ...moments].map((moment) => {
+    const override = overrides[moment.id];
+    if (!override) return moment;
+    return {
+      ...moment,
+      title: override.title ?? moment.title,
+      tag: override.tag ?? moment.tag,
+      caption: override.caption ?? moment.caption,
+    };
+  });
   const activeMoment = lightbox !== null ? allMoments[lightbox] : null;
+  const editingMoment = editingId ? allMoments.find((moment) => moment.id === editingId) ?? null : null;
+
+  const openEditor = (moment: CareerMoment) => {
+    setLightbox(null);
+    setEditingId(moment.id);
+    setEditTitle(moment.title);
+    setEditTag(moment.tag ?? "");
+    setEditCaption(moment.caption ?? "");
+  };
+
+  const saveEdit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!editingId) return;
+    const next = { ...overrides, [editingId]: { title: editTitle.trim(), tag: editTag.trim(), caption: editCaption.trim() } };
+    setOverrides(next);
+    window.localStorage.setItem(overridesStorageKey, JSON.stringify(next));
+    setEditingId(null);
+  };
+
+  const resetEdit = () => {
+    if (!editingId) return;
+    const next = { ...overrides };
+    delete next[editingId];
+    setOverrides(next);
+    window.localStorage.setItem(overridesStorageKey, JSON.stringify(next));
+    setEditingId(null);
+  };
 
   return <Section id="gallery" eyebrow="Career Gallery" title="Career Moments" muted>
     <div className="mb-6 flex items-center justify-end gap-2">
