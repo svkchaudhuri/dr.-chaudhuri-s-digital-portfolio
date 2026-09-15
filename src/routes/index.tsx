@@ -722,6 +722,9 @@ function CareerGallery() {
     }
   }, []);
 
+  useEffect(() => { setShuffleSeed(Math.floor(Math.random() * 4294967295) + 1); }, []);
+
+
   useEffect(() => {
     try {
       const stored = window.localStorage.getItem(pinnedStorageKey);
