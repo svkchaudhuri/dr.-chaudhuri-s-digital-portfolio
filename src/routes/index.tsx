@@ -722,6 +722,29 @@ function CareerGallery() {
   }, []);
 
   useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(pinnedStorageKey);
+      if (!stored) return;
+      const parsed: unknown = JSON.parse(stored);
+      if (Array.isArray(parsed)) setPinnedIds(parsed.filter((item): item is string => typeof item === "string").slice(0, maxPinned));
+    } catch {
+      window.localStorage.removeItem(pinnedStorageKey);
+    }
+  }, []);
+
+  const togglePin = (id: string) => {
+    setPinNotice("");
+    const isPinned = pinnedIds.includes(id);
+    if (!isPinned && pinnedIds.length >= maxPinned) {
+      setPinNotice(`You can pin up to ${maxPinned} photos. Unpin one first.`);
+      return;
+    }
+    const next = isPinned ? pinnedIds.filter((item) => item !== id) : [...pinnedIds, id];
+    setPinnedIds(next);
+    window.localStorage.setItem(pinnedStorageKey, JSON.stringify(next));
+  };
+
+  useEffect(() => {
     if (window.localStorage.getItem(adminStorageKey) === "true") { setIsAdmin(true); return; }
     if (new URLSearchParams(window.location.search).get("admin") === "true") setPasscodeOpen(true);
   }, []);
