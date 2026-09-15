@@ -378,15 +378,17 @@ function Profile() {
     </article>)}
   </div>
   <div className="mt-14 grid gap-10 lg:grid-cols-2">
-    <div>
+    <div className="profile-column">
       <p className="section-kicker">Core methods</p>
       <h3 className="mt-2 font-display text-3xl">Research Interests</h3>
-      <div className="profile-interest-network mt-7">{researchInterests.map(({ name, Icon }, index) => <Button key={name} variant="ghost" onClick={() => setSelectedInterest(index)} aria-label={`Explore research interest: ${name}`} className="profile-interest-node group h-auto min-h-20 w-full justify-start whitespace-normal rounded-md border border-border bg-card px-4 py-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary hover:bg-card hover:shadow-portrait">
-        <span className="grid size-9 shrink-0 place-items-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground"><Icon className="size-4" aria-hidden="true" /></span>
-        <span className="min-w-0"><span className="block text-sm font-bold leading-snug text-foreground">{name}</span><span className="mt-1 flex items-center gap-1 text-[10px] font-bold uppercase text-primary">Explore topic <ChevronRight className="size-3" aria-hidden="true" /></span></span>
-      </Button>)}</div>
+      <div className="profile-interest-network mt-7">{researchInterests.map(({ name, Icon }, index) => <article key={name} className="profile-interest-node group">
+        <Button variant="ghost" onClick={() => setSelectedInterest(index)} aria-label={`Explore research interest: ${name}`} className="profile-interest-card flex h-full w-full cursor-pointer flex-col items-center justify-center whitespace-normal bg-card px-5 py-7 text-center shadow-none transition-colors hover:bg-card focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4">
+          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground"><Icon className="size-4" aria-hidden="true" /></span>
+          <span className="mt-2 min-w-0"><span className="line-clamp-2 block text-sm font-bold leading-snug text-foreground">{name}</span><span className="mt-1 flex items-center justify-center gap-1 text-[9px] font-bold uppercase text-primary">Explore topic <ChevronRight className="size-3" aria-hidden="true" /></span></span>
+        </Button>
+      </article>)}</div>
     </div>
-    <div>
+    <div className="profile-column">
       <p className="section-kicker">Roles and responsibilities</p>
       <h3 className="mt-2 font-display text-3xl">Research Leadership</h3>
       <ol className="profile-leadership-rail mt-7 space-y-3">{researchLeadership.map(({ label, description, badge, Icon }) => <li key={label} className="relative pl-12">
