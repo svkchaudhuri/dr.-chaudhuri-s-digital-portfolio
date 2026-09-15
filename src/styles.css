@@ -264,7 +264,7 @@
 
 @utility profile-interest-network {
   --profile-hex-gap: 0.875rem;
-  --profile-hex-width: min(calc((100cqi - var(--profile-hex-gap)) / 2), 9.25rem);
+  --profile-hex-width: min(calc((100cqi - var(--profile-hex-gap)) / 2), 11rem);
   --profile-hex-height: calc(var(--profile-hex-width) / 0.8660254);
   --profile-hex-step: calc(var(--profile-hex-height) * 0.75 + var(--profile-hex-gap) * 0.8660254);
 
@@ -304,6 +304,21 @@
 
   @media (min-width: 64rem) {
     flex: 1;
+    --profile-hex-rise: calc((100% - var(--profile-hex-height)) / 13);
+
+    & > .profile-interest-node:nth-child(2) { top: var(--profile-hex-rise); }
+    & > .profile-interest-node:nth-child(3) { top: calc(var(--profile-hex-rise) * 2); }
+    & > .profile-interest-node:nth-child(4) { top: calc(var(--profile-hex-rise) * 3); }
+    & > .profile-interest-node:nth-child(5) { top: calc(var(--profile-hex-rise) * 4); }
+    & > .profile-interest-node:nth-child(6) { top: calc(var(--profile-hex-rise) * 5); }
+    & > .profile-interest-node:nth-child(7) { top: calc(var(--profile-hex-rise) * 6); }
+    & > .profile-interest-node:nth-child(8) { top: calc(var(--profile-hex-rise) * 7); }
+    & > .profile-interest-node:nth-child(9) { top: calc(var(--profile-hex-rise) * 8); }
+    & > .profile-interest-node:nth-child(10) { top: calc(var(--profile-hex-rise) * 9); }
+    & > .profile-interest-node:nth-child(11) { top: calc(var(--profile-hex-rise) * 10); }
+    & > .profile-interest-node:nth-child(12) { top: calc(var(--profile-hex-rise) * 11); }
+    & > .profile-interest-node:nth-child(13) { top: calc(var(--profile-hex-rise) * 12); }
+    & > .profile-interest-node:nth-child(14) { top: calc(var(--profile-hex-rise) * 13); }
   }
 }
 
