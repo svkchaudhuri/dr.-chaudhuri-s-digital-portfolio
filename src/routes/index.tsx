@@ -873,6 +873,18 @@ function CareerGallery() {
         </div>
       </div>
     )}
+    {editingMoment && <div className="fixed inset-0 z-[90] grid place-items-center p-4">
+      <Button variant="ghost" aria-label="Close edit photo dialog" className="absolute inset-0 h-auto w-full rounded-none bg-overlay hover:bg-overlay" onClick={() => setEditingId(null)} />
+      <div role="dialog" aria-modal="true" aria-labelledby="edit-photo-title" className="relative z-10 w-full max-w-lg rounded-xl border border-border bg-background p-6 shadow-drawer">
+        <div className="flex items-start justify-between gap-4"><div><h3 id="edit-photo-title" className="font-display text-2xl">Edit Photo Details</h3><p className="mt-1 text-sm text-muted-foreground">Update the text shown on this moment.</p></div><Button variant="ghost" size="icon" onClick={() => setEditingId(null)} aria-label="Close dialog"><X className="size-5" /></Button></div>
+        <form className="mt-6 space-y-4" onSubmit={saveEdit}>
+          <label className="block text-sm font-semibold">Title<input required maxLength={120} value={editTitle} onChange={(event) => setEditTitle(event.target.value)} className="mt-2 h-10 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" /></label>
+          <label className="block text-sm font-semibold">Year or tag<input maxLength={80} value={editTag} onChange={(event) => setEditTag(event.target.value)} className="mt-2 h-10 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" /></label>
+          <label className="block text-sm font-semibold">Caption<textarea maxLength={280} rows={3} value={editCaption} onChange={(event) => setEditCaption(event.target.value)} className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring" /></label>
+          <div className="flex flex-wrap justify-end gap-2 pt-2"><Button type="button" variant="ghost" onClick={resetEdit}>Reset to default</Button><Button type="button" variant="outline" onClick={() => setEditingId(null)}>Cancel</Button><Button type="submit">Save changes</Button></div>
+        </form>
+      </div>
+    </div>}
   </Section>;
 }
 
