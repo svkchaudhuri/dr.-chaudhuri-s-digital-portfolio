@@ -746,7 +746,7 @@ function CareerGallery() {
     setImageUrl(""); setTitle(""); setTag(""); setError(""); setDialogOpen(false);
   };
 
-  const allMoments = [builtInCareerMoment, ...moments];
+  const allMoments = [...builtInCareerMoments, ...moments];
   const activeMoment = lightbox !== null ? allMoments[lightbox] : null;
 
   return <Section id="gallery" eyebrow="Career Gallery" title="Career Moments" muted>
