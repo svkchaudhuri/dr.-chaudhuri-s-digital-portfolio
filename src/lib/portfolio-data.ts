@@ -18,6 +18,7 @@ export const publications: Publication[] = [
     { label: "Water Tank Test for Airkeel (AK)", url: "https://youtu.be/Ri43Zp2B0pI" },
     { label: "Field Test for Conventional Keel (CK)", url: "https://youtu.be/8M-48dO4nR0" },
     { label: "Field Test for Airkeel (AK)", url: "https://youtu.be/fORjzl04tpQ" },
+    { label: "Simulation with Airkeel (AK)", url: "https://youtu.be/cY3Z3y2hikg" },
   ] },
   { category: "Journals", authors: "N. Taghva, S. Chaudhuri", title: "How language-specific and cross-linguistic factors affect speech rhythm", venue: "Estudios de Fonética Experimental", year: 2024, details: "vol. 33, pp. 169–190, Sep. 2024", doi: "10.1344/EFE-2024-33-169-190" },
   { category: "Journals", authors: "A. Sarkar, S. Dasmahapatra, S. Chaudhuri, R. Saha, S. Mookherjee, D. Sanyal", title: "A novel order-separated generalized feedforward design for motion control in energy-efficient electrohydraulic systems with proportional and integral feedback", venue: "ISA Transactions", year: 2024, details: "vol. 146, pp. 336–351, Jan. 2024. ISSN 0019-0578", doi: "10.1016/j.isatra.2024.01.012" },
