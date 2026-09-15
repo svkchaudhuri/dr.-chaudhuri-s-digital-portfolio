@@ -665,7 +665,7 @@ const builtInCareerMoments: CareerMoment[] = [
   { id: "tower-crane-demo", title: "Tower Crane Demo to Danfoss CEO Kim Fausing", tag: "Industrial demo · Danfoss leadership visit", src: craneDemoAsset.url, alt: "Live tower crane control demonstration presented to Danfoss CEO Kim Fausing" },
   { id: "cyber-physical-lab-2023", title: "Cyber Physical Lab", tag: "2023 · Teaching and research testbeds", src: cyberLabAsset.url, alt: "Cyber Physical Lab with control experiment testbeds at SDU" },
   { id: "boat-ride-svendborg-2022", title: "Demo Boat Ride at Svendborg", tag: "2022 · Maritime trials", src: boatRideAsset.url, alt: "Instrumented demonstration boat moored at Svendborg harbour during maritime trials" },
-  { id: "student-defense-david-2025", title: "Student Defense, David", tag: "2025 · Supervision and mentorship", src: studentDefenseAsset.url, alt: "Student thesis defense with supervisors and a drone platform" },
+  { id: "student-defense-david-2025", title: "Masters Thesis Defense (David)", tag: "2025 · Supervision and mentorship", src: studentDefenseAsset.url, alt: "Master's thesis defense with supervisors and a drone platform" },
   { id: "sdu-farewell-2026", title: "SDU Farewell", tag: "February 2026 · Colleagues and research group", src: sduFarewellAsset.url, alt: "Farewell gathering with SDU colleagues and research group members" },
   { id: "phd-convocation-2023", title: "PhD Convocation, Degree Awarding Ceremony", tag: "2023 · Jadavpur University", src: phdConvocationAsset.url, alt: "PhD degree awarding ceremony at Jadavpur University" },
   { id: "masters-convocation-2013", title: "Master's Convocation, 58th Annual Convocation", tag: "2013 · Jadavpur University", src: mastersConvocationAsset.url, alt: "Receiving the master's degree at the 58th Annual Convocation of Jadavpur University" },
@@ -679,8 +679,8 @@ const builtInCareerMoments: CareerMoment[] = [
   { id: "safemarvel-first-2024", title: "SAFEMARVEL 1st Biannual Meeting", tag: "2024 · Consortium milestone meeting", src: safemarvelFirstAsset.url, alt: "SAFEMARVEL consortium members at the first biannual meeting" },
   { id: "safemarvel-second-2025", title: "SAFEMARVEL 2nd Biannual Meeting", tag: "2025 · Consortium milestone meeting", src: safemarvelSecondAsset.url, alt: "SAFEMARVEL consortium members at the second biannual meeting" },
   { id: "scholars-bbq", title: "Scholars BBQ", tag: "Community and campus gathering", src: scholarsBbqAsset.url, alt: "Scholars barbecue gathering beside the campus waterfront" },
-  { id: "defense-jana-jakub-2026", title: "Student Defense (Jana and Jakub)", tag: "2026 · Supervision and thesis defense", src: defenseJanaJakubAsset.url, alt: "Thesis defense of Jana and Jakub with supervisors and industry partners" },
-  { id: "defense-zofia-henrik-2025", title: "Student Defense (Zofia and Henrik)", tag: "2025 · Supervision and thesis defense", src: defenseZofiaHenrikAsset.url, alt: "Thesis defense of Zofia and Henrik with the supervision panel" },
+  { id: "defense-jana-jakub-2026", title: "Bachelor Project Presentation (Jana and Jakub)", tag: "2026 · Supervision and thesis defense", src: defenseJanaJakubAsset.url, alt: "Bachelor project presentation of Jana and Jakub with supervisors and industry partners" },
+  { id: "defense-zofia-henrik-2025", title: "Bachelor Project Presentation (Zofia and Henrik)", tag: "2025 · Supervision and thesis defense", src: defenseZofiaHenrikAsset.url, alt: "Bachelor project presentation of Zofia and Henrik with the supervision panel" },
   { id: "ilmenau-supper", title: "Supper with Professors and Colleagues, TU Ilmenau", tag: "MSCA secondment and academic exchange", src: ilmenauSupperAsset.url, alt: "Supper with professors and colleagues during the TU Ilmenau secondment" },
 ];
 const careerStorageKey = "shouvik-career-moments";
