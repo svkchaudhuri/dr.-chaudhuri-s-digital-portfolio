@@ -892,8 +892,9 @@ function CareerGallery() {
         </form>
       </div>
     </div>}
+    {isAdmin && <p className="mb-4 text-right text-xs text-muted-foreground">{pinnedIds.length} of {maxPinned} photos pinned to the top.{pinNotice && <span className="ml-2 font-semibold text-destructive">{pinNotice}</span>}</p>}
     <div className="grid auto-rows-[220px] gap-4 md:grid-cols-3">
-      {allMoments.map((moment, index) => (
+      {orderedMoments.map((moment, index) => (
         <figure
           key={moment.id}
           role="button"
@@ -904,11 +905,16 @@ function CareerGallery() {
           onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setLightbox(index); } }}
         >
           <img src={moment.src} alt={moment.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
-          {isAdmin && <Button variant="outline" size="sm" aria-label={`Edit details for ${moment.title}`} className="absolute right-3 top-3 z-20 border-2 border-primary bg-card text-foreground shadow-drawer hover:bg-card" onClick={(event) => { event.stopPropagation(); openEditor(moment); }}><Pencil className="size-4" aria-hidden="true" />Edit</Button>}
+          {isAdmin && <div className="absolute right-3 top-3 z-20 flex flex-wrap justify-end gap-2">
+            <Button variant="outline" size="sm" aria-pressed={pinnedIds.includes(moment.id)} aria-label={pinnedIds.includes(moment.id) ? `Unpin ${moment.title}` : `Pin ${moment.title}`} className={cn("border-2 shadow-drawer", pinnedIds.includes(moment.id) ? "border-primary bg-primary text-primary-foreground hover:bg-primary" : "border-primary bg-card text-foreground hover:bg-card")} onClick={(event) => { event.stopPropagation(); togglePin(moment.id); }}>{pinnedIds.includes(moment.id) ? <PinOff className="size-4" aria-hidden="true" /> : <Pin className="size-4" aria-hidden="true" />}{pinnedIds.includes(moment.id) ? "Unpin" : "Pin"}</Button>
+            <Button variant="outline" size="sm" aria-label={`Edit details for ${moment.title}`} className="border-2 border-primary bg-card text-foreground shadow-drawer hover:bg-card" onClick={(event) => { event.stopPropagation(); openEditor(moment); }}><Pencil className="size-4" aria-hidden="true" />Edit</Button>
+          </div>}
+          {!isAdmin && pinnedIds.includes(moment.id) && <span className="absolute right-3 top-3 z-20 inline-flex items-center gap-1 rounded-full bg-overlay px-2.5 py-1 text-xs font-semibold text-primary-foreground"><Pin className="size-3" aria-hidden="true" />Pinned</span>}
           <figcaption className="absolute inset-x-0 bottom-0 bg-overlay px-5 py-4 text-primary-foreground backdrop-blur-sm"><p className="font-display text-xl">{moment.title}</p>{moment.tag && <p className="mt-1 text-xs opacity-80">{moment.tag}</p>}{moment.caption && <p className="mt-1 text-xs opacity-70">{moment.caption}</p>}</figcaption>
         </figure>
       ))}
     </div>
+
     {dialogOpen && <div className="fixed inset-0 z-[70] grid place-items-center p-4">
       <Button variant="ghost" aria-label="Close add photo dialog" className="absolute inset-0 h-auto w-full rounded-none bg-overlay hover:bg-overlay" onClick={() => setDialogOpen(false)} />
       <div role="dialog" aria-modal="true" aria-labelledby="add-photo-title" className="relative z-10 w-full max-w-lg rounded-xl border border-border bg-background p-6 shadow-drawer">
