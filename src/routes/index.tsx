@@ -628,15 +628,14 @@ const bachelors=[['Development of a Simulation-Based Sales Tool: Quantifying Eff
 const individualStudies=[['Active Disturbance Rejection Control for Attitude Stabilization of Aerodynamically Unstable Re-entry Capsules','Benjamin André Freij · 2026'],['Study on Magnetorheological Damper Design Optimization','Máximo Jitchi · 2026']];
 function ThesisList({title,items}:{title:string;items:string[][]}) { return <div><h3 className="font-display text-2xl">{title} <span className="font-sans text-sm text-primary">{String(items.length).padStart(2,"0")}</span></h3><ol className="mt-5 space-y-4">{items.map(([name,person],i)=><li key={name} className="grid grid-cols-[24px_1fr] gap-3 text-sm"><span className="font-mono text-xs text-primary">{i+1}.</span><span><strong>{name}</strong><span className="mt-1 block text-muted-foreground">{person}</span></span></li>)}</ol></div>; }
 const controlMiniprojectPhotos = [
-  ["/assets/control-miniproject-01-team-work.jpg", "Team members working with the robotic manipulator"],
   ["/assets/control-miniproject-02-title.jpg", "The Control Miniproject film title and wrist-mounted camera"],
   ["/assets/control-miniproject-03-manipulator.jpg", "Robotic manipulator during a visual servoing test"],
   ["/assets/control-miniproject-04-grasp.jpg", "Robot gripper grasping the target ball"],
-  ["/assets/control-miniproject-05-camera-check.jpg", "Team member checking the wrist-mounted camera"],
-  ["/assets/control-miniproject-06-vision-test.jpg", "Live computer-vision test with the target ball"],
-  ["/assets/control-miniproject-07-control-architecture.jpg", "Control architecture and robotic manipulator"],
   ["/assets/control-miniproject-08-ball-pickup.jpg", "Target ball positioned beneath the robot gripper"],
-  ["/assets/control-miniproject-09-vision-screen.jpg", "Live visual-servoing experiment and processed camera view"],
+  ["/assets/control-miniproject-05-camera-check.jpg", "Team member checking the wrist-mounted camera"],
+  ["/assets/control-miniproject-07-control-architecture.jpg", "Control architecture and robotic manipulator"],
+  ["/assets/control-miniproject-06-vision-test.jpg", "Live computer-vision test with the target ball"],
+  ["/assets/control-miniproject-01-team-work.jpg", "Dr. Chaudhuri demonstrating the experiment with the team"],
 ] as const;
 function ControlMiniproject() {
   const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null);
@@ -646,9 +645,23 @@ function ControlMiniproject() {
     <h3 className="mt-2 font-display text-3xl">The Control Miniproject</h3>
     <p className="mt-1 text-sm font-semibold">Eye-in-hand visual servoing of a serial robotic manipulator</p>
     <p className="mt-4 max-w-4xl text-sm leading-7 text-muted-foreground">Four MSc Mechatronics students designed and built a camera-guided control system for a four-degree-of-freedom robot. Using live wrist-camera feedback and MATLAB/Simulink, the robot located, approached, grasped and lifted a coloured ball.</p>
-    <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-2">
-      <div><dt className="font-bold text-primary">Project members</dt><dd className="mt-1 text-muted-foreground">Matías Ramiro Cusicanqui Bejarano, Tarek Zidan, Levi Fechete and David Torres</dd></div>
-      <div><dt className="font-bold text-primary">Credits</dt><dd className="mt-1 text-muted-foreground">Supervisor: Dr. Shouvik Chaudhuri · Video editor: Oliver Vedby Jørgensen, co-produced with Matías R. Cusicanqui B. · Project supporter: Hossein Ramezani</dd></div>
+    <dl className="mt-5 grid gap-6 text-sm sm:grid-cols-2">
+      <div>
+        <dt className="font-bold text-primary">Project members</dt>
+        <ol className="mt-2 space-y-1.5">
+          {["Matías Ramiro Cusicanqui Bejarano", "Tarek Zidan", "Levi Fechete", "David Torres"].map((name, i) => (
+            <li key={name} className="flex gap-2 text-muted-foreground"><span className="font-mono text-xs font-bold text-primary">{i + 1}.</span>{name}</li>
+          ))}
+        </ol>
+      </div>
+      <div>
+        <dt className="font-bold text-primary">Production &amp; Support</dt>
+        <ol className="mt-2 space-y-1.5">
+          {["Project Supervisor: Dr. Shouvik Chaudhuri", "Video Editing: Oliver Vedby Jørgensen", "Co-produced with Matías R. Cusicanqui", "Project Supporter: Hossein Ramezani"].map((role, i) => (
+            <li key={role} className="flex gap-2 text-muted-foreground"><span className="font-mono text-xs font-bold text-primary">{i + 1}.</span>{role}</li>
+          ))}
+        </ol>
+      </div>
     </dl>
     <div className="mt-5 flex flex-wrap gap-2">
       <Button asChild variant="outline" size="sm"><a href="https://www.youtube.com/watch?app=desktop&v=_I938Jcwo8s" target="_blank" rel="noreferrer"><Youtube className="size-4" />Project Video 1</a></Button>
