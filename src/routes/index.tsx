@@ -637,6 +637,13 @@ const controlMiniprojectPhotos = [
   ["/assets/control-miniproject-06-vision-test.jpg", "Live computer-vision test with the target ball"],
   ["/assets/control-miniproject-01-team-work.jpg", "Dr. Chaudhuri demonstrating the experiment with the team"],
 ] as const;
+const controlMiniprojectMembers = [
+  { name: "Matías Ramiro Cusicanqui Bejarano", url: "https://www.linkedin.com/in/mat%C3%ADas-ramiro-cusicanqui-bejarano-6a6707385/", role: "Project coordination, management and documentation" },
+  { name: "Tarek Zidan", url: "https://www.linkedin.com/in/tarek-zidan-tenz/" },
+  { name: "Levi Fechete", url: "https://www.linkedin.com/in/levi-fechete-516415163/" },
+  { name: "David Torres", url: "https://www.linkedin.com/in/davidtorres-ethz/" },
+];
+
 function ControlMiniproject() {
   const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null);
   const selected = selectedPhoto === null ? null : controlMiniprojectPhotos[selectedPhoto];
