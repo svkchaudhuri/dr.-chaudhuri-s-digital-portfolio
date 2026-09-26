@@ -644,9 +644,9 @@ const controlMiniprojectPhotos = [
   ["/assets/control-miniproject-02-title.jpg", "The Control Miniproject film title and wrist-mounted camera"],
   ["/assets/control-miniproject-03-manipulator.jpg", "Robotic manipulator during a visual servoing test"],
   ["/assets/control-miniproject-04-grasp.jpg", "Robot gripper grasping the target ball"],
-  ["/assets/control-miniproject-08-ball-pickup.jpg", "Target ball positioned beneath the robot gripper"],
-  ["/assets/control-miniproject-05-camera-check.jpg", "Team member checking the wrist-mounted camera"],
-  ["/assets/control-miniproject-07-control-architecture.jpg", "Control architecture and robotic manipulator"],
+  ["/assets/control-miniproject-08-ball-pickup.jpg", "Robotic arm testing (in frame - Tarek and Shouvik)"],
+  ["/assets/control-miniproject-05-camera-check.jpg", "Matias checking the wrist-mounted camera"],
+  ["/assets/control-miniproject-07-control-architecture.jpg", "Live computer-vision test with the target ball by David"],
   ["/assets/control-miniproject-06-vision-test.jpg", "Live computer-vision test with the target ball"],
   ["/assets/control-miniproject-01-team-work.jpg", "Dr. Chaudhuri demonstrating the experiment with the team"],
 ] as const;
