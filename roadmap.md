@@ -21,3 +21,4 @@
 - [x] Reorient Profile interests into a flat-top interlocking honeycomb without connector rails
 - [x] Replace the default favicon and add Apple and installable home-screen icons
 - [x] Replace all browser and home-screen icons with the new Dr. SC monogram
+- [x] Add The Control Miniproject feature with credits, links, and an enlarged photo viewer
