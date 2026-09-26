@@ -637,6 +637,13 @@ const controlMiniprojectPhotos = [
   ["/assets/control-miniproject-06-vision-test.jpg", "Live computer-vision test with the target ball"],
   ["/assets/control-miniproject-01-team-work.jpg", "Dr. Chaudhuri demonstrating the experiment with the team"],
 ] as const;
+const controlMiniprojectMembers = [
+  { name: "Matías Ramiro Cusicanqui Bejarano", url: "https://www.linkedin.com/in/mat%C3%ADas-ramiro-cusicanqui-bejarano-6a6707385/", role: "Project coordination, management and documentation" },
+  { name: "Tarek Zidan", url: "https://www.linkedin.com/in/tarek-zidan-tenz/" },
+  { name: "Levi Fechete", url: "https://www.linkedin.com/in/levi-fechete-516415163/" },
+  { name: "David Torres", url: "https://www.linkedin.com/in/davidtorres-ethz/" },
+];
+
 function ControlMiniproject() {
   const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null);
   const selected = selectedPhoto === null ? null : controlMiniprojectPhotos[selectedPhoto];
@@ -649,17 +656,18 @@ function ControlMiniproject() {
       <div>
         <dt className="font-bold text-primary">Project members</dt>
         <ol className="mt-2 space-y-1.5">
-          {["Matías Ramiro Cusicanqui Bejarano", "Tarek Zidan", "Levi Fechete", "David Torres"].map((name, i) => (
-            <li key={name} className="flex gap-2 text-muted-foreground"><span className="font-mono text-xs font-bold text-primary">{i + 1}.</span>{name}</li>
-          ))}
+          {controlMiniprojectMembers.map((member, i) => <li key={member.name} className="text-muted-foreground">
+            <span className="flex gap-2"><span className="font-mono text-xs font-bold text-primary">{i + 1}.</span><a href={member.url} target="_blank" rel="noreferrer" className="underline-offset-2 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{member.name}</a></span>
+            {member.role && <span className="mt-0.5 block pl-5 text-xs text-muted-foreground">{member.role}</span>}
+          </li>)}
         </ol>
       </div>
       <div>
         <dt className="font-bold text-primary">Production &amp; Support</dt>
         <ol className="mt-2 space-y-1.5">
-          {["Project Supervisor: Dr. Shouvik Chaudhuri", "Video Idea, Design and Production: Oliver Vedby Jørgensen with Matías R. Cusicanqui", "Project Supporter: Hossein Ramezani"].map((role, i) => (
-            <li key={role} className="flex gap-2 text-muted-foreground"><span className="font-mono text-xs font-bold text-primary">{i + 1}.</span>{role}</li>
-          ))}
+          <li className="flex gap-2 text-muted-foreground"><span className="font-mono text-xs font-bold text-primary">1.</span><span>Project Supervisor: Dr. Shouvik Chaudhuri</span></li>
+          <li className="flex gap-2 text-muted-foreground"><span className="font-mono text-xs font-bold text-primary">2.</span><span>Video Idea, Design and Production:<br /><a href="https://www.linkedin.com/in/oliverjorgensen/" target="_blank" rel="noreferrer" className="underline-offset-2 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Oliver Vedby Jørgensen</a> with <a href="https://www.linkedin.com/in/mat%C3%ADas-ramiro-cusicanqui-bejarano-6a6707385/" target="_blank" rel="noreferrer" className="underline-offset-2 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Matías R. Cusicanqui</a></span></li>
+          <li className="flex gap-2 text-muted-foreground"><span className="font-mono text-xs font-bold text-primary">3.</span><span>Project Supporter: <a href="https://www.linkedin.com/in/hossein-ramezani-a07a2672/" target="_blank" rel="noreferrer" className="underline-offset-2 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Hossein Ramezani</a></span></li>
         </ol>
       </div>
     </dl>
