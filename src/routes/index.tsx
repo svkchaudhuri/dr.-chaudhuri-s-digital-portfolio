@@ -923,7 +923,7 @@ function CareerGallery() {
     {dialogOpen && <div className="fixed inset-0 z-[70] grid place-items-center p-4">
       <Button variant="ghost" aria-label="Close add photo dialog" className="absolute inset-0 h-auto w-full rounded-none bg-overlay hover:bg-overlay" onClick={() => setDialogOpen(false)} />
       <div role="dialog" aria-modal="true" aria-labelledby="add-photo-title" className="relative z-10 w-full max-w-lg rounded-xl border border-border bg-background p-6 shadow-drawer">
-        <div className="flex items-start justify-between gap-4"><div><h3 id="add-photo-title" className="font-display text-2xl">Add a career photo</h3><p className="mt-1 text-sm text-muted-foreground">Add a hosted image to this gallery.</p></div><Button variant="ghost" size="icon" onClick={() => setDialogOpen(false)} aria-label="Close dialog"><X className="size-5" /></Button></div>
+        <div className="flex items-start justify-between gap-4"><div><h3 id="add-photo-title" className="font-display text-2xl">Add a career photo</h3><p className="mt-1 text-sm text-muted-foreground">Upload a photo from your device to this gallery.</p></div><Button variant="ghost" size="icon" onClick={() => setDialogOpen(false)} aria-label="Close dialog"><X className="size-5" /></Button></div>
         <form className="mt-6 space-y-4" onSubmit={addPhoto}>
           <label className="block text-sm font-semibold">Photo file<input type="file" required accept="image/*" onChange={(event) => {
             const file = event.target.files?.[0];
