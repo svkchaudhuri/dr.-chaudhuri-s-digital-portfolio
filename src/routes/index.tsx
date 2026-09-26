@@ -925,7 +925,33 @@ function CareerGallery() {
       <div role="dialog" aria-modal="true" aria-labelledby="add-photo-title" className="relative z-10 w-full max-w-lg rounded-xl border border-border bg-background p-6 shadow-drawer">
         <div className="flex items-start justify-between gap-4"><div><h3 id="add-photo-title" className="font-display text-2xl">Add a career photo</h3><p className="mt-1 text-sm text-muted-foreground">Add a hosted image to this gallery.</p></div><Button variant="ghost" size="icon" onClick={() => setDialogOpen(false)} aria-label="Close dialog"><X className="size-5" /></Button></div>
         <form className="mt-6 space-y-4" onSubmit={addPhoto}>
-          <label className="block text-sm font-semibold">Image URL<input type="url" required maxLength={2048} value={imageUrl} onChange={(event) => setImageUrl(event.target.value)} placeholder="https://example.com/photo.jpg" className="mt-2 h-10 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" /></label>
+          <label className="block text-sm font-semibold">Photo file<input type="file" required accept="image/*" onChange={(event) => {
+            const file = event.target.files?.[0];
+            if (!file) { setImageData(""); setImageName(""); return; }
+            setError("");
+            const reader = new FileReader();
+            reader.onload = () => {
+              const result = typeof reader.result === "string" ? reader.result : "";
+              const img = new Image();
+              img.onload = () => {
+                const maxSide = 1600;
+                const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+                const canvas = document.createElement("canvas");
+                canvas.width = Math.round(img.width * scale);
+                canvas.height = Math.round(img.height * scale);
+                const ctx = canvas.getContext("2d");
+                if (!ctx) { setImageData(result); setImageName(file.name); return; }
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                setImageData(canvas.toDataURL("image/jpeg", 0.82));
+                setImageName(file.name);
+              };
+              img.onerror = () => setError("That file could not be read as an image.");
+              img.src = result;
+            };
+            reader.onerror = () => setError("That file could not be read.");
+            reader.readAsDataURL(file);
+          }} className="mt-2 block w-full cursor-pointer rounded-md border border-input bg-background px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-sm file:font-semibold file:text-primary-foreground" /></label>
+          {imageName && <p className="text-xs text-muted-foreground">Selected: {imageName}</p>}
           <label className="block text-sm font-semibold">Title or caption<input required maxLength={100} value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Research testbed demonstration" className="mt-2 h-10 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" /></label>
           <label className="block text-sm font-semibold">Year or tag <span className="font-normal text-muted-foreground">(optional)</span><input maxLength={60} value={tag} onChange={(event) => setTag(event.target.value)} placeholder="2025 · SDU Laboratory" className="mt-2 h-10 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" /></label>
           {error && <p role="alert" className="text-sm font-semibold text-destructive">{error}</p>}
