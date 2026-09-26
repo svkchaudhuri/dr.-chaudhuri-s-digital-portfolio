@@ -644,11 +644,11 @@ const controlMiniprojectPhotos = [
   ["/assets/control-miniproject-02-title.jpg", "The Control Miniproject film title and wrist-mounted camera"],
   ["/assets/control-miniproject-03-manipulator.jpg", "Robotic manipulator during a visual servoing test"],
   ["/assets/control-miniproject-04-grasp.jpg", "Robot gripper grasping the target ball"],
-  ["/assets/control-miniproject-08-ball-pickup.jpg", "Robotic arm testing (in frame - Tarek and Shouvik)"],
+  ["/assets/control-miniproject-08-ball-pickup.jpg", "Target ball positioned beneath the robot gripper"],
   ["/assets/control-miniproject-05-camera-check.jpg", "Matias checking the wrist-mounted camera"],
   ["/assets/control-miniproject-07-control-architecture.jpg", "Control-system architecture with robot experiment stills"],
   ["/assets/control-miniproject-06-vision-test.jpg", "Live computer-vision test with the target ball by David"],
-  ["/assets/control-miniproject-01-team-work.jpg", "Dr. Chaudhuri demonstrating the experiment with the team"],
+  ["/assets/control-miniproject-01-team-work.jpg", "Robotic arm testing (in frame - Tarek and Shouvik)"],
 ] as const;
 const controlMiniprojectMembers = [
   { name: "Matías Ramiro Cusicanqui Bejarano", url: "https://www.linkedin.com/in/mat%C3%ADas-ramiro-cusicanqui-bejarano-6a6707385/", role: "Project coordination, management, and documentation" },
@@ -706,7 +706,7 @@ function ControlMiniproject() {
           <Button type="button" variant="outline" size="icon" aria-label="Previous photo" onClick={() => setSelectedPhoto((selectedPhoto! - 1 + controlMiniprojectPhotos.length) % controlMiniprojectPhotos.length)} className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/90 shadow-md"><ChevronLeft className="size-5" /></Button>
           <Button type="button" variant="outline" size="icon" aria-label="Next photo" onClick={() => setSelectedPhoto((selectedPhoto! + 1) % controlMiniprojectPhotos.length)} className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/90 shadow-md"><ChevronRight className="size-5" /></Button>
         </div>
-        <p className="mt-2 text-center font-mono text-xs font-bold text-muted-foreground">View {String(selectedPhoto! + 1).padStart(2, "0")} of {String(controlMiniprojectPhotos.length).padStart(2, "0")}</p>
+        <p className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-md bg-background/90 px-2.5 py-1 font-mono text-xs font-bold text-foreground shadow-md">View {String(selectedPhoto! + 1).padStart(2, "0")} of {String(controlMiniprojectPhotos.length).padStart(2, "0")}</p>
       </DialogContent>}
     </Dialog>
   </article>;
