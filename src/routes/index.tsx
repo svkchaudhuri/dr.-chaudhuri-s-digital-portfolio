@@ -638,10 +638,10 @@ const controlMiniprojectPhotos = [
   ["/assets/control-miniproject-01-team-work.jpg", "Dr. Chaudhuri demonstrating the experiment with the team"],
 ] as const;
 const controlMiniprojectMembers = [
-  { name: "Matías Ramiro Cusicanqui Bejarano", url: "https://www.linkedin.com/in/mat%C3%ADas-ramiro-cusicanqui-bejarano-6a6707385/", role: "Project coordination, management and documentation" },
-  { name: "Tarek Zidan", url: "https://www.linkedin.com/in/tarek-zidan-tenz/" },
-  { name: "Levi Fechete", url: "https://www.linkedin.com/in/levi-fechete-516415163/" },
-  { name: "David Torres", url: "https://www.linkedin.com/in/davidtorres-ethz/" },
+  { name: "Matías Ramiro Cusicanqui Bejarano", url: "https://www.linkedin.com/in/mat%C3%ADas-ramiro-cusicanqui-bejarano-6a6707385/", role: "Eye-in-hand configuration control, project management, article distribution and writing, and final review" },
+  { name: "Tarek Zidan", url: "https://www.linkedin.com/in/tarek-zidan-tenz/", role: "AI-based control, manipulator Jacobian experiment, AI-based impedance control, controller deployment and technical writing" },
+  { name: "Levi Fechete", url: "https://www.linkedin.com/in/levi-fechete-516415163/", role: "Model-based control, robotic-arm setup, Gazebo digital twin, model-based impedance control, deployment and technical writing" },
+  { name: "David Torres", url: "https://www.linkedin.com/in/davidtorres-ethz/", role: "Model-based control, manipulator-kinematics experiments, model-based position control, deployment and technical writing" },
 ];
 
 function ControlMiniproject() {
@@ -649,7 +649,7 @@ function ControlMiniproject() {
   const selected = selectedPhoto === null ? null : controlMiniprojectPhotos[selectedPhoto];
   return <article className="mt-12 border-t border-border pt-8">
     <p className="font-mono text-xs font-bold uppercase text-primary">Extracurricular Project · Spring 2025</p>
-    <h3 className="mt-2 font-display text-3xl">The Control Miniproject</h3>
+    <h3 className="mt-2 font-display text-3xl font-bold">The Control Miniproject</h3>
     <p className="mt-1 text-sm font-semibold">Eye-in-hand visual servoing of a serial robotic manipulator</p>
     <p className="mt-4 max-w-4xl text-sm leading-7 text-muted-foreground">Four MSc Mechatronics students designed and built a camera-guided control system for a four-degree-of-freedom robot. Using live wrist-camera feedback and MATLAB/Simulink, the robot located, approached, grasped and lifted a coloured ball.</p>
     <dl className="mt-5 grid gap-6 text-sm sm:grid-cols-2">
@@ -657,7 +657,7 @@ function ControlMiniproject() {
         <dt className="font-bold text-primary">Project members</dt>
         <ol className="mt-2 space-y-1.5">
           {controlMiniprojectMembers.map((member, i) => <li key={member.name} className="text-muted-foreground">
-            <span className="flex gap-2"><span className="font-mono text-xs font-bold text-primary">{i + 1}.</span><a href={member.url} target="_blank" rel="noreferrer" className="underline-offset-2 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{member.name}</a></span>
+            <span className="flex gap-2"><span className="font-mono text-xs font-bold text-primary">{i + 1}.</span><a href={member.url} target="_blank" rel="noreferrer" className="font-bold text-foreground underline decoration-primary/60 underline-offset-4 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{member.name}</a></span>
             {member.role && <span className="mt-0.5 block pl-5 text-xs text-muted-foreground">{member.role}</span>}
           </li>)}
         </ol>
@@ -666,8 +666,8 @@ function ControlMiniproject() {
         <dt className="font-bold text-primary">Production &amp; Support</dt>
         <ol className="mt-2 space-y-1.5">
           <li className="flex gap-2 text-muted-foreground"><span className="font-mono text-xs font-bold text-primary">1.</span><span>Project Supervisor: Dr. Shouvik Chaudhuri</span></li>
-          <li className="flex gap-2 text-muted-foreground"><span className="font-mono text-xs font-bold text-primary">2.</span><span>Video Idea, Design and Production:<br /><a href="https://www.linkedin.com/in/oliverjorgensen/" target="_blank" rel="noreferrer" className="underline-offset-2 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Oliver Vedby Jørgensen</a> with <a href="https://www.linkedin.com/in/mat%C3%ADas-ramiro-cusicanqui-bejarano-6a6707385/" target="_blank" rel="noreferrer" className="underline-offset-2 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Matías R. Cusicanqui</a></span></li>
-          <li className="flex gap-2 text-muted-foreground"><span className="font-mono text-xs font-bold text-primary">3.</span><span>Project Supporter: <a href="https://www.linkedin.com/in/hossein-ramezani-a07a2672/" target="_blank" rel="noreferrer" className="underline-offset-2 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Hossein Ramezani</a></span></li>
+          <li className="flex gap-2 text-muted-foreground"><span className="font-mono text-xs font-bold text-primary">2.</span><span>Video Idea, Design and Production:<br /><a href="https://www.linkedin.com/in/oliverjorgensen/" target="_blank" rel="noreferrer" className="font-bold text-foreground underline decoration-primary/60 underline-offset-4 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Oliver Vedby Jørgensen</a> with <a href="https://www.linkedin.com/in/mat%C3%ADas-ramiro-cusicanqui-bejarano-6a6707385/" target="_blank" rel="noreferrer" className="font-bold text-foreground underline decoration-primary/60 underline-offset-4 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Matías R. Cusicanqui</a></span></li>
+          <li className="flex gap-2 text-muted-foreground"><span className="font-mono text-xs font-bold text-primary">3.</span><span>Project Supporter: <a href="https://www.linkedin.com/in/hossein-ramezani-a07a2672/" target="_blank" rel="noreferrer" className="font-bold text-foreground underline decoration-primary/60 underline-offset-4 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Hossein Ramezani</a></span></li>
         </ol>
       </div>
     </dl>
