@@ -697,7 +697,8 @@ const defaultPinnedIds = ["sdu-sonderborg", "tower-crane-demo", "phd-convocation
 function CareerGallery() {
   const [moments, setMoments] = useState<CareerMoment[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageData, setImageData] = useState("");
+  const [imageName, setImageName] = useState("");
   const [title, setTitle] = useState("");
   const [tag, setTag] = useState("");
   const [error, setError] = useState("");
@@ -800,23 +801,23 @@ function CareerGallery() {
     event.preventDefault();
     const cleanTitle = title.trim();
     const cleanTag = tag.trim();
-    let cleanUrl = "";
-    try {
-      const parsedUrl = new URL(imageUrl.trim());
-      if (parsedUrl.protocol !== "https:" && parsedUrl.protocol !== "http:") throw new Error();
-      cleanUrl = parsedUrl.toString();
-    } catch {
-      setError("Enter a valid image URL beginning with http:// or https://.");
+    if (!imageData) {
+      setError("Choose a photo file to upload.");
       return;
     }
     if (!cleanTitle) {
       setError("Add a title or caption for this photo.");
       return;
     }
-    const next = [...moments, { id: `${Date.now()}-${cleanTitle.slice(0, 20)}`, title: cleanTitle, tag: cleanTag, src: cleanUrl, alt: cleanTitle }];
+    const next = [...moments, { id: `${Date.now()}-${cleanTitle.slice(0, 20)}`, title: cleanTitle, tag: cleanTag, src: imageData, alt: cleanTitle }];
+    try {
+      window.localStorage.setItem(careerStorageKey, JSON.stringify(next));
+    } catch {
+      setError("This photo is too large to store in the browser. Try a smaller image.");
+      return;
+    }
     setMoments(next);
-    window.localStorage.setItem(careerStorageKey, JSON.stringify(next));
-    setImageUrl(""); setTitle(""); setTag(""); setError(""); setDialogOpen(false);
+    setImageData(""); setImageName(""); setTitle(""); setTag(""); setError(""); setDialogOpen(false);
   };
 
   const allMoments = [...builtInCareerMoments, ...moments].map((moment) => {
