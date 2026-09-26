@@ -657,7 +657,7 @@ function ControlMiniproject() {
       <div>
         <dt className="font-bold text-primary">Production &amp; Support</dt>
         <ol className="mt-2 space-y-1.5">
-          {["Project Supervisor: Dr. Shouvik Chaudhuri", "Video Editing: Oliver Vedby Jørgensen", "Co-produced with Matías R. Cusicanqui", "Project Supporter: Hossein Ramezani"].map((role, i) => (
+          {["Project Supervisor: Dr. Shouvik Chaudhuri", "Video Idea, Design and Production: Oliver Vedby Jørgensen with Matías R. Cusicanqui", "Project Supporter: Hossein Ramezani"].map((role, i) => (
             <li key={role} className="flex gap-2 text-muted-foreground"><span className="font-mono text-xs font-bold text-primary">{i + 1}.</span>{role}</li>
           ))}
         </ol>
