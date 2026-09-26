@@ -638,10 +638,10 @@ const controlMiniprojectPhotos = [
   ["/assets/control-miniproject-01-team-work.jpg", "Dr. Chaudhuri demonstrating the experiment with the team"],
 ] as const;
 const controlMiniprojectMembers = [
-  { name: "Matías Ramiro Cusicanqui Bejarano", url: "https://www.linkedin.com/in/mat%C3%ADas-ramiro-cusicanqui-bejarano-6a6707385/", role: "Project coordination, eye-in-hand configuration control, and documentation" },
-  { name: "Tarek Zidan", url: "https://www.linkedin.com/in/tarek-zidan-tenz/", role: "AI-based impedance control, controller deployment, and technical writing" },
-  { name: "Levi Fechete", url: "https://www.linkedin.com/in/levi-fechete-516415163/", role: "Model-based impedance control, robot setup, and digital twin development" },
-  { name: "David Torres", url: "https://www.linkedin.com/in/davidtorres-ethz/", role: "Model-based position control and manipulator kinematics experiments" },
+  { name: "Matías Ramiro Cusicanqui Bejarano", url: "https://www.linkedin.com/in/mat%C3%ADas-ramiro-cusicanqui-bejarano-6a6707385/", role: "Project coordination, management, and documentation" },
+  { name: "Tarek Zidan", url: "https://www.linkedin.com/in/tarek-zidan-tenz/", role: "AI-based impedance control and controller deployment" },
+  { name: "Levi Fechete", url: "https://www.linkedin.com/in/levi-fechete-516415163/", role: "Digital twin development on Gazebo and robot setup" },
+  { name: "David Torres", url: "https://www.linkedin.com/in/davidtorres-ethz/", role: "Model-based position control and manipulator kinematics" },
 ];
 
 function ControlMiniproject() {
