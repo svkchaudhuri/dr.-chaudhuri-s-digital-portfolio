@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  Activity, Anchor, Award, BadgeCheck, BookOpen, BriefcaseBusiness, CheckCircle2, ChevronRight, Clock3, Download,
+  Activity, Anchor, Award, BadgeCheck, BookOpen, BriefcaseBusiness, CheckCircle2, ChevronLeft, ChevronRight, Clock3, Download,
   ExternalLink, FileImage, FileText, Film, GraduationCap, Home, ImagePlus, Linkedin, Sparkles,
   Globe2, Lock, LockOpen, Mail, MapPin, Menu, Microscope, Pencil, Pin, PinOff, RefreshCw, Search, ShieldCheck, SlidersHorizontal, Users, Waves, Wrench, X, Youtube,
 } from "lucide-react";
@@ -646,8 +646,8 @@ const controlMiniprojectPhotos = [
   ["/assets/control-miniproject-04-grasp.jpg", "Robot gripper grasping the target ball"],
   ["/assets/control-miniproject-08-ball-pickup.jpg", "Robotic arm testing (in frame - Tarek and Shouvik)"],
   ["/assets/control-miniproject-05-camera-check.jpg", "Matias checking the wrist-mounted camera"],
-  ["/assets/control-miniproject-07-control-architecture.jpg", "Live computer-vision test with the target ball by David"],
-  ["/assets/control-miniproject-06-vision-test.jpg", "Live computer-vision test with the target ball"],
+  ["/assets/control-miniproject-07-control-architecture.jpg", "Control-system architecture with robot experiment stills"],
+  ["/assets/control-miniproject-06-vision-test.jpg", "Live computer-vision test with the target ball by David"],
   ["/assets/control-miniproject-01-team-work.jpg", "Dr. Chaudhuri demonstrating the experiment with the team"],
 ] as const;
 const controlMiniprojectMembers = [
@@ -701,7 +701,12 @@ function ControlMiniproject() {
       {selected && <DialogContent className="max-h-[92vh] w-[calc(100%-2rem)] max-w-6xl overflow-y-auto bg-background p-3 sm:p-5">
         <DialogTitle className="pr-10 font-display text-xl">The Control Miniproject</DialogTitle>
         <DialogDescription>{selected[1]}</DialogDescription>
-        <img src={selected[0]} alt={selected[1]} className="mt-2 max-h-[72vh] w-full rounded-md object-contain" />
+        <div className="relative mt-2">
+          <img src={selected[0]} alt={selected[1]} className="max-h-[72vh] w-full rounded-md object-contain" />
+          <Button type="button" variant="outline" size="icon" aria-label="Previous photo" onClick={() => setSelectedPhoto((selectedPhoto! - 1 + controlMiniprojectPhotos.length) % controlMiniprojectPhotos.length)} className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/90 shadow-md"><ChevronLeft className="size-5" /></Button>
+          <Button type="button" variant="outline" size="icon" aria-label="Next photo" onClick={() => setSelectedPhoto((selectedPhoto! + 1) % controlMiniprojectPhotos.length)} className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/90 shadow-md"><ChevronRight className="size-5" /></Button>
+        </div>
+        <p className="mt-2 text-center font-mono text-xs font-bold text-muted-foreground">View {String(selectedPhoto! + 1).padStart(2, "0")} of {String(controlMiniprojectPhotos.length).padStart(2, "0")}</p>
       </DialogContent>}
     </Dialog>
   </article>;
