@@ -1,5 +1,5 @@
 export type Publication = {
-  category: "Journals" | "Conference Proceedings" | "Books" | "Book Chapters";
+  category: "Journals" | "Conference Proceedings" | "Books" | "Book Chapters" | "Posters";
   authors: string;
   title: string;
   venue: string;
@@ -7,6 +7,8 @@ export type Publication = {
   details?: string;
   doi?: string;
   videos?: { label: string; url: string }[];
+  posterUrl?: string;
+  galleryId?: string;
 };
 
 export const publications: Publication[] = [
@@ -44,6 +46,7 @@ export const publications: Publication[] = [
   { category: "Books", authors: "S. Chaudhuri", title: "Pressurised Water Nuclear Reactor: Dynamics, Modelling and Simulation", venue: "LAP Lambert Academic Publishing (OmniScriptum Publishing Group)", year: 2019, details: "164 pp. ISBN 978-620-0-09362-2" },
   { category: "Book Chapters", authors: "R. Bhattacharjee, S. Chaudhuri, A. Ganguly", title: "Robust control of pulsatile ventricular assist devices for patients with advanced heart failure", venue: "Proceedings of COMSYS 2022, Lecture Notes in Networks and Systems, Springer, Singapore", year: 2023, details: "pp. 331–341. ISBN 978-981-99-2679-4", doi: "10.1007/978-981-99-2680-0_29" },
   { category: "Book Chapters", authors: "S. Chaudhuri, S. Dasmahapatra, A. Chatterjee, R. Saha, S. Mookherjee, D. Sanyal", title: "Adaptive fuzzy-sliding mode control with fixed bias compensator for an electrohydraulic actuation system with hard nonlinearities", venue: "Fluid Mechanics and Fluid Power: Contemporary Research, Lecture Notes in Mechanical Engineering, Springer, New Delhi", year: 2017, details: "pp. 1223–1232. ISBN 978-81-322-2743-4", doi: "10.1007/978-81-322-2743-4_116" },
+  { category: "Posters", authors: "S. Chaudhuri, H. Ramezani, and J. Jouffroy", title: "Project SAFEMARVEL and Project AMCOSTAR", venue: "Poster presented at IME Day, University of Southern Denmark (SDU), Odense, Denmark", year: 2025, details: "May 27, 2025", posterUrl: "/assets/IMEDay_Poster_SAFEMARVEL_AMCOSTAR.pdf", galleryId: "poster-odense-2025" },
 ];
 
 export const researchPillars = [
