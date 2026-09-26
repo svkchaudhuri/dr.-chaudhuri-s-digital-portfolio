@@ -705,8 +705,8 @@ function ControlMiniproject() {
           <img src={selected[0]} alt={selected[1]} className="max-h-[72vh] w-full rounded-md object-contain" />
           <Button type="button" variant="outline" size="icon" aria-label="Previous photo" onClick={() => setSelectedPhoto((selectedPhoto! - 1 + controlMiniprojectPhotos.length) % controlMiniprojectPhotos.length)} className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/90 shadow-md"><ChevronLeft className="size-5" /></Button>
           <Button type="button" variant="outline" size="icon" aria-label="Next photo" onClick={() => setSelectedPhoto((selectedPhoto! + 1) % controlMiniprojectPhotos.length)} className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/90 shadow-md"><ChevronRight className="size-5" /></Button>
+          <p className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-md bg-background/90 px-2.5 py-1 font-mono text-xs font-bold text-foreground shadow-md">View {String(selectedPhoto! + 1).padStart(2, "0")} of {String(controlMiniprojectPhotos.length).padStart(2, "0")}</p>
         </div>
-        <p className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-md bg-background/90 px-2.5 py-1 font-mono text-xs font-bold text-foreground shadow-md">View {String(selectedPhoto! + 1).padStart(2, "0")} of {String(controlMiniprojectPhotos.length).padStart(2, "0")}</p>
       </DialogContent>}
     </Dialog>
   </article>;
