@@ -592,10 +592,11 @@ function Funding() {
     ['International mobility and travel', 'Otto Mønsteds Fond · INCOM 2026, India', '7,500 DKK', 'Main applicant'],
   ];
   const proposals = [
-    ['MERLIN: Marine Environmental Remediation Learning Integrated Navigator', 'Lead applicant', 'Progressed to Phase 2'],
-    ['Smart energy management and power flow optimisation for maritime energy hubs', 'Project participant', 'Under preparation'],
-    ['Smart power flow optimisation for megawatt supercharging', 'Co-developer', 'Waitlisted'],
-    ['Motion-stabilised safe room for reducing motion sickness', 'Co-developer', 'Not funded'],
+    ['SmartOPS: Smart Power Flow Optimization for Megawatt supercharging in Maritime Onshore Power Supplies', 'Energy Cluster Denmark Business Lighthouse', 'Co-developer', 'Waitlisted'],
+    ['MOSSROOMS: MOtion-Stabilized Safe room for Reducing mOtiOn Sickness on Marine vesselS', 'Den Danske Maritime Fond (DDMF) 2025', 'Co-developer', 'Not funded'],
+    ['DASH: Digital Architecture for Symbiotic Heatflows at GreenLab', 'Green Labs Skive Challenge C 2025', 'Co-developer', 'Not funded'],
+    ['Development of an advanced Real-Time Driving Simulator Platform for Intelligent Vehicle Control and Hands-On Education at SDU Sønderborg', 'Fabrikant Mads Clausen Fond · Call 1 2025', 'Principal Investigator', 'Not funded'],
+    ['SAFEAMP: SAFE Autonomous Maintenance for Ammonia Heat Pumps', 'SDU I4.0 Lab', 'Project Responsible', 'Not funded'],
   ];
   return <Section id="funding" eyebrow="Funding" title="Research Funding" muted>
     <div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-full bg-primary text-primary-foreground"><BadgeCheck className="size-5" aria-hidden="true" /></span><div><h3 className="font-display text-2xl">Funded Research Grants</h3><p className="mt-1 text-sm text-muted-foreground">Awarded grants and mobility support.</p></div></div>
