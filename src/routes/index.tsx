@@ -592,10 +592,11 @@ function Funding() {
     ['International mobility and travel', 'Otto Mønsteds Fond · INCOM 2026, India', '7,500 DKK', 'Main applicant'],
   ];
   const proposals = [
-    ['MERLIN: Marine Environmental Remediation Learning Integrated Navigator', 'Lead applicant', 'Progressed to Phase 2'],
-    ['Smart energy management and power flow optimisation for maritime energy hubs', 'Project participant', 'Under preparation'],
-    ['Smart power flow optimisation for megawatt supercharging', 'Co-developer', 'Waitlisted'],
-    ['Motion-stabilised safe room for reducing motion sickness', 'Co-developer', 'Not funded'],
+    ['SmartOPS: Smart Power Flow Optimization for Megawatt supercharging in Maritime Onshore Power Supplies', 'Energy Cluster Denmark Business Lighthouse', 'Co-developer', 'Waitlisted'],
+    ['MOSSROOMS: MOtion-Stabilized Safe room for Reducing mOtiOn Sickness on Marine vesselS', 'Den Danske Maritime Fond (DDMF) 2025', 'Co-developer', 'Not funded'],
+    ['DASH: Digital Architecture for Symbiotic Heatflows at GreenLab', 'Green Labs Skive Challenge C 2025', 'Co-developer', 'Not funded'],
+    ['Development of an advanced Real-Time Driving Simulator Platform for Intelligent Vehicle Control and Hands-On Education at SDU Sønderborg', 'Fabrikant Mads Clausen Fond · Call 1 2025', 'Principal Investigator', 'Not funded'],
+    ['SAFEAMP: SAFE Autonomous Maintenance for Ammonia Heat Pumps', 'SDU I4.0 Lab', 'Project Responsible', 'Not funded'],
   ];
   return <Section id="funding" eyebrow="Funding" title="Research Funding" muted>
     <div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-full bg-primary text-primary-foreground"><BadgeCheck className="size-5" aria-hidden="true" /></span><div><h3 className="font-display text-2xl">Funded Research Grants</h3><p className="mt-1 text-sm text-muted-foreground">Awarded grants and mobility support.</p></div></div>
@@ -604,7 +605,7 @@ function Funding() {
       <h4 className="mt-3 font-display text-xl">{name}</h4><p className="mt-2 text-sm leading-6 text-muted-foreground">{source}</p><p className="mt-4 text-xs font-semibold">{role}</p>
     </article>)}</div>
     <div className="mt-14 border-t border-border pt-9"><div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-full border border-primary/30 bg-background text-primary"><Clock3 className="size-5" aria-hidden="true" /></span><div><h3 className="font-display text-2xl">Proposals in Pipeline / Not Funded</h3><p className="mt-1 text-sm text-muted-foreground">Submitted, developing, waitlisted, and concluded proposals.</p></div></div>
-      <div className="mt-6 grid gap-4 md:grid-cols-2">{proposals.map(([name, role, status]) => <article key={name} className="rounded-md border border-border bg-card/60 p-6 transition-colors hover:border-primary/50"><div className="flex items-start justify-between gap-4"><Clock3 className="mt-1 size-4 shrink-0 text-highlight" aria-hidden="true" /><span className="rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-bold text-muted-foreground">{status}</span></div><h4 className="mt-4 font-display text-xl leading-snug">{name}</h4><p className="mt-3 text-xs font-semibold text-primary">{role}</p></article>)}</div>
+      <div className="mt-6 grid gap-4 md:grid-cols-2">{proposals.map(([name, funder, role, status]) => <article key={name} className="rounded-md border border-border bg-card/60 p-6 transition-colors hover:border-primary/50"><div className="flex items-start justify-between gap-4"><Clock3 className="mt-1 size-4 shrink-0 text-highlight" aria-hidden="true" /><span className="rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-bold text-muted-foreground">{status}</span></div><h4 className="mt-4 font-display text-xl leading-snug">{name}</h4><p className="mt-2 text-sm leading-6 text-muted-foreground">{funder}</p><p className="mt-3 text-xs font-semibold text-primary">{role}</p></article>)}</div>
     </div>
   </Section>;
 }
