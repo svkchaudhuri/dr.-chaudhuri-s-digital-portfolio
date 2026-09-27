@@ -722,7 +722,7 @@ const examRoles = [
     { level: "Bachelor's courses", Icon: GraduationCap, items: ["Expert in Teams (EXT)", "Semester Project in Mechanical Engineering (SPRO4ME)", "Control Engineering 1 (CoE1)"] },
     { level: "Master's courses", Icon: BookOpen, items: ["Experimental Control Systems (XCOS)"] },
   ]},
-  { role: "Internal Co-Examiner", subtitle: "Co-examination of courses taught by fellow faculty", Icon: Users2, groups: [
+  { role: "Internal Co-Examiner", subtitle: "Co\u2011examination of courses taught by fellow faculty", Icon: Users2, groups: [
     { level: "Master's courses", Icon: BookOpen, items: ["Statistical Signal Processing", "Adaptive and Nonlinear Control", "Fault-Tolerant Control", "Multi-body Dynamics (MBD)"] },
   ]},
   { role: "Internal Assessor", subtitle: "Assessment of student projects and theses", Icon: ClipboardList, groups: [
