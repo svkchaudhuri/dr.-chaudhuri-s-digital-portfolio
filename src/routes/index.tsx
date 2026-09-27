@@ -860,11 +860,13 @@ function CareerGallery() {
     if (passcode.trim() !== adminPasscode) { setPasscodeError("That passcode is not correct."); return; }
     window.localStorage.setItem(adminStorageKey, "true");
     setIsAdmin(true); setPasscode(""); setPasscodeError(""); setPasscodeOpen(false);
+    window.dispatchEvent(new Event("shouvik-admin-changed"));
   };
 
   const lockAdmin = () => {
     window.localStorage.removeItem(adminStorageKey);
     setIsAdmin(false); setDialogOpen(false);
+    window.dispatchEvent(new Event("shouvik-admin-changed"));
   };
 
   useEffect(() => {
@@ -1115,7 +1117,8 @@ function Downloads() {
     sync();
     window.addEventListener("storage", sync);
     window.addEventListener("focus", sync);
-    return () => { window.removeEventListener("storage", sync); window.removeEventListener("focus", sync); };
+    window.addEventListener("shouvik-admin-changed", sync);
+    return () => { window.removeEventListener("storage", sync); window.removeEventListener("focus", sync); window.removeEventListener("shouvik-admin-changed", sync); };
   }, []);
 
   const handleUpload = (title: string, file: File | undefined) => {
