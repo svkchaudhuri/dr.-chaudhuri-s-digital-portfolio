@@ -718,14 +718,14 @@ const courses: { code: string; text: string; url?: string; evalUrl?: string }[] 
   { code: 'CoE1', text: 'Control Engineering 1 · BSc · 5 ECTS · Spring 2024 · Co-lecturer' },
 ];
 const examRoles = [
-  { role: "Examiner", subtitle: "Courses I taught", Icon: BadgeCheck, groups: [
+  { role: "Examiner", subtitle: "Examiner for courses under own instruction", Icon: BadgeCheck, groups: [
     { level: "Bachelor's courses", Icon: GraduationCap, items: ["Expert in Teams (EXT)", "Semester Project in Mechanical Engineering (SPRO4ME)", "Control Engineering 1 (CoE1)"] },
     { level: "Master's courses", Icon: BookOpen, items: ["Experimental Control Systems (XCOS)"] },
   ]},
-  { role: "Internal Co-Examiner", subtitle: "Courses taught by other instructors", Icon: Users2, groups: [
+  { role: "Internal Co-Examiner", subtitle: "Co-examination of courses taught by fellow faculty", Icon: Users2, groups: [
     { level: "Master's courses", Icon: BookOpen, items: ["Statistical Signal Processing", "Adaptive and Nonlinear Control", "Fault-Tolerant Control", "Multi-body Dynamics (MBD)"] },
   ]},
-  { role: "Internal Assessor", subtitle: "Projects and theses", Icon: ClipboardList, groups: [
+  { role: "Internal Assessor", subtitle: "Assessment of student projects and theses", Icon: ClipboardList, groups: [
     { level: "Evaluated work", Icon: FileText, items: ["In-company projects", "Final bachelor's projects", "Master's theses"] },
   ]},
 ];
