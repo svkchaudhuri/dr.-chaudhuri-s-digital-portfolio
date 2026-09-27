@@ -860,11 +860,13 @@ function CareerGallery() {
     if (passcode.trim() !== adminPasscode) { setPasscodeError("That passcode is not correct."); return; }
     window.localStorage.setItem(adminStorageKey, "true");
     setIsAdmin(true); setPasscode(""); setPasscodeError(""); setPasscodeOpen(false);
+    window.dispatchEvent(new Event("shouvik-admin-changed"));
   };
 
   const lockAdmin = () => {
     window.localStorage.removeItem(adminStorageKey);
     setIsAdmin(false); setDialogOpen(false);
+    window.dispatchEvent(new Event("shouvik-admin-changed"));
   };
 
   useEffect(() => {
@@ -1095,6 +1097,71 @@ const downloadCards = [
   { title: "Academic CV", note: "Complete academic record · Version 2 · 13 September 2026 · PDF", url: cvAsset.url, file: "Shouvik_Chaudhuri_CV_Master_v2.pdf" },
   { title: "Complete List of Publications", note: "All journal, conference, book and chapter entries · Version 2 · PDF", url: pubListAsset.url, file: "Shouvik_Chaudhuri_Publication_List_v2.pdf" },
 ];
-function Downloads() { return <Section id="downloads" eyebrow="Downloads" title="Documents" muted><div className="grid gap-4 md:grid-cols-2">{downloadCards.map(d=><article key={d.title} className="flex flex-col rounded-md border border-border bg-background p-7 transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait"><FileText className="size-7 text-primary" aria-hidden="true" /><h3 className="mt-4 font-display text-2xl">{d.title}</h3><p className="mt-2 flex-1 text-sm leading-6 text-muted-foreground">{d.note}</p><Button asChild className="mt-6 w-fit"><a href={d.url} download={d.file}><Download className="size-4" />Download PDF</a></Button></article>)}</div></Section>; }
+const docStorageKeys: Record<string, string> = { "Academic CV": "shouvik-doc-cv", "Complete List of Publications": "shouvik-doc-publist" };
+
+function Downloads() {
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [docOverrides, setDocOverrides] = useState<Record<string, string>>({});
+  const [uploadError, setUploadError] = useState("");
+
+  useEffect(() => {
+    const sync = () => {
+      setIsAdmin(window.localStorage.getItem(adminStorageKey) === "true");
+      const next: Record<string, string> = {};
+      for (const [title, key] of Object.entries(docStorageKeys)) {
+        const stored = window.localStorage.getItem(key);
+        if (stored) next[title] = stored;
+      }
+      setDocOverrides(next);
+    };
+    sync();
+    window.addEventListener("storage", sync);
+    window.addEventListener("focus", sync);
+    window.addEventListener("shouvik-admin-changed", sync);
+    return () => { window.removeEventListener("storage", sync); window.removeEventListener("focus", sync); window.removeEventListener("shouvik-admin-changed", sync); };
+  }, []);
+
+  const handleUpload = (title: string, file: File | undefined) => {
+    setUploadError("");
+    if (!file) return;
+    if (file.type !== "application/pdf") { setUploadError("Please choose a PDF file."); return; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        window.localStorage.setItem(docStorageKeys[title]!, String(reader.result));
+        setDocOverrides((prev) => ({ ...prev, [title]: String(reader.result) }));
+      } catch {
+        setUploadError("The file is too large for browser storage. Please use a smaller PDF.");
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const resetDoc = (title: string) => {
+    window.localStorage.removeItem(docStorageKeys[title]!);
+    setDocOverrides((prev) => { const next = { ...prev }; delete next[title]; return next; });
+  };
+
+  return <Section id="downloads" eyebrow="Downloads" title="Documents" muted>
+    {isAdmin && <p className="mb-4 text-right text-xs text-muted-foreground">Admin mode: upload a replacement PDF for either document.{uploadError && <span className="ml-2 font-semibold text-destructive">{uploadError}</span>}</p>}
+    <div className="grid gap-4 md:grid-cols-2">{downloadCards.map(d => {
+      const url = docOverrides[d.title] ?? d.url;
+      return <article key={d.title} className="flex flex-col rounded-md border border-border bg-background p-7 transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait">
+        <FileText className="size-7 text-primary" aria-hidden="true" />
+        <h3 className="mt-4 font-display text-2xl">{d.title}</h3>
+        <p className="mt-2 flex-1 text-sm leading-6 text-muted-foreground">{d.note}{docOverrides[d.title] && <span className="ml-1 font-semibold text-primary">(updated upload)</span>}</p>
+        <div className="mt-6 flex flex-wrap items-center gap-2">
+          <Button asChild className="w-fit"><a href={url} download={d.file}><Download className="size-4" />Download PDF</a></Button>
+          {isAdmin && <>
+            <Button asChild variant="outline" size="sm" className="w-fit cursor-pointer">
+              <label>Upload new PDF<input type="file" accept="application/pdf" className="sr-only" onChange={(e) => { handleUpload(d.title, e.target.files?.[0]); e.target.value = ""; }} /></label>
+            </Button>
+            {docOverrides[d.title] && <Button variant="ghost" size="sm" onClick={() => resetDoc(d.title)}>Reset to default</Button>}
+          </>}
+        </div>
+      </article>;
+    })}</div>
+  </Section>;
+}
 
 function Contact() { return <Section id="contact" eyebrow="Contact" title="Connect and collaborate"><div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr]"><div><p className="max-w-md text-lg leading-8 text-muted-foreground">For research collaboration, academic opportunities and technical discussions in dynamics and control.</p><Button asChild className="mt-7"><a href="mailto:svk.chaudhuri@gmail.com"><Mail className="size-4" />Send an email</a></Button><div className="mt-7 space-y-2 text-sm"><p>+91 90380 43252</p><p>Kolkata, India</p></div></div><div className="grid gap-3 sm:grid-cols-2">{brandLinks.map(link=>{const inner=<><span className="grid size-11 shrink-0 place-items-center rounded-md border border-border bg-card"><BrandMark link={link} className="size-6" /></span><span className="min-w-0"><span className="flex items-center gap-1.5 text-sm font-bold">{link.label}{link.url&&<ExternalLink className="size-3.5 text-muted-foreground group-hover:text-primary" />}</span><span className="mt-0.5 block break-all text-xs text-muted-foreground">{link.value}</span></span></>;return link.url?<a key={link.label} href={link.url} target="_blank" rel="noreferrer" className="group flex items-center gap-3 rounded-md border border-border p-4 transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait">{inner}</a>:<div key={link.label} className="flex items-center gap-3 rounded-md border border-border p-4">{inner}</div>;})}</div></div><footer className="mt-20 border-t border-border pt-6 text-xs text-muted-foreground">© 2026 Shouvik Chaudhuri, Ph.D. · Academic portfolio</footer></Section>; }
