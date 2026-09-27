@@ -1094,8 +1094,8 @@ function CareerGallery() {
 }
 
 const downloadCards = [
-  { title: "Academic CV", note: "Complete academic record · Updated 27 September 2026 · PDF", url: cvAsset.url, file: "Shouvik_Chaudhuri_Academic_CV.pdf" },
-  { title: "Complete List of Publications", note: "All journal, conference, book and chapter entries · Updated 27 September 2026 · PDF", url: pubListAsset.url, file: "Shouvik_Chaudhuri_Publication_List.pdf" },
+  { title: "Academic CV", note: "Complete academic record", meta: "Updated 27 September 2026 · PDF", url: cvAsset.url, file: "Shouvik_Chaudhuri_Academic_CV.pdf" },
+  { title: "Complete List of Publications", note: "All journal, conference, book and chapter entries ·", meta: "Updated 27 September 2026 · PDF", url: pubListAsset.url, file: "Shouvik_Chaudhuri_Publication_List.pdf" },
 ];
 const docStorageKeys: Record<string, string> = { "Academic CV": "shouvik-doc-cv", "Complete List of Publications": "shouvik-doc-publist" };
 
@@ -1149,7 +1149,7 @@ function Downloads() {
       return <article key={d.title} className="flex flex-col rounded-md border border-border bg-background p-7 transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait">
         <FileText className="size-7 text-primary" aria-hidden="true" />
         <h3 className="mt-4 font-display text-2xl">{d.title}</h3>
-        <p className="mt-2 flex-1 text-sm leading-6 text-muted-foreground">{d.note}{docOverrides[d.title] && <span className="ml-1 font-semibold text-primary">(updated upload)</span>}</p>
+        <p className="mt-2 flex-1 text-sm leading-6 text-muted-foreground">{d.note}{docOverrides[d.title] && <span className="ml-1 font-semibold text-primary">(updated upload)</span>}<br /><span className="block">{d.meta}</span></p>
         <div className="mt-6 flex flex-wrap items-center gap-2">
           <Button asChild className="w-fit"><a href={url} download={d.file}><Download className="size-4" />Download PDF</a></Button>
           {isAdmin && <>
