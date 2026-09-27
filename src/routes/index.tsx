@@ -592,6 +592,7 @@ function Funding() {
     ['International mobility and travel', 'Otto Mønsteds Fond · INCOM 2026, India', '7,500 DKK', 'Main applicant'],
   ];
   const proposals = [
+    ['MERLIN: Marine Environmental Remediation Learning Integrated Navigator', 'VILLUM Experiment', 'Lead applicant', 'Progressed to Phase 2'],
     ['SmartOPS: Smart Power Flow Optimization for Megawatt supercharging in Maritime Onshore Power Supplies', 'Energy Cluster Denmark Business Lighthouse', 'Co-developer', 'Waitlisted'],
     ['MOSSROOMS: MOtion-Stabilized Safe room for Reducing mOtiOn Sickness on Marine vesselS', 'Den Danske Maritime Fond (DDMF) 2025', 'Co-developer', 'Not funded'],
     ['DASH: Digital Architecture for Symbiotic Heatflows at GreenLab', 'Green Labs Skive Challenge C 2025', 'Co-developer', 'Not funded'],
