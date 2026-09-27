@@ -1128,7 +1128,7 @@ function Downloads() {
     const reader = new FileReader();
     reader.onload = () => {
       try {
-        window.localStorage.setItem(docStorageKeys[title], String(reader.result));
+        window.localStorage.setItem(docStorageKeys[title]!, String(reader.result));
         setDocOverrides((prev) => ({ ...prev, [title]: String(reader.result) }));
       } catch {
         setUploadError("The file is too large for browser storage. Please use a smaller PDF.");
@@ -1138,7 +1138,7 @@ function Downloads() {
   };
 
   const resetDoc = (title: string) => {
-    window.localStorage.removeItem(docStorageKeys[title]);
+    window.localStorage.removeItem(docStorageKeys[title]!);
     setDocOverrides((prev) => { const next = { ...prev }; delete next[title]; return next; });
   };
 
