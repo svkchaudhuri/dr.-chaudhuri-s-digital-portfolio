@@ -723,7 +723,7 @@ const examRoles = [
     { level: "Master's courses", Icon: BookOpen, items: ["Experimental Control Systems (XCOS)"] },
   ]},
   { role: "Internal\nco-Examiner", subtitle: "Co\u2011examination of courses taught by fellow faculty", Icon: Users2, groups: [
-    { level: "Master's courses", Icon: BookOpen, items: ["Statistical Signal Processing", "Adaptive and Nonlinear Control", "Fault-Tolerant Control", "Multi-body Dynamics (MBD)"] },
+    { level: "Master's courses", Icon: BookOpen, items: ["Statistical Signal Processing (SSP)", "Adaptive and Nonlinear Control (ANC)", "Fault-Tolerant Control (FTC)", "Multi-body Dynamics (MBD)"] },
   ]},
   { role: "Internal Assessor", subtitle: "Assessment of student projects and theses", Icon: ClipboardList, groups: [
     { level: "Evaluated work", Icon: FileText, items: ["In-company projects", "Final bachelor's projects", "Master's theses"] },
