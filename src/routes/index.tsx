@@ -1096,7 +1096,7 @@ function CareerGallery() {
 }
 
 const downloadCards = [
-  { title: "Academic CV", note: "Complete academic record", meta: "Updated 27 September 2026 · PDF", url: cvAsset.url, file: "Shouvik_Chaudhuri_Academic_CV.pdf" },
+  { title: "Academic CV", note: "Complete academic record", meta: "Updated 28 September 2026 · PDF", url: cvAsset.url, file: "Shouvik_Chaudhuri_Academic_CV.pdf" },
   { title: "Complete List of Publications", note: "All journal, conference, book and chapter entries ·", meta: "Updated 27 September 2026 · PDF", url: pubListAsset.url, file: "Shouvik_Chaudhuri_Publication_List.pdf" },
 ];
 const docStorageKeys: Record<string, string> = { "Academic CV": "shouvik-doc-cv", "Complete List of Publications": "shouvik-doc-publist" };
