@@ -1,0 +1,46 @@
+name: Verify assets and build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check CV PDFs and profile photos are tracked
+        run: |
+          set -e
+          required=(
+            public/assets/Shouvik-Chaudhuri-CV.pdf
+            public/assets/publication-list.pdf
+            public/assets/shouvik-headshot.png
+          )
+          # Every asset referenced by a pointer must also be tracked
+          for f in src/assets/*.asset.json; do
+            url=$(grep -o '"url": *"[^"]*"' "$f" | sed 's/.*"\(\/assets\/[^"]*\)"/\1/')
+            [ -n "$url" ] && required+=("public$url")
+          done
+          missing=0
+          for f in "${required[@]}"; do
+            if ! git ls-files --error-unmatch "$f" >/dev/null 2>&1; then
+              echo "::error::Not tracked in Git: $f"; missing=1
+            elif [ ! -s "$f" ]; then
+              echo "::error::Empty file: $f"; missing=1
+            fi
+          done
+          for pdf in public/assets/Shouvik-Chaudhuri-CV.pdf public/assets/publication-list.pdf; do
+            head -c 4 "$pdf" | grep -q '%PDF' || { echo "::error::Not a valid PDF: $pdf"; missing=1; }
+          done
+          exit $missing
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build site
+        run: bun run build
