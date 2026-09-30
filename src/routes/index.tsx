@@ -49,7 +49,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { publications, researchPillars, skills } from "@/lib/portfolio-data";
-import { useSitePublications, useSiteOwner, staticPublicationKey, saveInterestPicks, type SitePublication } from "@/lib/publication-store";
+import { useSitePublications, useSiteOwner, staticPublicationKey, saveInterestPicks, loadSiteSetting, saveSiteSetting, deleteSiteSetting, uploadSiteDocument, siteDocumentUrl, type SitePublication } from "@/lib/publication-store";
 import { OwnerPanel } from "@/components/OwnerPanel";
 import { OwnerSignIn } from "@/components/OwnerSignIn";
 import { supabase as ownerDb } from "@/integrations/supabase/client";
@@ -859,8 +859,6 @@ const builtInCareerMoments: CareerMoment[] = [
   { id: "ilmenau-supper", title: "Supper with Professors and Colleagues, TU Ilmenau", tag: "MSCA secondment and academic exchange", src: ilmenauSupperAsset.url, alt: "Supper with professors and colleagues during the TU Ilmenau secondment" },
 ];
 const adminStorageKey = "shouvik-gallery-admin";
-const overridesStorageKey = "shouvik-career-overrides";
-const pinnedStorageKey = "shouvik-career-pinned";
 const maxPinned = 5;
 // Permanent default pins, shown first for every visitor until an admin overrides them.
 const defaultPinnedIds = ["sdu-sonderborg", "tower-crane-demo", "phd-convocation-2023", "cyber-physical-lab-2023", "sdu-farewell-2026"];
@@ -885,29 +883,13 @@ function CareerGallery() {
   const [editCaption, setEditCaption] = useState("");
 
   useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(overridesStorageKey);
-      if (!stored) return;
-      const parsed: unknown = JSON.parse(stored);
-      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) setOverrides(parsed as Record<string, MomentOverride>);
-    } catch {
-      window.localStorage.removeItem(overridesStorageKey);
-    }
+    void loadSiteSetting<Record<string, MomentOverride>>("career_overrides").then((v) => { if (v) setOverrides(v); });
+    void loadSiteSetting<string[]>("career_pins").then((v) => { if (Array.isArray(v)) setPinnedIds(v.slice(0, maxPinned)); });
   }, []);
 
   useEffect(() => { setShuffleSeed(Math.floor(Math.random() * 4294967295) + 1); }, []);
 
 
-  useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(pinnedStorageKey);
-      if (!stored) return;
-      const parsed: unknown = JSON.parse(stored);
-      if (Array.isArray(parsed)) setPinnedIds(parsed.filter((item): item is string => typeof item === "string").slice(0, maxPinned));
-    } catch {
-      window.localStorage.removeItem(pinnedStorageKey);
-    }
-  }, []);
 
   const togglePin = (id: string) => {
     setPinNotice("");
@@ -918,7 +900,7 @@ function CareerGallery() {
     }
     const next = isPinned ? pinnedIds.filter((item) => item !== id) : [...pinnedIds, id];
     setPinnedIds(next);
-    window.localStorage.setItem(pinnedStorageKey, JSON.stringify(next));
+    saveSiteSetting("career_pins", next).catch((e: Error) => setPinNotice(`Could not save pins: ${e.message}`));
   };
 
   useEffect(() => {
@@ -1024,7 +1006,7 @@ function CareerGallery() {
     if (!editingId) return;
     const next = { ...overrides, [editingId]: { title: editTitle.trim(), tag: editTag.trim(), caption: editCaption.trim() } };
     setOverrides(next);
-    window.localStorage.setItem(overridesStorageKey, JSON.stringify(next));
+    saveSiteSetting("career_overrides", next).catch((e: Error) => window.alert(`Could not save: ${e.message}`));
     setEditingId(null);
   };
 
@@ -1033,7 +1015,7 @@ function CareerGallery() {
     const next = { ...overrides };
     delete next[editingId];
     setOverrides(next);
-    window.localStorage.setItem(overridesStorageKey, JSON.stringify(next));
+    saveSiteSetting("career_overrides", next).catch((e: Error) => window.alert(`Could not save: ${e.message}`));
     setEditingId(null);
   };
 
@@ -1153,49 +1135,43 @@ const downloadCards = [
   { title: "Academic CV", note: "Complete academic record", meta: "Updated 28 September 2026 · PDF", url: cvAsset.url, file: "Shouvik_Chaudhuri_Academic_CV.pdf" },
   { title: "Complete List of Publications", note: "All journal, conference, book and chapter entries ·", meta: "Updated 27 September 2026 · PDF", url: pubListAsset.url, file: "Shouvik_Chaudhuri_Publication_List.pdf" },
 ];
-const docStorageKeys: Record<string, string> = { "Academic CV": "shouvik-doc-cv", "Complete List of Publications": "shouvik-doc-publist" };
 
 function Downloads() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [docOverrides, setDocOverrides] = useState<Record<string, string>>({});
   const [uploadError, setUploadError] = useState("");
 
+  const loadDocs = async () => {
+    const stored = await loadSiteSetting<Record<string, string>>("document_paths");
+    const next: Record<string, string> = {};
+    for (const [title, path] of Object.entries(stored ?? {})) { const url = await siteDocumentUrl(path); if (url) next[title] = url; }
+    setDocOverrides(next);
+  };
+
   useEffect(() => {
-    const sync = () => {
-      setIsAdmin(window.localStorage.getItem(adminStorageKey) === "true");
-      const next: Record<string, string> = {};
-      for (const [title, key] of Object.entries(docStorageKeys)) {
-        const stored = window.localStorage.getItem(key);
-        if (stored) next[title] = stored;
-      }
-      setDocOverrides(next);
-    };
-    sync();
-    window.addEventListener("storage", sync);
-    window.addEventListener("focus", sync);
+    const sync = () => setIsAdmin(window.localStorage.getItem(adminStorageKey) === "true");
+    sync(); void loadDocs();
     window.addEventListener("shouvik-admin-changed", sync);
-    return () => { window.removeEventListener("storage", sync); window.removeEventListener("focus", sync); window.removeEventListener("shouvik-admin-changed", sync); };
+    return () => window.removeEventListener("shouvik-admin-changed", sync);
   }, []);
 
-  const handleUpload = (title: string, file: File | undefined) => {
+  const handleUpload = async (title: string, file: File | undefined) => {
     setUploadError("");
     if (!file) return;
     if (file.type !== "application/pdf") { setUploadError("Please choose a PDF file."); return; }
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        window.localStorage.setItem(docStorageKeys[title]!, String(reader.result));
-        setDocOverrides((prev) => ({ ...prev, [title]: String(reader.result) }));
-      } catch {
-        setUploadError("The file is too large for browser storage. Please use a smaller PDF.");
-      }
-    };
-    reader.readAsDataURL(file);
+    try {
+      const path = await uploadSiteDocument(file, title === "Academic CV" ? "cv" : "publication-list");
+      const stored = (await loadSiteSetting<Record<string, string>>("document_paths")) ?? {};
+      await saveSiteSetting("document_paths", { ...stored, [title]: path });
+      await loadDocs();
+    } catch (error) { setUploadError(error instanceof Error ? `Upload failed: ${error.message}` : "Upload failed."); }
   };
 
-  const resetDoc = (title: string) => {
-    window.localStorage.removeItem(docStorageKeys[title]!);
-    setDocOverrides((prev) => { const next = { ...prev }; delete next[title]; return next; });
+  const resetDoc = async (title: string) => {
+    const stored = (await loadSiteSetting<Record<string, string>>("document_paths")) ?? {};
+    delete stored[title];
+    await saveSiteSetting("document_paths", stored);
+    await loadDocs();
   };
 
   return <Section id="downloads" eyebrow="Downloads" title="Documents" muted>
