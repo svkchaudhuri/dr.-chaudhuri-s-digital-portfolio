@@ -4,7 +4,7 @@ import {
   ClipboardList, ExternalLink, FileImage, FileText, Film, GraduationCap, Home, ImagePlus, Linkedin, Sparkles, Users2,
   Globe2, Lock, LockOpen, Mail, MapPin, Menu, Microscope, Pencil, Pin, PinOff, RefreshCw, Search, ShieldCheck, SlidersHorizontal, Users, Waves, Wrench, X, Youtube,
 } from "lucide-react";
-import { useEffect, useMemo, useState, type ComponentType } from "react";
+import { useEffect, useMemo, useRef, useState, type ComponentType, type TouchEvent as ReactTouchEvent } from "react";
 
 import headshot from "@/assets/shouvik-headshot.png.asset.json";
 import cvAsset from "@/assets/shouvik-cv.pdf.asset.json";
@@ -81,6 +81,28 @@ const brandLinks: Brand[] = [
   { label: "LinkedIn", value: "drshouvikchaudhuri", url: "https://www.linkedin.com/in/drshouvikchaudhuri", Icon: Linkedin },
   { label: "IEEE", value: "Senior Member · ID 90902393", img: ieeeLogo.url },
 ];
+
+function useSwipeNav(onPrev: () => void, onNext: () => void) {
+  const startX = useRef<number | null>(null);
+  const startY = useRef<number | null>(null);
+  return {
+    onTouchStart: (event: ReactTouchEvent) => {
+      startX.current = event.touches[0]?.clientX ?? null;
+      startY.current = event.touches[0]?.clientY ?? null;
+    },
+    onTouchEnd: (event: ReactTouchEvent) => {
+      if (startX.current === null || startY.current === null) return;
+      const dx = (event.changedTouches[0]?.clientX ?? startX.current) - startX.current;
+      const dy = (event.changedTouches[0]?.clientY ?? startY.current) - startY.current;
+      startX.current = null;
+      startY.current = null;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        if (dx < 0) onNext();
+        else onPrev();
+      }
+    },
+  };
+}
 
 function BrandMark({ link, className = "size-5" }: { link: Brand; className?: string }) {
   if (link.img) return <img src={link.img} alt="" className={cn("object-contain", className)} />;
@@ -673,6 +695,10 @@ const controlMiniprojectMembers = [
 function ControlMiniproject() {
   const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null);
   const selected = selectedPhoto === null ? null : controlMiniprojectPhotos[selectedPhoto];
+  const swipe = useSwipeNav(
+    () => setSelectedPhoto((current) => (current === null ? null : (current - 1 + controlMiniprojectPhotos.length) % controlMiniprojectPhotos.length)),
+    () => setSelectedPhoto((current) => (current === null ? null : (current + 1) % controlMiniprojectPhotos.length)),
+  );
   return <article id="control-miniproject" className="mt-12 scroll-mt-24 border-t border-border pt-8">
     <p className="font-mono text-xs font-bold uppercase text-primary">Extracurricular Project · Spring 2025</p>
     <h3 className="mt-2 font-display text-3xl font-bold">The Control Miniproject</h3>
@@ -714,7 +740,7 @@ function ControlMiniproject() {
       {selected && <DialogContent className="max-h-[92vh] w-[calc(100%-2rem)] max-w-6xl overflow-y-auto bg-background p-3 sm:p-5">
         <DialogTitle className="pr-10 font-display text-xl">The Control Miniproject</DialogTitle>
         <DialogDescription>{selected[1]}</DialogDescription>
-        <div className="relative mt-2">
+        <div className="relative mt-2 touch-pan-y" {...swipe}>
           <img src={selected[0]} alt={selected[1]} className="max-h-[72vh] w-full rounded-md object-contain" />
           <Button type="button" variant="outline" size="icon" aria-label="Previous photo" onClick={() => setSelectedPhoto((selectedPhoto! - 1 + controlMiniprojectPhotos.length) % controlMiniprojectPhotos.length)} className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/90 shadow-md"><ChevronLeft className="size-5" /></Button>
           <Button type="button" variant="outline" size="icon" aria-label="Next photo" onClick={() => setSelectedPhoto((selectedPhoto! + 1) % controlMiniprojectPhotos.length)} className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/90 shadow-md"><ChevronRight className="size-5" /></Button>
@@ -954,6 +980,10 @@ function CareerGallery() {
   }, [JSON.stringify(allMoments), pinnedIds, shuffleSeed]);
 
   const activeMoment = lightbox !== null ? orderedMoments[lightbox] : null;
+  const swipe = useSwipeNav(
+    () => setLightbox((current) => (current === null ? null : (current - 1 + orderedMoments.length) % orderedMoments.length)),
+    () => setLightbox((current) => (current === null ? null : (current + 1) % orderedMoments.length)),
+  );
 
   useEffect(() => {
     if (lightbox === null) return;
@@ -1079,8 +1109,9 @@ function CareerGallery() {
     </div>}
     {activeMoment && (
       <div
-        className="fixed inset-0 z-[80] grid place-items-center bg-black/92 p-4 pt-20 backdrop-blur-sm lg:pt-4"
+        className="fixed inset-0 z-[80] grid touch-pan-y place-items-center bg-black/92 p-4 pt-20 backdrop-blur-sm lg:pt-4"
         onClick={(event) => { if (event.target === event.currentTarget) setLightbox(null); }}
+        {...swipe}
         role="dialog"
         aria-modal="true"
         aria-label={`${activeMoment.title} lightbox`}
