@@ -1086,9 +1086,14 @@ function CareerGallery() {
         aria-label={`${activeMoment.title} lightbox`}
       >
         <Button variant="ghost" size="icon" className="absolute right-4 top-20 z-10 text-white hover:bg-white/10 lg:top-4" onClick={() => setLightbox(null)} aria-label="Close lightbox"><X className="size-7" /></Button>
+        {orderedMoments.length > 1 && <>
+          <Button type="button" variant="outline" size="icon" aria-label="Previous photo" className="absolute left-2 top-1/2 z-10 -translate-y-1/2 bg-background/90 shadow-md lg:left-4" onClick={() => setLightbox((current) => (current === null ? null : (current - 1 + orderedMoments.length) % orderedMoments.length))}><ChevronLeft className="size-5" /></Button>
+          <Button type="button" variant="outline" size="icon" aria-label="Next photo" className="absolute right-2 top-1/2 z-10 -translate-y-1/2 bg-background/90 shadow-md lg:right-4" onClick={() => setLightbox((current) => (current === null ? null : (current + 1) % orderedMoments.length))}><ChevronRight className="size-5" /></Button>
+        </>}
         <div className="flex max-h-full w-full max-w-6xl flex-col items-center gap-5">
           <img src={activeMoment.src} alt={activeMoment.alt} className="max-h-[70vh] w-auto max-w-full rounded-xl object-contain shadow-2xl lg:max-h-[78vh]" />
           <div className="max-w-2xl text-center text-white">
+            <p className="text-xs font-bold uppercase tracking-widest opacity-70">{(lightbox ?? 0) + 1} / {orderedMoments.length}</p>
             <p className="font-display text-2xl">{activeMoment.title}</p>
             {activeMoment.tag && <p className="mt-1.5 text-sm font-medium opacity-80">{activeMoment.tag}</p>}
             {activeMoment.caption && <p className="mt-2 text-sm opacity-75">{activeMoment.caption}</p>}{activeMoment.posterUrl && <a href={activeMoment.posterUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/40 bg-white/10 px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-white/25"><FileText className="size-3.5" aria-hidden="true" />View poster (PDF)</a>}
