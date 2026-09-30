@@ -429,7 +429,7 @@ function Profile() {
   const [pickSearch, setPickSearch] = useState("");
   const [pickError, setPickError] = useState("");
   const [savingPicks, setSavingPicks] = useState(false);
-  const selectedKeys = selected ? (picks[selected.name] ?? selected.publications.map((i) => staticPublicationKey(publications[i]))) : [];
+  const selectedKeys = selected ? (picks[selected.name] ?? selected.publications.flatMap((i) => publications[i] ? [staticPublicationKey(publications[i]!)] : [])) : [];
   const selectedPublications = selectedKeys.map((key) => sitePublications.find((p) => p.key === key)).filter((p): p is SitePublication => Boolean(p));
   useEffect(() => { setEditingPicks(null); setPickSearch(""); setPickError(""); }, [selectedInterest]);
 

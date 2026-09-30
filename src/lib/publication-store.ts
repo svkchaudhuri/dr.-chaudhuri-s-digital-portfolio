@@ -25,8 +25,8 @@ export function useSitePublications() {
     if (!pubRes.error && pubRes.data) {
       setCustom((pubRes.data as CustomRow[]).map((r) => ({
         key: `c:${r.id}`, customId: r.id, category: r.category, authors: r.authors, title: r.title, venue: r.venue, year: r.year,
-        details: r.details ?? undefined, doi: r.doi ?? undefined, url: r.url ?? undefined,
-      })));
+        ...(r.details ? { details: r.details } : {}), ...(r.doi ? { doi: r.doi } : {}), ...(r.url ? { url: r.url } : {}),
+      }) as SitePublication));
     }
     if (!pickRes.error && pickRes.data) {
       setPicks(Object.fromEntries((pickRes.data as { interest_name: string; publication_keys: string[] }[]).map((r) => [r.interest_name, r.publication_keys])));
