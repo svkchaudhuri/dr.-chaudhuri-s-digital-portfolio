@@ -329,19 +329,30 @@ function Hero() {
           </article>
         ))}
       </div>
-      <a href="#control-miniproject" className="group mt-6 flex flex-wrap items-center gap-4 rounded-xl border border-border bg-card p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait sm:flex-nowrap">
-        <span className="grid size-11 shrink-0 place-items-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-          <Film className="size-5" aria-hidden="true" />
-        </span>
-        <div className="min-w-0 flex-1">
-          <p className="flex items-center gap-1.5 font-mono text-xs font-bold uppercase tracking-wide text-primary"><Sparkles className="size-3.5" aria-hidden="true" />Featured project</p>
-          <h3 className="mt-1 text-base font-bold leading-snug">The Control Miniproject</h3>
-          <p className="mt-1 text-sm text-muted-foreground">Eye-in-hand visual servoing of a robotic manipulator, supervised with four MSc students in the Cyber Physical Lab.</p>
-        </div>
-        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-primary/30 bg-primary/5 px-3 py-2 text-xs font-bold text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-          View the project <ChevronRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-        </span>
-      </a>
+      <div className="mt-6 grid gap-4" aria-label="Featured projects">
+        {[
+          {
+            title: "The Control Miniproject",
+            description: "Eye-in-hand visual servoing of a robotic manipulator, supervised with four MSc students in the Cyber Physical Lab.",
+            href: "#control-miniproject",
+            Icon: Film,
+          },
+        ].map(({ title, description, href, Icon }) => (
+          <a key={href} href={href} className="group grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-3 rounded-xl border border-border bg-card p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-portrait sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center sm:gap-x-4">
+            <span className="grid size-11 shrink-0 place-items-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground sm:row-span-1">
+              <Icon className="size-5" aria-hidden="true" />
+            </span>
+            <div className="min-w-0">
+              <p className="flex items-center gap-1.5 font-mono text-xs font-bold uppercase text-primary"><Sparkles className="size-3.5 shrink-0" aria-hidden="true" />Featured project</p>
+              <h3 className="mt-1 text-lg font-bold leading-snug">{title}</h3>
+              <p className="mt-1.5 text-sm leading-6 text-muted-foreground">{description}</p>
+            </div>
+            <span className="col-span-2 inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-primary/30 bg-primary/5 px-3 py-2.5 text-sm font-bold text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground sm:col-span-1 sm:w-auto sm:shrink-0 sm:text-xs">
+              View the project <ChevronRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+            </span>
+          </a>
+        ))}
+      </div>
     </div>
   </section>;
 }
