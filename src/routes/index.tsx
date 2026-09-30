@@ -980,6 +980,10 @@ function CareerGallery() {
   }, [JSON.stringify(allMoments), pinnedIds, shuffleSeed]);
 
   const activeMoment = lightbox !== null ? orderedMoments[lightbox] : null;
+  const swipe = useSwipeNav(
+    () => setLightbox((current) => (current === null ? null : (current - 1 + orderedMoments.length) % orderedMoments.length)),
+    () => setLightbox((current) => (current === null ? null : (current + 1) % orderedMoments.length)),
+  );
 
   useEffect(() => {
     if (lightbox === null) return;
@@ -1105,8 +1109,9 @@ function CareerGallery() {
     </div>}
     {activeMoment && (
       <div
-        className="fixed inset-0 z-[80] grid place-items-center bg-black/92 p-4 pt-20 backdrop-blur-sm lg:pt-4"
+        className="fixed inset-0 z-[80] grid touch-pan-y place-items-center bg-black/92 p-4 pt-20 backdrop-blur-sm lg:pt-4"
         onClick={(event) => { if (event.target === event.currentTarget) setLightbox(null); }}
+        {...swipe}
         role="dialog"
         aria-modal="true"
         aria-label={`${activeMoment.title} lightbox`}
