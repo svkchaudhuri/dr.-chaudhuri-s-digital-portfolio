@@ -421,10 +421,27 @@ const publicationFilterEvent = "shouvik-publication-filter";
 function Profile() {
   const [selectedInterest, setSelectedInterest] = useState<number | null>(null);
   const selected = selectedInterest === null ? null : researchInterests[selectedInterest];
+  const { all: sitePublications, picks } = useSitePublications();
+  const { isOwner } = useSiteOwner();
+  const [editingPicks, setEditingPicks] = useState<string[] | null>(null);
+  const [pickSearch, setPickSearch] = useState("");
+  const [pickError, setPickError] = useState("");
+  const [savingPicks, setSavingPicks] = useState(false);
+  const selectedKeys = selected ? (picks[selected.name] ?? selected.publications.map((i) => staticPublicationKey(publications[i]))) : [];
+  const selectedPublications = selectedKeys.map((key) => sitePublications.find((p) => p.key === key)).filter((p): p is SitePublication => Boolean(p));
+  useEffect(() => { setEditingPicks(null); setPickSearch(""); setPickError(""); }, [selectedInterest]);
+
+  const savePicks = async () => {
+    if (!selected || !editingPicks) return;
+    setSavingPicks(true); setPickError("");
+    try { await saveInterestPicks(selected.name, editingPicks); setEditingPicks(null); }
+    catch (error) { setPickError(error instanceof Error ? error.message : "Could not save."); }
+    finally { setSavingPicks(false); }
+  };
 
   const viewFilteredPublications = () => {
     if (!selected) return;
-    const detail = { label: selected.name, indices: [...selected.publications] };
+    const detail = { label: selected.name, keys: [...selectedKeys] };
     setSelectedInterest(null);
     window.setTimeout(() => {
       window.dispatchEvent(new CustomEvent(publicationFilterEvent, { detail }));
@@ -475,17 +492,30 @@ function Profile() {
         <DialogDescription className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">{selected.summary}</DialogDescription>
       </div>
       <div className="px-6 pb-7 sm:px-8">
-        <p className="font-mono text-[10px] font-bold uppercase text-primary">Related publications</p>
-        <ul className="mt-4 space-y-3">{selected.publications.map((publicationIndex) => {
-          const publication = publications[publicationIndex];
-          return publication ? <li key={`${selected.name}-${publicationIndex}`} className="rounded-md border border-border bg-card p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="font-mono text-[10px] font-bold uppercase text-primary">Related publications</p>
+          {isOwner && !editingPicks && <Button variant="outline" size="sm" onClick={() => setEditingPicks([...selectedKeys])}><Pencil className="size-4" aria-hidden="true" />Choose publications</Button>}
+        </div>
+        {editingPicks ? <div className="mt-4">
+          <p className="text-sm text-muted-foreground">Tick the publications to show for this interest. {editingPicks.length} selected.</p>
+          <input className="mt-3 h-10 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" value={pickSearch} onChange={(e) => setPickSearch(e.target.value)} placeholder="Search title, venue or year" aria-label="Search publications to choose" />
+          <ul className="mt-3 max-h-80 space-y-2 overflow-y-auto pr-1">{sitePublications.filter((p) => `${p.title} ${p.venue} ${p.year}`.toLowerCase().includes(pickSearch.toLowerCase())).map((p) => {
+            const checked = editingPicks.includes(p.key);
+            return <li key={p.key}><label className="flex cursor-pointer items-start gap-3 rounded-md border border-border bg-card p-3 hover:border-primary/50">
+              <input type="checkbox" className="mt-1 size-4 accent-primary" checked={checked} onChange={() => setEditingPicks(checked ? editingPicks.filter((k) => k !== p.key) : [...editingPicks, p.key])} />
+              <span className="min-w-0"><span className="font-mono text-[10px] font-bold text-primary">{p.year}</span><span className="block text-sm font-semibold leading-5">{p.title}</span><span className="block text-xs italic text-muted-foreground">{p.venue}</span></span>
+            </label></li>;
+          })}</ul>
+          {pickError && <p className="mt-3 text-sm font-semibold text-destructive">{pickError}</p>}
+          <div className="mt-4 flex flex-wrap gap-2"><Button onClick={savePicks} disabled={savingPicks}>{savingPicks ? "Saving..." : "Save for everyone"}</Button><Button variant="ghost" onClick={() => setEditingPicks(null)}>Cancel</Button></div>
+        </div> : <>
+        <ul className="mt-4 space-y-3">{selectedPublications.length === 0 && <li className="text-sm text-muted-foreground">No publications selected yet.</li>}{selectedPublications.map((publication) => <li key={`${selected.name}-${publication.key}`} className="rounded-md border border-border bg-card p-4">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0 flex-1"><p className="font-mono text-[10px] font-bold text-primary">{publication.year}</p><p className="mt-1 text-sm font-bold leading-5 text-foreground">{publication.title}</p><p className="mt-2 text-xs italic leading-5 text-muted-foreground">{publication.venue}</p></div>
-              {publication.doi ? <Button asChild variant="outline" size="sm"><a href={`https://doi.org/${publication.doi}`} target="_blank" rel="noreferrer">DOI <ExternalLink className="size-3" aria-hidden="true" /></a></Button> : <span className="rounded-full bg-muted px-3 py-1.5 text-xs text-muted-foreground">DOI not listed</span>}
+              {publication.doi ? <Button asChild variant="outline" size="sm"><a href={`https://doi.org/${publication.doi}`} target="_blank" rel="noreferrer">DOI <ExternalLink className="size-3" aria-hidden="true" /></a></Button> : publication.url ? <Button asChild variant="outline" size="sm"><a href={publication.url} target="_blank" rel="noreferrer">Link <ExternalLink className="size-3" aria-hidden="true" /></a></Button> : <span className="rounded-full bg-muted px-3 py-1.5 text-xs text-muted-foreground">DOI not listed</span>}
             </div>
-          </li> : null;
-        })}</ul>
-        <Button className="mt-6" onClick={viewFilteredPublications}><BookOpen className="size-4" aria-hidden="true" />View filtered publications</Button>
+          </li>)}</ul>
+        <Button className="mt-6" onClick={viewFilteredPublications}><BookOpen className="size-4" aria-hidden="true" />View filtered publications</Button></>}
       </div>
     </DialogContent>}
   </Dialog>
