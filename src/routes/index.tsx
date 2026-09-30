@@ -161,9 +161,9 @@ function SidebarContent({ active, close, showNav = false }: { active: string; cl
 function TopNav({ active }: { active: string }) {
   const jump = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   const rows = [nav.slice(0, 8), nav.slice(8)];
-  return <div className="sticky top-0 z-20 hidden relative border-b border-border bg-background/90 backdrop-blur lg:block">
-    <div className="absolute right-3 top-2 z-10"><OwnerSignIn compact /></div>
-    <nav aria-label="Portfolio sections" className="overflow-hidden px-5 py-2 xl:px-8">
+  return <div className="sticky top-0 z-20 hidden border-b border-border bg-background/90 backdrop-blur lg:block">
+    <div className="flex justify-end px-5 pt-1.5 xl:px-8"><OwnerSignIn compact /></div>
+    <nav aria-label="Portfolio sections" className="overflow-hidden px-5 pb-2 pt-0.5 xl:px-8">
       {rows.map((row, rowIndex) => <div key={rowIndex} className={cn("flex flex-nowrap justify-center gap-1", rowIndex === 1 && "mt-1")}>
         {row.map(([id, label, Icon]) => <Button key={id} variant="ghost" size="sm" onClick={() => jump(id)} aria-current={active === id ? "true" : undefined} className={cn("h-7 shrink min-w-0 gap-1 px-2 text-[11.5px] xl:px-2.5 xl:text-xs", active === id && "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground")}>
           <Icon className="size-3.5 shrink-0" aria-hidden="true" /><span className="whitespace-nowrap">{label}</span>
