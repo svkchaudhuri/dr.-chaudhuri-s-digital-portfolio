@@ -49,7 +49,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { publications, researchPillars, skills } from "@/lib/portfolio-data";
-import { useSitePublications, useSiteOwner, staticPublicationKey, saveInterestPicks, loadSiteSetting, saveSiteSetting, deleteSiteSetting, uploadSiteDocument, siteDocumentUrl, type SitePublication } from "@/lib/publication-store";
+import { useSitePublications, useSiteOwner, staticPublicationKey, saveInterestPicks, loadSiteSetting, saveSiteSetting, uploadSiteDocument, siteDocumentUrl, type SitePublication } from "@/lib/publication-store";
 import { OwnerPanel } from "@/components/OwnerPanel";
 import { OwnerSignIn } from "@/components/OwnerSignIn";
 import { supabase as ownerDb } from "@/integrations/supabase/client";
