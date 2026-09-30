@@ -902,12 +902,6 @@ function CareerGallery() {
     return () => document.removeEventListener("keydown", closeOnEscape);
   }, [dialogOpen]);
 
-  useEffect(() => {
-    if (lightbox === null) return;
-    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setLightbox(null); };
-    document.addEventListener("keydown", closeOnEscape);
-    return () => document.removeEventListener("keydown", closeOnEscape);
-  }, [lightbox]);
 
   const addPhoto = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -960,6 +954,18 @@ function CareerGallery() {
   }, [JSON.stringify(allMoments), pinnedIds, shuffleSeed]);
 
   const activeMoment = lightbox !== null ? orderedMoments[lightbox] : null;
+
+  useEffect(() => {
+    if (lightbox === null) return;
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setLightbox(null);
+      else if (event.key === "ArrowLeft") setLightbox((current) => (current === null ? null : (current - 1 + orderedMoments.length) % orderedMoments.length));
+      else if (event.key === "ArrowRight") setLightbox((current) => (current === null ? null : (current + 1) % orderedMoments.length));
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [lightbox, orderedMoments.length]);
+
   const editingMoment = editingId ? orderedMoments.find((moment) => moment.id === editingId) ?? null : null;
 
   const openEditor = (moment: { id: string; title: string; tag?: string | undefined; caption?: string | undefined }) => {
