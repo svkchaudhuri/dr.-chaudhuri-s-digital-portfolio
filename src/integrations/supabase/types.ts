@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      custom_career_moments: {
+        Row: {
+          created_at: string
+          id: string
+          src: string
+          tag: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          src: string
+          tag?: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          src?: string
+          tag?: string
+          title?: string
+        }
+        Relationships: []
+      }
       custom_publications: {
         Row: {
           authors: string

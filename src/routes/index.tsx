@@ -51,6 +51,8 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { publications, researchPillars, skills } from "@/lib/portfolio-data";
 import { useSitePublications, useSiteOwner, staticPublicationKey, saveInterestPicks, type SitePublication } from "@/lib/publication-store";
 import { OwnerPanel } from "@/components/OwnerPanel";
+import { OwnerSignIn } from "@/components/OwnerSignIn";
+import { supabase as ownerDb } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -159,7 +161,8 @@ function SidebarContent({ active, close, showNav = false }: { active: string; cl
 function TopNav({ active }: { active: string }) {
   const jump = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   const rows = [nav.slice(0, 8), nav.slice(8)];
-  return <div className="sticky top-0 z-20 hidden border-b border-border bg-background/90 backdrop-blur lg:block">
+  return <div className="sticky top-0 z-20 hidden relative border-b border-border bg-background/90 backdrop-blur lg:block">
+    <div className="absolute right-3 top-2 z-10"><OwnerSignIn compact /></div>
     <nav aria-label="Portfolio sections" className="overflow-hidden px-5 py-2 xl:px-8">
       {rows.map((row, rowIndex) => <div key={rowIndex} className={cn("flex flex-nowrap justify-center gap-1", rowIndex === 1 && "mt-1")}>
         {row.map(([id, label, Icon]) => <Button key={id} variant="ghost" size="sm" onClick={() => jump(id)} aria-current={active === id ? "true" : undefined} className={cn("h-7 shrink min-w-0 gap-1 px-2 text-[11.5px] xl:px-2.5 xl:text-xs", active === id && "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground")}>
@@ -194,7 +197,7 @@ function Portfolio() {
     <header className="sticky top-0 z-40 grid h-16 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-b border-border bg-background/95 px-4 backdrop-blur lg:hidden">
       <Button variant="ghost" size="icon" onClick={() => setDrawer(true)} aria-label="Open navigation"><Menu className="size-5" /></Button>
       <span className="truncate text-sm font-bold">Shouvik Chaudhuri, Ph.D.</span>
-      <Button asChild variant="outline" size="sm"><a href={cvAsset.url} download><Download className="size-4" /><span className="hidden sm:inline">CV</span></a></Button>
+      <div className="flex items-center gap-1"><OwnerSignIn compact /><Button asChild variant="outline" size="sm"><a href={cvAsset.url} download><Download className="size-4" /><span className="hidden sm:inline">CV</span></a></Button></div>
     </header>
     {drawer && <div className="fixed inset-0 z-50 lg:hidden"><button aria-label="Close navigation" className="absolute inset-0 bg-overlay" onClick={() => setDrawer(false)} /><aside className="absolute inset-y-0 left-0 w-[min(88vw,340px)] bg-sidebar shadow-drawer"><Button variant="ghost" size="icon" className="absolute right-3 top-3 z-10" onClick={() => setDrawer(false)} aria-label="Close navigation"><X className="size-5" /></Button><SidebarContent active={active} close={() => setDrawer(false)} showNav /></aside></div>}
     <main className="relative lg:ml-[340px]">
@@ -855,9 +858,7 @@ const builtInCareerMoments: CareerMoment[] = [
   { id: "defense-zofia-henrik-2025", title: "Bachelor Project Presentation (Zofia and Henrik)", tag: "2025 · Supervision and thesis defense", src: defenseZofiaHenrikAsset.url, alt: "Bachelor project presentation of Zofia and Henrik with the supervision panel" },
   { id: "ilmenau-supper", title: "Supper with Professors and Colleagues, TU Ilmenau", tag: "MSCA secondment and academic exchange", src: ilmenauSupperAsset.url, alt: "Supper with professors and colleagues during the TU Ilmenau secondment" },
 ];
-const careerStorageKey = "shouvik-career-moments";
 const adminStorageKey = "shouvik-gallery-admin";
-const adminPasscode = "sc2026";
 const overridesStorageKey = "shouvik-career-overrides";
 const pinnedStorageKey = "shouvik-career-pinned";
 const maxPinned = 5;
@@ -874,9 +875,6 @@ function CareerGallery() {
   const [error, setError] = useState("");
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [passcodeOpen, setPasscodeOpen] = useState(false);
-  const [passcode, setPasscode] = useState("");
-  const [passcodeError, setPasscodeError] = useState("");
   const [overrides, setOverrides] = useState<Record<string, MomentOverride>>({});
   const [pinnedIds, setPinnedIds] = useState<string[]>(defaultPinnedIds);
   const [pinNotice, setPinNotice] = useState("");
@@ -924,36 +922,21 @@ function CareerGallery() {
   };
 
   useEffect(() => {
-    if (window.localStorage.getItem(adminStorageKey) === "true") { setIsAdmin(true); return; }
-    if (new URLSearchParams(window.location.search).get("admin") === "true") setPasscodeOpen(true);
+    const sync = () => setIsAdmin(window.localStorage.getItem(adminStorageKey) === "true");
+    sync();
+    window.addEventListener("shouvik-admin-changed", sync);
+    return () => window.removeEventListener("shouvik-admin-changed", sync);
   }, []);
 
-  const unlockAdmin = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (passcode.trim() !== adminPasscode) { setPasscodeError("That passcode is not correct."); return; }
-    window.localStorage.setItem(adminStorageKey, "true");
-    setIsAdmin(true); setPasscode(""); setPasscodeError(""); setPasscodeOpen(false);
-    window.dispatchEvent(new Event("shouvik-admin-changed"));
-  };
+  const lockAdmin = () => { setDialogOpen(false); void ownerDb.auth.signOut(); };
 
-  const lockAdmin = () => {
-    window.localStorage.removeItem(adminStorageKey);
-    setIsAdmin(false); setDialogOpen(false);
-    window.dispatchEvent(new Event("shouvik-admin-changed"));
+  const loadOnlineMoments = async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data } = await (ownerDb as any).from("custom_career_moments").select("id, title, tag, src").order("created_at");
+    if (data) setMoments((data as { id: string; title: string; tag: string; src: string }[]).map((m) => ({ ...m, alt: m.title })));
   };
+  useEffect(() => { void loadOnlineMoments(); }, []);
 
-  useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(careerStorageKey);
-      if (!stored) return;
-      const parsed: unknown = JSON.parse(stored);
-      if (Array.isArray(parsed)) {
-        setMoments(parsed.filter((item): item is CareerMoment => Boolean(item && typeof item === "object" && "id" in item && "src" in item && "title" in item && typeof item.id === "string" && typeof item.src === "string" && typeof item.title === "string")));
-      }
-    } catch {
-      window.localStorage.removeItem(careerStorageKey);
-    }
-  }, []);
 
   useEffect(() => {
     if (!dialogOpen) return;
@@ -963,7 +946,7 @@ function CareerGallery() {
   }, [dialogOpen]);
 
 
-  const addPhoto = (event: React.FormEvent<HTMLFormElement>) => {
+  const addPhoto = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const cleanTitle = title.trim();
     const cleanTag = tag.trim();
@@ -975,14 +958,10 @@ function CareerGallery() {
       setError("Add a title or caption for this photo.");
       return;
     }
-    const next = [...moments, { id: `${Date.now()}-${cleanTitle.slice(0, 20)}`, title: cleanTitle, tag: cleanTag, src: imageData, alt: cleanTitle }];
-    try {
-      window.localStorage.setItem(careerStorageKey, JSON.stringify(next));
-    } catch {
-      setError("This photo is too large to store in the browser. Try a smaller image.");
-      return;
-    }
-    setMoments(next);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error: saveError } = await (ownerDb as any).from("custom_career_moments").insert({ id: `${Date.now()}-${cleanTitle.slice(0, 20)}`, title: cleanTitle, tag: cleanTag, src: imageData });
+    if (saveError) { setError(`Could not save the photo: ${saveError.message}`); return; }
+    await loadOnlineMoments();
     setImageData(""); setImageName(""); setTitle(""); setTag(""); setError(""); setDialogOpen(false);
   };
 
@@ -1064,21 +1043,9 @@ function CareerGallery() {
         <Button onClick={() => { setLightbox(null); setError(""); setDialogOpen(true); }}><ImagePlus className="size-4" aria-hidden="true" />Add Photo</Button>
         <Button variant="outline" size="sm" onClick={() => window.dispatchEvent(new Event(scholarSyncEvent))}><RefreshCw className="size-4" aria-hidden="true" />Sync Scholar</Button>
         <span role="status" className="inline-flex items-center gap-2 rounded-full border-2 border-primary bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary"><LockOpen className="size-3.5" aria-hidden="true" />Admin Mode Active</span>
-        <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={lockAdmin}><Lock className="size-4" aria-hidden="true" />Exit admin</Button>
-      </> : <Button variant="ghost" size="icon" aria-label="Unlock gallery editing" className="text-muted-foreground/40 hover:text-muted-foreground" onClick={() => { setPasscodeError(""); setPasscodeOpen(true); }}><LockOpen className="size-4" aria-hidden="true" /></Button>}
+        <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={lockAdmin}><Lock className="size-4" aria-hidden="true" />Sign out</Button>
+      </> : null}
     </div>
-    {passcodeOpen && <div className="fixed inset-0 z-[70] grid place-items-center p-4">
-      <Button variant="ghost" aria-label="Close passcode dialog" className="absolute inset-0 h-auto w-full rounded-none bg-overlay hover:bg-overlay" onClick={() => setPasscodeOpen(false)} />
-      <div role="dialog" aria-modal="true" aria-labelledby="admin-passcode-title" className="relative z-10 w-full max-w-sm rounded-xl border border-border bg-background p-6 shadow-drawer">
-        <h3 id="admin-passcode-title" className="font-display text-2xl">Enter passcode</h3>
-        <p className="mt-1 text-sm text-muted-foreground">Gallery editing is restricted.</p>
-        <form className="mt-5 space-y-4" onSubmit={unlockAdmin}>
-          <input type="password" autoFocus value={passcode} onChange={(event) => setPasscode(event.target.value)} placeholder="Passcode" aria-label="Passcode" className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
-          {passcodeError && <p role="alert" className="text-sm font-semibold text-destructive">{passcodeError}</p>}
-          <div className="flex justify-end gap-2"><Button type="button" variant="outline" onClick={() => setPasscodeOpen(false)}>Cancel</Button><Button type="submit">Unlock</Button></div>
-        </form>
-      </div>
-    </div>}
     {isAdmin && <p className="mb-4 text-right text-xs text-muted-foreground">{pinnedIds.length} of {maxPinned} photos pinned to the top.{pinNotice && <span className="ml-2 font-semibold text-destructive">{pinNotice}</span>}</p>}
     <div className="grid auto-rows-[220px] gap-4 md:grid-cols-3">
       {orderedMoments.map((moment, index) => (
