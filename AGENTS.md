@@ -11,4 +11,4 @@
 
 - Keep Home featured projects in a data-driven list so additional projects can share one responsive card pattern.
 
-- Owner-editable content (added publications, Research Interest publication picks) lives in Lovable Cloud tables with owner-only write rules; the owner signs in via email/password in the Publications section. Why: edits must persist for all visitors without code changes.
+- Owner-editable content (added publications, Research Interest picks, uploaded Career Moments photos) lives in Lovable Cloud tables with owner-only write rules; a single owner sign-in (lock icon in the top bar) replaces the old passcode and switches on all admin controls. Why: edits must persist for all visitors without code changes.
