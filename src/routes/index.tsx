@@ -919,6 +919,21 @@ function CareerGallery() {
   };
   useEffect(() => { void loadOnlineMoments(); }, []);
 
+  // One-time rescue: move photos saved in this browser (older local-only uploads) to the shared online gallery.
+  useEffect(() => {
+    if (!isAdmin) return;
+    const legacyKey = "shouvik-career-moments";
+    let legacy: { id?: string; title?: string; tag?: string; src?: string }[] = [];
+    try { legacy = JSON.parse(window.localStorage.getItem(legacyKey) ?? "[]"); } catch { return; }
+    const rows = legacy.filter((m) => m?.src && m.src.startsWith("data:")).map((m, i) => ({ id: m.id || `${Date.now()}-legacy-${i}`, title: m.title || "Career moment", tag: m.tag || "", src: m.src! }));
+    if (!rows.length) return;
+    void (async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: upErr } = await (ownerDb as any).from("custom_career_moments").upsert(rows, { onConflict: "id", ignoreDuplicates: true });
+      if (!upErr) { window.localStorage.removeItem(legacyKey); await loadOnlineMoments(); }
+    })();
+  }, [isAdmin]);
+
 
   useEffect(() => {
     if (!dialogOpen) return;
