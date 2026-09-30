@@ -82,6 +82,28 @@ const brandLinks: Brand[] = [
   { label: "IEEE", value: "Senior Member · ID 90902393", img: ieeeLogo.url },
 ];
 
+function useSwipeNav(onPrev: () => void, onNext: () => void) {
+  const startX = useRef<number | null>(null);
+  const startY = useRef<number | null>(null);
+  return {
+    onTouchStart: (event: ReactTouchEvent) => {
+      startX.current = event.touches[0].clientX;
+      startY.current = event.touches[0].clientY;
+    },
+    onTouchEnd: (event: ReactTouchEvent) => {
+      if (startX.current === null || startY.current === null) return;
+      const dx = event.changedTouches[0].clientX - startX.current;
+      const dy = event.changedTouches[0].clientY - startY.current;
+      startX.current = null;
+      startY.current = null;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        if (dx < 0) onNext();
+        else onPrev();
+      }
+    },
+  };
+}
+
 function BrandMark({ link, className = "size-5" }: { link: Brand; className?: string }) {
   if (link.img) return <img src={link.img} alt="" className={cn("object-contain", className)} />;
   const Icon = link.Icon;
