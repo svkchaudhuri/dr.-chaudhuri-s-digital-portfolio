@@ -86,3 +86,31 @@ export async function deleteCustomPublication(id: string) {
   if (error) throw new Error(error.message);
   notifyPublicationsChanged();
 }
+
+export async function loadSiteSetting<T>(key: string): Promise<T | null> {
+  const { data } = await db.from("site_settings").select("value").eq("key", key).maybeSingle();
+  return (data?.value as T) ?? null;
+}
+
+export async function saveSiteSetting(key: string, value: unknown) {
+  const { error } = await db.from("site_settings").upsert({ key, value, updated_at: new Date().toISOString() });
+  if (error) throw new Error(error.message);
+}
+
+export async function deleteSiteSetting(key: string) {
+  const { error } = await db.from("site_settings").delete().eq("key", key);
+  if (error) throw new Error(error.message);
+}
+
+/** Uploads a PDF to online storage and returns its storage path. */
+export async function uploadSiteDocument(file: File, name: string) {
+  const path = `${name}-${Date.now()}.pdf`;
+  const { error } = await supabase.storage.from("site-documents").upload(path, file, { contentType: "application/pdf", upsert: true });
+  if (error) throw new Error(error.message);
+  return path;
+}
+
+export async function siteDocumentUrl(path: string) {
+  const { data } = await supabase.storage.from("site-documents").createSignedUrl(path, 60 * 60 * 24 * 365);
+  return data?.signedUrl ?? null;
+}
