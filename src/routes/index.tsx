@@ -87,13 +87,13 @@ function useSwipeNav(onPrev: () => void, onNext: () => void) {
   const startY = useRef<number | null>(null);
   return {
     onTouchStart: (event: ReactTouchEvent) => {
-      startX.current = event.touches[0].clientX;
-      startY.current = event.touches[0].clientY;
+      startX.current = event.touches[0]?.clientX ?? null;
+      startY.current = event.touches[0]?.clientY ?? null;
     },
     onTouchEnd: (event: ReactTouchEvent) => {
       if (startX.current === null || startY.current === null) return;
-      const dx = event.changedTouches[0].clientX - startX.current;
-      const dy = event.changedTouches[0].clientY - startY.current;
+      const dx = (event.changedTouches[0]?.clientX ?? startX.current) - startX.current;
+      const dy = (event.changedTouches[0]?.clientY ?? startY.current) - startY.current;
       startX.current = null;
       startY.current = null;
       if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
