@@ -831,7 +831,43 @@ const languages: readonly Language[] = [
 ];
 
 
-function Service() { return <Section id="service" eyebrow="Service" title="Professional standing and peer review"><div className="grid gap-10 lg:grid-cols-2"><div><h3 className="font-display text-2xl">Memberships & honours</h3><div className="mt-5 space-y-4">{[['Senior Member, IEEE','Elevated 2026 · member since 2016 · ID 90902393'],['Member, IET','ID 1101020475 · pursuing CEng status'],['Member & Chartered Engineer (India), IE(I)','ID M-1848040'],['Associate Member, INAE','Application under review, 2026'],['IEEE COVID-19 App Development Contest','Winner, 2020 · CovCov mobile application']].map(([a,b])=><div key={a} className="border-l-2 border-highlight pl-4"><p className="font-semibold">{a}</p><p className="text-sm text-muted-foreground">{b}</p></div>)}</div></div><div><div className="flex items-end justify-between"><h3 className="font-display text-2xl">Verified peer review</h3><p className="font-display text-4xl text-primary">55</p></div><p className="mt-2 text-sm text-muted-foreground">Reviews of 42 manuscripts · September 2015–September 2026</p><div className="mt-5 divide-y divide-border border-y border-border">{reviews.map(([a,n])=><div key={a} className="grid grid-cols-[1fr_auto] gap-3 py-2.5 text-xs"><span>{a}</span><strong className="text-primary">{n}</strong></div>)}</div></div></div></Section>; }
+function Service() { return <Section id="service" eyebrow="Service" title="Professional standing and peer review"><div className="grid gap-10 lg:grid-cols-2"><div><h3 className="font-display text-2xl">Memberships & honours</h3><div className="mt-5 space-y-4">{[['Senior Member, IEEE','Elevated 2026 · member since 2016 · ID 90902393'],['Member, IET','ID 1101020475 · pursuing CEng status'],['Member & Chartered Engineer (India), IE(I)','ID M-1848040'],['Associate Member, INAE','Application under review, 2026'],['IEEE COVID-19 App Development Contest','Winner, 2020 · CovCov mobile application']].map(([a,b])=><div key={a} className="border-l-2 border-highlight pl-4"><p className="font-semibold">{a}</p><p className="text-sm text-muted-foreground">{b}</p></div>)}</div></div><PeerReviewPanel /></div></Section>; }
+type PeerReviewData = { total: string; manuscripts: string; period: string; journals: [string, string][] };
+const defaultPeerReview: PeerReviewData = { total: "55", manuscripts: "42", period: "September 2015–September 2026", journals: reviews };
+function PeerReviewPanel() {
+  const { isOwner } = useSiteOwner();
+  const [data, setData] = useState<PeerReviewData>(defaultPeerReview);
+  const [open, setOpen] = useState(false);
+  const [draft, setDraft] = useState({ total: "", manuscripts: "", period: "", journals: "" });
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  useEffect(() => { loadSiteSetting<PeerReviewData>("peer_review").then((v) => { if (v) setData(v); }); }, []);
+  const startEdit = () => { setDraft({ total: data.total, manuscripts: data.manuscripts, period: data.period, journals: data.journals.map(([a, n]) => `${a} | ${n}`).join("\n") }); setError(""); setOpen(true); };
+  const save = async () => {
+    const journals = draft.journals.split("\n").map((l) => l.split("|").map((x) => x.trim())).filter((x) => x[0]).map((x) => [x[0], x[1] ?? ""] as [string, string]);
+    const next = { total: draft.total.trim(), manuscripts: draft.manuscripts.trim(), period: draft.period.trim(), journals };
+    setSaving(true); setError("");
+    try { await saveSiteSetting("peer_review", next); setData(next); setOpen(false); } catch (e) { setError(e instanceof Error ? e.message : "Could not save"); } finally { setSaving(false); }
+  };
+  const field = "mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm";
+  return <div>
+    <div className="flex items-end justify-between gap-3"><h3 className="font-display text-2xl">Verified peer review</h3><p className="font-display text-4xl text-primary">{data.total}</p></div>
+    <p className="mt-2 text-sm text-muted-foreground">Reviews of {data.manuscripts} manuscripts · {data.period}</p>
+    {isOwner && <Button size="sm" variant="outline" className="mt-3" onClick={startEdit}>Edit peer review numbers</Button>}
+    <div className="mt-5 divide-y divide-border border-y border-border">{data.journals.map(([a, n]) => <div key={a} className="grid grid-cols-[1fr_auto] gap-3 py-2.5 text-xs"><span>{a}</span><strong className="text-primary">{n}</strong></div>)}</div>
+    <Dialog open={open} onOpenChange={setOpen}><DialogContent className="max-h-[90vh] overflow-y-auto">
+      <DialogTitle>Edit verified peer review</DialogTitle>
+      <DialogDescription>Changes are saved online and shown to all visitors.</DialogDescription>
+      <div className="grid gap-3">
+        <div className="grid grid-cols-2 gap-3"><label className="text-sm">Total reviews<input className={field} value={draft.total} onChange={(e) => setDraft({ ...draft, total: e.target.value })} /></label><label className="text-sm">Manuscripts<input className={field} value={draft.manuscripts} onChange={(e) => setDraft({ ...draft, manuscripts: e.target.value })} /></label></div>
+        <label className="text-sm">Period<input className={field} value={draft.period} onChange={(e) => setDraft({ ...draft, period: e.target.value })} /></label>
+        <label className="text-sm">Journals (one per line: Journal name | count)<textarea rows={10} className={field} value={draft.journals} onChange={(e) => setDraft({ ...draft, journals: e.target.value })} /></label>
+        {error && <p className="text-sm text-destructive">{error}</p>}
+        <div className="flex justify-end gap-2"><Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button><Button onClick={save} disabled={saving}>{saving ? "Saving…" : "Save"}</Button></div>
+      </div>
+    </DialogContent></Dialog>
+  </div>;
+}
 
 type CareerMoment = { id: string; title: string; tag: string; src: string; alt: string; featured?: boolean; caption?: string; posterUrl?: string };
 type MomentOverride = { title?: string; tag?: string; caption?: string };
