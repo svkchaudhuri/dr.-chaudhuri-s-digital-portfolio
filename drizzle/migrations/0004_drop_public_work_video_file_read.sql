@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Visitors read published work video files" ON storage.objects;

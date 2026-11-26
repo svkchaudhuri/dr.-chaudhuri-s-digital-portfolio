@@ -29,6 +29,13 @@
       "when": 1795678442238,
       "tag": "0003_public_read_published_work_videos",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1795678500676,
+      "tag": "0004_drop_public_work_video_file_read",
+      "breakpoints": true
     }
   ]
 }
