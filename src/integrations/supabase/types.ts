@@ -164,6 +164,33 @@ export type Database = {
         }
         Relationships: []
       }
+      work_videos: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          mime_type: string
+          storage_path: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          mime_type?: string
+          storage_path: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          mime_type?: string
+          storage_path?: string
+          title?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

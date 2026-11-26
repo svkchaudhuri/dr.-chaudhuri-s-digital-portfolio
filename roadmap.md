@@ -22,3 +22,5 @@
 - [x] Replace the default favicon and add Apple and installable home-screen icons
 - [x] Replace all browser and home-screen icons with the new Dr. SC monogram
 - [x] Add The Control Miniproject feature with credits, links, and an enlarged photo viewer
+- [x] Add an online Research in Motion video archive between Home and Profile
+- [x] Verify public playback, owner-only uploads, and mobile layout

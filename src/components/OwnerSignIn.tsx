@@ -52,7 +52,7 @@ export function OwnerSignIn({ compact = false }: { compact?: boolean }) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-sm">
         <DialogTitle className="font-display text-2xl">{mode === "signin" ? "Owner sign in" : "Create owner account"}</DialogTitle>
-        <DialogDescription>{mode === "signin" ? "Sign in to add publications, photos and manage the site for every visitor." : "The first account created becomes the site owner."}</DialogDescription>
+        <DialogDescription>{mode === "signin" ? "Sign in to add publications, photos and videos, and manage the site for every visitor." : "The first account created becomes the site owner."}</DialogDescription>
         <form className="mt-2 space-y-3" onSubmit={submit}>
           <input className={field} type="email" required placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} aria-label="Email" />
           <input className={field} type="password" required minLength={8} placeholder="Password (min. 8 characters)" value={password} onChange={(e) => setPassword(e.target.value)} aria-label="Password" />

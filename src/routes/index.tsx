@@ -52,6 +52,7 @@ import { publications, researchPillars, skills } from "@/lib/portfolio-data";
 import { useSitePublications, useSiteOwner, staticPublicationKey, saveInterestPicks, loadSiteSetting, saveSiteSetting, uploadSiteDocument, siteDocumentUrl, type SitePublication } from "@/lib/publication-store";
 import { OwnerPanel } from "@/components/OwnerPanel";
 import { OwnerSignIn } from "@/components/OwnerSignIn";
+import { VideoArchive } from "@/components/VideoArchive";
 import { supabase as ownerDb } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
@@ -68,7 +69,7 @@ export const Route = createFileRoute("/")({
 });
 
 const nav = [
-  ["home", "Home", Home], ["profile", "Profile", Users], ["research", "Research", Microscope],
+  ["home", "Home", Home], ["videos", "Videos", Film], ["profile", "Profile", Users], ["research", "Research", Microscope],
   ["experience", "Work Experience", BriefcaseBusiness], ["funding", "Funding", Award],
   ["education", "Education", GraduationCap], ["publications", "Publications", BookOpen],
   ["teaching", "Teaching", Users], ["skills", "Skills", Wrench], ["service", "Service", ShieldCheck],
@@ -203,6 +204,7 @@ function Portfolio() {
     <main className="relative lg:ml-[340px]">
       <TopNav active={active} />
       <Hero />
+      <VideoArchive />
       <Profile />
       <Research />
       <Experience />
