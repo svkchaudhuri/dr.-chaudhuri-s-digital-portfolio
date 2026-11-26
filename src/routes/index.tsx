@@ -204,7 +204,6 @@ function Portfolio() {
     <main className="relative lg:ml-[340px]">
       <TopNav active={active} />
       <Hero />
-      <VideoArchive />
       <Profile />
       <Research />
       <Experience />
@@ -381,6 +380,7 @@ function Hero() {
             </span>
           </a>
         ))}
+        <VideoArchive />
       </div>
     </div>
   </section>;

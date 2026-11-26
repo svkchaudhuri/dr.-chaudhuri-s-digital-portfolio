@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { Film, Plus, Trash2, Upload } from "lucide-react";
+import { ChevronDown, Film, Plus, Sparkles, Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,6 +28,7 @@ export function VideoArchive() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -64,11 +65,11 @@ export function VideoArchive() {
     setVideos(withUrls.filter((video): video is VideoItem => video !== null));
     if (withUrls.some((video) => video === null)) setError("Some videos could not be loaded. Please refresh to try again.");
     setLoading(false);
-  }, []);
+  }, [isOwner]);
 
   useEffect(() => {
     void load();
-  }, [load, isOwner]);
+  }, [load]);
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -110,6 +111,7 @@ export function VideoArchive() {
       setTitle("");
       setDescription("");
       setOpen(false);
+      setExpanded(true);
       await load();
     } catch (caught) {
       setMessage(caught instanceof Error ? caught.message : "The video could not be uploaded.");
@@ -133,46 +135,56 @@ export function VideoArchive() {
     setDeletingId(null);
   };
 
-  return <section id="videos" className="scroll-mt-20 bg-muted/60 px-5 py-20 sm:px-10 lg:px-14 xl:px-20">
-    <div className="mx-auto max-w-6xl">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="section-kicker">Video archive</p>
-          <h2 className="section-title">Research in Motion</h2>
-        </div>
-        {isOwner && <Button onClick={() => { setMessage(""); setOpen(true); }}><Plus className="size-4" aria-hidden="true" />Add video</Button>}
-      </div>
-      <p className="mt-4 max-w-3xl text-sm leading-6 text-muted-foreground">Short videos documenting experiments, demonstrations, and engineering projects from simulation to real-world validation.</p>
+  return <section id="videos" className="scroll-mt-20 overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:border-primary hover:shadow-portrait">
+    <button
+      type="button"
+      className="group grid w-full grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-3 p-4 text-left sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center sm:gap-x-4"
+      aria-expanded={expanded}
+      aria-controls="featured-research-videos"
+      onClick={() => setExpanded((current) => !current)}
+    >
+      <span className="grid size-11 shrink-0 place-items-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+        <Film className="size-5" aria-hidden="true" />
+      </span>
+      <span className="min-w-0">
+        <span className="flex items-center gap-1.5 font-mono text-xs font-bold uppercase text-primary"><Sparkles className="size-3.5 shrink-0" aria-hidden="true" />Research video archive</span>
+        <span className="mt-1 block text-lg font-bold leading-snug">Featured Research Videos</span>
+        <span className="mt-1.5 block text-sm leading-6 text-muted-foreground">Short videos documenting experiments, demonstrations, and engineering projects from simulation to real-world validation.</span>
+      </span>
+      <span className="col-span-2 inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-primary/30 bg-primary/5 px-3 py-2.5 text-sm font-bold text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground sm:col-span-1 sm:w-auto sm:shrink-0 sm:text-xs">
+        {expanded ? "Hide videos" : "View the videos"}<ChevronDown className={`size-4 transition-transform ${expanded ? "rotate-180" : ""}`} aria-hidden="true" />
+      </span>
+    </button>
 
-      <div className="mt-10">
-        {loading ? <div className="rounded-md border border-border bg-card p-8 text-center text-sm text-muted-foreground" role="status">Loading videos...</div> : videos.length > 0 ? <div className="grid gap-6 md:grid-cols-2">
-          {videos.map((video) => <article key={video.id} className="overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-portrait">
-            <video className="aspect-video w-full bg-muted object-contain" controls playsInline preload="metadata" src={video.url} aria-label={video.title}>
-              Your browser does not support this video.
-            </video>
-            <div className="p-5">
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <h3 className="font-display text-xl leading-snug">{video.title}</h3>
-                  {video.description && <p className="mt-2 whitespace-pre-line text-sm leading-6 text-muted-foreground">{video.description}</p>}
-                </div>
-                {isOwner && <Button variant="ghost" size="icon" className="shrink-0 text-destructive" disabled={deletingId === video.id} onClick={() => void remove(video)} aria-label={`Remove ${video.title}`}><Trash2 className="size-4" aria-hidden="true" /></Button>}
+    {expanded && <div id="featured-research-videos" className="border-t border-border bg-muted/30 p-4 sm:p-5">
+      {isOwner && <div className="mb-4 flex justify-end"><Button size="sm" onClick={() => { setMessage(""); setOpen(true); }}><Plus className="size-4" aria-hidden="true" />Add video</Button></div>}
+      {loading ? <div className="rounded-md border border-border bg-card p-8 text-center text-sm text-muted-foreground" role="status">Loading videos...</div> : videos.length > 0 ? <div className="grid gap-5 lg:grid-cols-2">
+        {videos.map((video) => <article key={video.id} className="overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-portrait">
+          <video className="aspect-video w-full bg-muted object-contain" controls playsInline preload="metadata" src={video.url} aria-label={video.title}>
+            Your browser does not support this video.
+          </video>
+          <div className="p-5">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h3 className="font-display text-xl leading-snug">{video.title}</h3>
+                {video.description && <p className="mt-2 whitespace-pre-line text-sm leading-6 text-muted-foreground">{video.description}</p>}
               </div>
+              {isOwner && <Button variant="ghost" size="icon" className="shrink-0 text-destructive" disabled={deletingId === video.id} onClick={() => void remove(video)} aria-label={`Remove ${video.title}`}><Trash2 className="size-4" aria-hidden="true" /></Button>}
             </div>
-          </article>)}
-        </div> : <div className="rounded-xl border border-dashed border-border bg-card px-6 py-12 text-center">
-          <span className="mx-auto grid size-12 place-items-center rounded-full bg-primary/10 text-primary"><Film className="size-6" aria-hidden="true" /></span>
-          <h3 className="mt-4 font-display text-xl">{isOwner ? "Start your video archive" : "Videos are being curated"}</h3>
-          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">{isOwner ? "Add a short experiment or project video to share it with every visitor." : "New research demonstrations and project videos will appear here."}</p>
-          {isOwner && <Button className="mt-5" onClick={() => setOpen(true)}><Upload className="size-4" aria-hidden="true" />Upload the first video</Button>}
-        </div>}
-        {error && <p className="mt-4 text-sm text-destructive" role="alert">{error}</p>}
-      </div>
-    </div>
+          </div>
+        </article>)}
+      </div> : <div className="rounded-xl border border-dashed border-border bg-card px-5 py-8 text-center">
+        <span className="mx-auto grid size-11 place-items-center rounded-full bg-primary/10 text-primary"><Film className="size-5" aria-hidden="true" /></span>
+        <h3 className="mt-3 font-display text-xl">{isOwner ? "Start your video archive" : "Videos are being curated"}</h3>
+        <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">{isOwner ? "Add a short experiment or project video to share it with every visitor." : "New research demonstrations and project videos will appear here."}</p>
+        {isOwner && <Button className="mt-4" onClick={() => setOpen(true)}><Upload className="size-4" aria-hidden="true" />Upload the first video</Button>}
+      </div>}
+      {error && <p className="mt-4 text-sm text-destructive" role="alert">{error}</p>}
+    </div>}
 
     <Dialog open={open} onOpenChange={(next) => { if (!busy) { setOpen(next); if (!next) setMessage(""); } }}>
       <DialogContent className="max-w-lg">
-        <DialogTitle className="font-display text-2xl">Add a work video</DialogTitle>
+        <DialogTitle className="font-display text-2xl">Add a featured research video</DialogTitle>
         <DialogDescription>Upload an MP4, WebM, MOV, or M4V file up to 100 MB. It will be visible to every visitor.</DialogDescription>
         <form className="mt-2 space-y-4" onSubmit={submit}>
           <label className="block text-sm font-semibold" htmlFor="work-video-file">Video file</label>
