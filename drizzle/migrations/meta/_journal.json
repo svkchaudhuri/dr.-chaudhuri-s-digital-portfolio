@@ -8,6 +8,20 @@
       "when": 1795673836813,
       "tag": "0000_create_work_video_archive",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795674056352,
+      "tag": "0001_require_explicit_publication_for_public_content",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795674104211,
+      "tag": "0002_restrict_work_video_storage_to_owner",
+      "breakpoints": true
     }
   ]
 }

@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          is_public: boolean
           src: string
           tag: string
           title: string
@@ -25,6 +26,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id: string
+          is_public?: boolean
           src: string
           tag?: string
           title: string
@@ -32,6 +34,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          is_public?: boolean
           src?: string
           tag?: string
           title?: string
@@ -46,6 +49,7 @@ export type Database = {
           details: string | null
           doi: string | null
           id: string
+          is_public: boolean
           title: string
           url: string | null
           venue: string
@@ -58,6 +62,7 @@ export type Database = {
           details?: string | null
           doi?: string | null
           id?: string
+          is_public?: boolean
           title: string
           url?: string | null
           venue?: string
@@ -70,6 +75,7 @@ export type Database = {
           details?: string | null
           doi?: string | null
           id?: string
+          is_public?: boolean
           title?: string
           url?: string | null
           venue?: string
@@ -80,16 +86,19 @@ export type Database = {
       interest_publications: {
         Row: {
           interest_name: string
+          is_public: boolean
           publication_keys: string[]
           updated_at: string
         }
         Insert: {
           interest_name: string
+          is_public?: boolean
           publication_keys?: string[]
           updated_at?: string
         }
         Update: {
           interest_name?: string
+          is_public?: boolean
           publication_keys?: string[]
           updated_at?: string
         }
@@ -102,6 +111,7 @@ export type Database = {
           h_index: number
           i10_index: number | null
           id: string
+          is_public: boolean
           last_synced_at: string | null
           publications: number
           scholar_author_id: string
@@ -112,6 +122,7 @@ export type Database = {
           h_index?: number
           i10_index?: number | null
           id?: string
+          is_public?: boolean
           last_synced_at?: string | null
           publications?: number
           scholar_author_id?: string
@@ -122,6 +133,7 @@ export type Database = {
           h_index?: number
           i10_index?: number | null
           id?: string
+          is_public?: boolean
           last_synced_at?: string | null
           publications?: number
           scholar_author_id?: string
@@ -130,16 +142,19 @@ export type Database = {
       }
       site_settings: {
         Row: {
+          is_public: boolean
           key: string
           updated_at: string
           value: Json
         }
         Insert: {
+          is_public?: boolean
           key: string
           updated_at?: string
           value: Json
         }
         Update: {
+          is_public?: boolean
           key?: string
           updated_at?: string
           value?: Json
@@ -169,6 +184,7 @@ export type Database = {
           created_at: string
           description: string
           id: string
+          is_public: boolean
           mime_type: string
           storage_path: string
           title: string
@@ -177,6 +193,7 @@ export type Database = {
           created_at?: string
           description?: string
           id?: string
+          is_public?: boolean
           mime_type?: string
           storage_path: string
           title: string
@@ -185,6 +202,7 @@ export type Database = {
           created_at?: string
           description?: string
           id?: string
+          is_public?: boolean
           mime_type?: string
           storage_path?: string
           title?: string

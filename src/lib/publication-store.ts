@@ -70,13 +70,13 @@ export function useSiteOwner() {
 }
 
 export async function saveInterestPicks(interestName: string, keys: string[]) {
-  const { error } = await db.from("interest_publications").upsert({ interest_name: interestName, publication_keys: keys, updated_at: new Date().toISOString() });
+  const { error } = await db.from("interest_publications").upsert({ interest_name: interestName, publication_keys: keys, is_public: true, updated_at: new Date().toISOString() });
   if (error) throw new Error(error.message);
   notifyPublicationsChanged();
 }
 
 export async function addCustomPublication(p: { category: string; authors: string; title: string; venue: string; year: number; details?: string; doi?: string; url?: string }) {
-  const { error } = await db.from("custom_publications").insert({ ...p, details: p.details || null, doi: p.doi || null, url: p.url || null });
+  const { error } = await db.from("custom_publications").insert({ ...p, details: p.details || null, doi: p.doi || null, url: p.url || null, is_public: true });
   if (error) throw new Error(error.message);
   notifyPublicationsChanged();
 }
@@ -93,7 +93,7 @@ export async function loadSiteSetting<T>(key: string): Promise<T | null> {
 }
 
 export async function saveSiteSetting(key: string, value: unknown) {
-  const { error } = await db.from("site_settings").upsert({ key, value, updated_at: new Date().toISOString() });
+  const { error } = await db.from("site_settings").upsert({ key, value, is_public: true, updated_at: new Date().toISOString() });
   if (error) throw new Error(error.message);
 }
 

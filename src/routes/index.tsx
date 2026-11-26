@@ -963,7 +963,7 @@ function CareerGallery() {
     const legacyKey = "shouvik-career-moments";
     let legacy: { id?: string; title?: string; tag?: string; src?: string }[] = [];
     try { legacy = JSON.parse(window.localStorage.getItem(legacyKey) ?? "[]"); } catch { return; }
-    const rows = legacy.filter((m) => m?.src && m.src.startsWith("data:")).map((m, i) => ({ id: m.id || `${Date.now()}-legacy-${i}`, title: m.title || "Career moment", tag: m.tag || "", src: m.src! }));
+    const rows = legacy.filter((m) => m?.src && m.src.startsWith("data:")).map((m, i) => ({ id: m.id || `${Date.now()}-legacy-${i}`, title: m.title || "Career moment", tag: m.tag || "", src: m.src!, is_public: true }));
     if (!rows.length) return;
     void (async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -994,7 +994,7 @@ function CareerGallery() {
       return;
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error: saveError } = await (ownerDb as any).from("custom_career_moments").insert({ id: `${Date.now()}-${cleanTitle.slice(0, 20)}`, title: cleanTitle, tag: cleanTag, src: imageData });
+    const { error: saveError } = await (ownerDb as any).from("custom_career_moments").insert({ id: `${Date.now()}-${cleanTitle.slice(0, 20)}`, title: cleanTitle, tag: cleanTag, src: imageData, is_public: true });
     if (saveError) { setError(`Could not save the photo: ${saveError.message}`); return; }
     await loadOnlineMoments();
     setImageData(""); setImageName(""); setTitle(""); setTag(""); setError(""); setDialogOpen(false);

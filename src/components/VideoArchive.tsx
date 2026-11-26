@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useSiteOwner } from "@/lib/publication-store";
+import { getPublishedWorkVideoUrl } from "@/lib/work-video.functions";
 
 const bucket = "work-videos";
 const maxFileSize = 100 * 1024 * 1024;
@@ -49,11 +50,15 @@ export function VideoArchive() {
 
     const rows = (data ?? []) as VideoRow[];
     const withUrls = await Promise.all(rows.map(async (row): Promise<VideoItem | null> => {
-      const { data: signed, error: signError } = await supabase.storage
-        .from(bucket)
-        .createSignedUrl(row.storage_path, 60 * 60 * 24 * 365);
-      if (signError || !signed?.signedUrl) return null;
-      return { ...row, url: signed.signedUrl };
+      if (isOwner) {
+        const { data: signed, error: signError } = await supabase.storage
+          .from(bucket)
+          .createSignedUrl(row.storage_path, 60 * 60 * 24 * 365);
+        if (!signError && signed?.signedUrl) return { ...row, url: signed.signedUrl };
+      }
+
+      const { url } = await getPublishedWorkVideoUrl({ data: { path: row.storage_path } });
+      return url ? { ...row, url } : null;
     }));
 
     setVideos(withUrls.filter((video): video is VideoItem => video !== null));
@@ -93,6 +98,7 @@ export function VideoArchive() {
         description: description.trim(),
         storage_path: path,
         mime_type: contentType,
+        is_public: true,
       });
       if (insertError) {
         await supabase.storage.from(bucket).remove([path]);
