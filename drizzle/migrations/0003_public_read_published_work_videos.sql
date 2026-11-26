@@ -1,0 +1,1 @@
+CREATE POLICY "Visitors read published work video files" ON storage.objects FOR SELECT TO anon, authenticated USING (bucket_id = 'work-videos' AND EXISTS (SELECT 1 FROM public.work_videos v WHERE v.storage_path = storage.objects.name AND v.is_public = true));

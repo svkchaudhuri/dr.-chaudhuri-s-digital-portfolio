@@ -51,15 +51,19 @@ export function VideoArchive() {
 
     const rows = (data ?? []) as VideoRow[];
     const withUrls = await Promise.all(rows.map(async (row): Promise<VideoItem | null> => {
-      if (isOwner) {
+      {
         const { data: signed, error: signError } = await supabase.storage
           .from(bucket)
           .createSignedUrl(row.storage_path, 60 * 60 * 24 * 365);
         if (!signError && signed?.signedUrl) return { ...row, url: signed.signedUrl };
       }
 
-      const { url } = await getPublishedWorkVideoUrl({ data: { path: row.storage_path } });
-      return url ? { ...row, url } : null;
+      try {
+        const { url } = await getPublishedWorkVideoUrl({ data: { path: row.storage_path } });
+        return url ? { ...row, url } : null;
+      } catch {
+        return null;
+      }
     }));
 
     setVideos(withUrls.filter((video): video is VideoItem => video !== null));
