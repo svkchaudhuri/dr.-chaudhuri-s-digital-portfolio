@@ -24,3 +24,5 @@
 - [x] Add The Control Miniproject feature with credits, links, and an enlarged photo viewer
 - [x] Add an online Research in Motion video archive between Home and Profile
 - [x] Verify public playback, owner-only uploads, and mobile layout
+- [x] Add owner-only video title and description editing
+- [x] Add persistent owner-controlled video ordering

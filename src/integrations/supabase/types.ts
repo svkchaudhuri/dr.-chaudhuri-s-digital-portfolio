@@ -186,6 +186,7 @@ export type Database = {
           id: string
           is_public: boolean
           mime_type: string
+          sort_order: number
           storage_path: string
           title: string
         }
@@ -195,6 +196,7 @@ export type Database = {
           id?: string
           is_public?: boolean
           mime_type?: string
+          sort_order?: number
           storage_path: string
           title: string
         }
@@ -204,6 +206,7 @@ export type Database = {
           id?: string
           is_public?: boolean
           mime_type?: string
+          sort_order?: number
           storage_path?: string
           title?: string
         }

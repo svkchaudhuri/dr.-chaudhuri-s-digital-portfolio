@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { ChevronDown, Film, Plus, Sparkles, Trash2, Upload } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronDown, Film, Pencil, Plus, Sparkles, Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,6 +18,7 @@ type VideoRow = {
   storage_path: string;
   mime_type: string;
   created_at: string;
+  sort_order: number;
 };
 
 type VideoItem = VideoRow & { url: string };
@@ -35,13 +36,20 @@ export function VideoArchive() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [editingVideo, setEditingVideo] = useState<VideoItem | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editMessage, setEditMessage] = useState("");
+  const [savingEdit, setSavingEdit] = useState(false);
+  const [ordering, setOrdering] = useState(false);
 
   const load = useCallback(async () => {
     setError("");
     const { data, error: readError } = await supabase
       .from("work_videos")
-      .select("id, title, description, storage_path, mime_type, created_at")
-      .order("created_at", { ascending: false });
+      .select("id, title, description, storage_path, mime_type, created_at, sort_order")
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: true });
 
     if (readError) {
       setError(readError.message);
@@ -94,6 +102,7 @@ export function VideoArchive() {
     setBusy(true);
     setMessage("");
     const path = `${crypto.randomUUID()}.${extension}`;
+    const nextPosition = videos.reduce((highest, video) => Math.max(highest, video.sort_order), 0) + 1;
     try {
       const { error: uploadError } = await supabase.storage.from(bucket).upload(path, file, { contentType });
       if (uploadError) throw new Error(uploadError.message);
@@ -104,6 +113,7 @@ export function VideoArchive() {
         storage_path: path,
         mime_type: contentType,
         is_public: true,
+        sort_order: nextPosition,
       });
       if (insertError) {
         await supabase.storage.from(bucket).remove([path]);
@@ -122,6 +132,65 @@ export function VideoArchive() {
     } finally {
       setBusy(false);
     }
+  };
+
+  const startEditing = (video: VideoItem) => {
+    setEditingVideo(video);
+    setEditTitle(video.title);
+    setEditDescription(video.description);
+    setEditMessage("");
+  };
+
+  const saveEdit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!editingVideo || !editTitle.trim()) return;
+    const video = editingVideo;
+    const nextTitle = editTitle.trim();
+    const nextDescription = editDescription.trim();
+    setSavingEdit(true);
+    setEditMessage("");
+
+    const { error: updateError } = await supabase
+      .from("work_videos")
+      .update({ title: nextTitle, description: nextDescription })
+      .eq("id", video.id);
+
+    if (updateError) {
+      setEditMessage(updateError.message);
+    } else {
+      setVideos((current) => current.map((item) => item.id === video.id
+        ? { ...item, title: nextTitle, description: nextDescription }
+        : item));
+      setEditingVideo(null);
+    }
+    setSavingEdit(false);
+  };
+
+  const moveVideo = async (video: VideoItem, offset: -1 | 1) => {
+    const currentIndex = videos.findIndex((item) => item.id === video.id);
+    const nextIndex = currentIndex + offset;
+    if (currentIndex < 0 || nextIndex < 0 || nextIndex >= videos.length) return;
+
+    const reordered = [...videos];
+    const [moved] = reordered.splice(currentIndex, 1);
+    if (!moved) return;
+    reordered.splice(nextIndex, 0, moved);
+
+    setOrdering(true);
+    setError("");
+    const results = await Promise.all(reordered.map((item, index) => supabase
+      .from("work_videos")
+      .update({ sort_order: index + 1 })
+      .eq("id", item.id)));
+    const failed = results.find((result) => result.error);
+
+    if (failed?.error) {
+      await load();
+      setError("The new video order could not be saved. Please try again.");
+    } else {
+      setVideos(reordered.map((item, index) => ({ ...item, sort_order: index + 1 })));
+    }
+    setOrdering(false);
   };
 
   const remove = async (video: VideoItem) => {
@@ -161,20 +230,33 @@ export function VideoArchive() {
     </button>
 
     {expanded && <div id="featured-research-videos" className="border-t border-border bg-muted/30 p-4 sm:p-5">
-      {isOwner && <div className="mb-4 flex justify-end"><Button size="sm" onClick={() => { setMessage(""); setOpen(true); }}><Plus className="size-4" aria-hidden="true" />Add video</Button></div>}
-      {loading ? <div className="rounded-md border border-border bg-card p-8 text-center text-sm text-muted-foreground" role="status">Loading videos...</div> : videos.length > 0 ? <div className="grid gap-5 lg:grid-cols-2">
-        {videos.map((video) => <article key={video.id} className="overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-portrait">
+      {isOwner && <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-xs leading-5 text-muted-foreground">Use the move buttons to choose the visitor order. New videos are added at the end.</p>
+        <Button className="shrink-0" size="sm" onClick={() => { setMessage(""); setOpen(true); }}><Plus className="size-4" aria-hidden="true" />Add video</Button>
+      </div>}
+      {loading ? <div className="rounded-md border border-border bg-card p-8 text-center text-sm text-muted-foreground" role="status">Loading videos...</div> : videos.length > 0 ? <div className="grid items-start gap-5 lg:grid-cols-2">
+        {videos.map((video, index) => <article key={video.id} className="overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-portrait">
           <video className="aspect-video w-full bg-muted object-contain" controls playsInline preload="metadata" src={video.url} aria-label={video.title}>
             Your browser does not support this video.
           </video>
           <div className="p-5">
-            <div className="flex items-start justify-between gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
                 <h3 className="font-display text-xl leading-snug">{video.title}</h3>
                 {video.description && <p className="mt-2 whitespace-pre-line text-sm leading-6 text-muted-foreground">{video.description}</p>}
               </div>
-              {isOwner && <Button variant="ghost" size="icon" className="shrink-0 text-destructive" disabled={deletingId === video.id} onClick={() => void remove(video)} aria-label={`Remove ${video.title}`}><Trash2 className="size-4" aria-hidden="true" /></Button>}
+              {isOwner && <div className="flex shrink-0 items-center gap-1 self-end sm:self-auto">
+                <Button variant="ghost" size="icon" onClick={() => startEditing(video)} aria-label={`Edit details for ${video.title}`}><Pencil className="size-4" aria-hidden="true" /></Button>
+                <Button variant="ghost" size="icon" className="text-destructive" disabled={deletingId === video.id || ordering} onClick={() => void remove(video)} aria-label={`Remove ${video.title}`}><Trash2 className="size-4" aria-hidden="true" /></Button>
+              </div>}
             </div>
+            {isOwner && <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3">
+              <span className="text-xs text-muted-foreground">Position {index + 1} of {videos.length}</span>
+              <div className="flex flex-wrap gap-2">
+                <Button variant="outline" size="sm" disabled={ordering || index === 0} onClick={() => void moveVideo(video, -1)} aria-label={`Move ${video.title} up`}><ArrowUp className="size-4" aria-hidden="true" />Move up</Button>
+                <Button variant="outline" size="sm" disabled={ordering || index === videos.length - 1} onClick={() => void moveVideo(video, 1)} aria-label={`Move ${video.title} down`}><ArrowDown className="size-4" aria-hidden="true" />Move down</Button>
+              </div>
+            </div>}
           </div>
         </article>)}
       </div> : <div className="rounded-xl border border-dashed border-border bg-card px-5 py-8 text-center">
@@ -204,6 +286,25 @@ export function VideoArchive() {
           {message && <p className="text-sm text-destructive" role="alert">{message}</p>}
           {busy && <p className="text-sm text-muted-foreground" role="status">Uploading your video. Please keep this window open.</p>}
           <Button type="submit" className="w-full" disabled={busy || !file || !title.trim()}><Upload className="size-4" aria-hidden="true" />{busy ? "Uploading..." : "Upload video"}</Button>
+        </form>
+      </DialogContent>
+    </Dialog>
+
+    <Dialog open={editingVideo !== null} onOpenChange={(next) => { if (!savingEdit && !next) setEditingVideo(null); }}>
+      <DialogContent className="max-w-lg">
+        <DialogTitle className="font-display text-2xl">Edit video details</DialogTitle>
+        <DialogDescription>Change the title or description shown to visitors. The video file stays the same.</DialogDescription>
+        <form className="mt-2 space-y-4" onSubmit={saveEdit}>
+          <div>
+            <label className="mb-1.5 block text-sm font-semibold" htmlFor="edit-work-video-title">Title</label>
+            <input id="edit-work-video-title" className={field} required maxLength={160} disabled={savingEdit} value={editTitle} onChange={(event) => setEditTitle(event.target.value)} />
+          </div>
+          <div>
+            <label className="mb-1.5 block text-sm font-semibold" htmlFor="edit-work-video-description">Short description <span className="font-normal text-muted-foreground">(optional)</span></label>
+            <textarea id="edit-work-video-description" className={`${field} min-h-28 resize-y`} maxLength={500} disabled={savingEdit} value={editDescription} onChange={(event) => setEditDescription(event.target.value)} placeholder="What does this video demonstrate?" />
+          </div>
+          {editMessage && <p className="text-sm text-destructive" role="alert">{editMessage}</p>}
+          <Button type="submit" className="w-full" disabled={savingEdit || !editTitle.trim()}>{savingEdit ? "Saving changes..." : "Save changes"}</Button>
         </form>
       </DialogContent>
     </Dialog>
