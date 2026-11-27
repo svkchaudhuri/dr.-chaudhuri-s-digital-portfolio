@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { ArrowDown, ArrowUp, ChevronDown, Film, Pencil, Plus, Sparkles, Trash2, Upload } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronDown, Film, GripVertical, Pencil, Plus, Sparkles, Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
@@ -42,6 +42,8 @@ export function VideoArchive() {
   const [editMessage, setEditMessage] = useState("");
   const [savingEdit, setSavingEdit] = useState(false);
   const [ordering, setOrdering] = useState(false);
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setError("");
@@ -166,16 +168,7 @@ export function VideoArchive() {
     setSavingEdit(false);
   };
 
-  const moveVideo = async (video: VideoItem, offset: -1 | 1) => {
-    const currentIndex = videos.findIndex((item) => item.id === video.id);
-    const nextIndex = currentIndex + offset;
-    if (currentIndex < 0 || nextIndex < 0 || nextIndex >= videos.length) return;
-
-    const reordered = [...videos];
-    const [moved] = reordered.splice(currentIndex, 1);
-    if (!moved) return;
-    reordered.splice(nextIndex, 0, moved);
-
+  const saveOrder = async (reordered: VideoItem[]) => {
     setOrdering(true);
     setError("");
     const results = await Promise.all(reordered.map((item, index) => supabase
@@ -191,6 +184,32 @@ export function VideoArchive() {
       setVideos(reordered.map((item, index) => ({ ...item, sort_order: index + 1 })));
     }
     setOrdering(false);
+  };
+
+  const moveVideo = async (video: VideoItem, offset: -1 | 1) => {
+    const currentIndex = videos.findIndex((item) => item.id === video.id);
+    const nextIndex = currentIndex + offset;
+    if (currentIndex < 0 || nextIndex < 0 || nextIndex >= videos.length) return;
+
+    const reordered = [...videos];
+    const [moved] = reordered.splice(currentIndex, 1);
+    if (!moved) return;
+    reordered.splice(nextIndex, 0, moved);
+    await saveOrder(reordered);
+  };
+
+  const dropVideo = async (target: VideoItem) => {
+    const currentIndex = videos.findIndex((item) => item.id === draggedId);
+    const nextIndex = videos.findIndex((item) => item.id === target.id);
+    setDraggedId(null);
+    setDragOverId(null);
+    if (currentIndex < 0 || nextIndex < 0 || currentIndex === nextIndex) return;
+
+    const reordered = [...videos];
+    const [moved] = reordered.splice(currentIndex, 1);
+    if (!moved) return;
+    reordered.splice(nextIndex, 0, moved);
+    await saveOrder(reordered);
   };
 
   const remove = async (video: VideoItem) => {
@@ -231,11 +250,26 @@ export function VideoArchive() {
 
     {expanded && <div id="featured-research-videos" className="border-t border-border bg-muted/30 p-4 sm:p-5">
       {isOwner && <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs leading-5 text-muted-foreground">Use the move buttons to choose the visitor order. New videos are added at the end.</p>
+        <p className="text-xs leading-5 text-muted-foreground">Drag a grip handle onto another video to reorder, or use the arrows. New videos are added at the end.</p>
         <Button className="shrink-0" size="sm" onClick={() => { setMessage(""); setOpen(true); }}><Plus className="size-4" aria-hidden="true" />Add video</Button>
       </div>}
       {loading ? <div className="rounded-md border border-border bg-card p-8 text-center text-sm text-muted-foreground" role="status">Loading videos...</div> : videos.length > 0 ? <div className="grid items-start gap-5 lg:grid-cols-2">
-        {videos.map((video, index) => <article key={video.id} className="overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-portrait">
+        {videos.map((video, index) => <article
+          key={video.id}
+          className={`overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-portrait ${draggedId === video.id ? "opacity-50" : ""} ${dragOverId === video.id && draggedId !== video.id ? "border-primary ring-2 ring-primary/40" : ""}`}
+          onDragOver={(event) => {
+            if (!isOwner || !draggedId || ordering) return;
+            event.preventDefault();
+            event.dataTransfer.dropEffect = "move";
+            setDragOverId(video.id);
+          }}
+          onDragLeave={() => setDragOverId((current) => current === video.id ? null : current)}
+          onDrop={(event) => {
+            if (!isOwner || !draggedId || ordering) return;
+            event.preventDefault();
+            void dropVideo(video);
+          }}
+        >
           <video className="aspect-video w-full bg-muted object-contain" controls playsInline preload="metadata" src={video.url} aria-label={video.title}>
             Your browser does not support this video.
           </video>
@@ -251,7 +285,23 @@ export function VideoArchive() {
               </div>}
             </div>
             {isOwner && <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3">
-              <span className="text-xs text-muted-foreground">Position {index + 1} of {videos.length}</span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  draggable={!ordering}
+                  className="grid size-8 cursor-grab place-items-center rounded-md border border-border bg-muted text-muted-foreground transition-colors hover:border-primary hover:text-primary active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={ordering}
+                  title="Drag to reorder"
+                  aria-label={`Drag ${video.title} to reorder`}
+                  onDragStart={(event) => {
+                    event.dataTransfer.effectAllowed = "move";
+                    event.dataTransfer.setData("text/plain", video.id);
+                    setDraggedId(video.id);
+                  }}
+                  onDragEnd={() => { setDraggedId(null); setDragOverId(null); }}
+                ><GripVertical className="size-4" aria-hidden="true" /></button>
+                <span className="text-xs text-muted-foreground">Position {index + 1} of {videos.length}</span>
+              </div>
               <div className="flex flex-wrap gap-2">
                 <Button variant="outline" size="sm" disabled={ordering || index === 0} onClick={() => void moveVideo(video, -1)} aria-label={`Move ${video.title} up`}><ArrowUp className="size-4" aria-hidden="true" />Move up</Button>
                 <Button variant="outline" size="sm" disabled={ordering || index === videos.length - 1} onClick={() => void moveVideo(video, 1)} aria-label={`Move ${video.title} down`}><ArrowDown className="size-4" aria-hidden="true" />Move down</Button>

@@ -26,3 +26,4 @@
 - [x] Verify public playback, owner-only uploads, and mobile layout
 - [x] Add owner-only video title and description editing
 - [x] Add persistent owner-controlled video ordering
+- [x] Add drag-and-drop video reordering
